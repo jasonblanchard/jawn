@@ -12,7 +12,8 @@ export default class EntryController {
 
   handlePost(req, res) {
     this._logger.debug('handlePost', LOG_TAG);
-    this._entryService.create({ text: 'testing' })
+    this._logger.debug({ body: req.body }, LOG_TAG);
+    this._entryService.create(req.body)
       .then(entry => {
         this._logger.debug({ entry }, LOG_TAG);
         res.json(entry);
