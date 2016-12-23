@@ -21,7 +21,7 @@ export default class EntryController {
   }
 
   handleIndex(req, res) {
-    this._logger.debug('index', LOG_TAG);
+    this._logger.debug('handleIndex', LOG_TAG);
     this._entryService.list().then(entries => {
       res.json(entries);
     });
