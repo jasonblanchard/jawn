@@ -50,8 +50,11 @@ export default class EntryService {
           return reject(error);
         }
 
-        const { _id: id, text, timeCreated } = record;
-        const entry = { id, text, timeCreated };
+        const entry = {
+          id: record.id,
+          text: record.text,
+          timeCreated: record.timeCreated
+        }
 
         this._logger.debug({ entry }, LOG_TAG);
 
