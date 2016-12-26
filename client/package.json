@@ -6,13 +6,18 @@
     "react-scripts": "0.8.4"
   },
   "dependencies": {
+    "found": "^0.2.0",
     "react": "^15.4.1",
-    "react-dom": "^15.4.1"
+    "react-dom": "^15.4.1",
+    "react-redux": "^5.0.1",
+    "redux": "^3.6.0",
+    "superagent": "^3.3.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "NODE_PATH=. react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
-  }
+  },
+  "proxy": "http://localhost:8081"
 }

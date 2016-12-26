@@ -16,8 +16,8 @@ export default function(registry) {
     res.send('Hello');
   });
 
-  app.get('/entries', entryController.handleIndex);
-  app.post('/entries', entryController.handlePost);
+  app.get('/api/entries', entryController.handleIndex);
+  app.post('/api/entries', entryController.handlePost);
 
   return app;
 }
