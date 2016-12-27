@@ -1,57 +1,21 @@
-import {
-  Actions as FarceActions,
-  BrowserProtocol,
-  createHistoryEnhancer,
-  queryMiddleware
-} from 'farce';
-import {
-  createConnectedRouter,
-  createMatchEnhancer,
-  createRender,
-  foundReducer,
-  Matcher,
-  resolveElements
-} from 'found';
+import { Actions as FarceActions } from 'farce';
 import { Provider } from 'react-redux';
-import { combineReducers, compose, createStore } from 'redux';
+import { resolveElements } from 'found';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import routes from 'src/routes';
+import { Router } from 'src/routes';
+import createStore from 'src/createStore';
 
 import './index.css';
 
-const store = createStore(
-  combineReducers({
-    found: foundReducer,
-  }),
-  compose(
-    createHistoryEnhancer({
-      protocol: new BrowserProtocol(),
-      middlewares: [queryMiddleware],
-    }),
-    createMatchEnhancer(
-      new Matcher(routes),
-    ),
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-  ),
-);
+const store = createStore();
 
 store.dispatch(FarceActions.init());
 
-const ConnectedRouter = createConnectedRouter({
-  render: createRender({
-    renderError: ({ error }) => (
-      <div>
-        {error.status === 404 ? 'Not found' : 'Error'}
-      </div>
-    ),
-  })
-});
-
 ReactDOM.render(
   <Provider store={store}>
-    <ConnectedRouter resolveElements={resolveElements} matchContext={{ store }} />
+    <Router resolveElements={resolveElements} matchContext={{ store }} />
   </Provider>,
   document.getElementById('root'),
 );

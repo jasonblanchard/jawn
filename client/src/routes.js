@@ -1,4 +1,6 @@
+import { createConnectedRouter, createRender } from 'found';
 import http from 'superagent';
+import React from 'react';
 
 import EntriesIndexPage from 'src/pages/EntriesIndexPage';
 
@@ -19,3 +21,13 @@ export default [
     }
   }
 ];
+
+export const Router = createConnectedRouter({
+  render: createRender({
+    renderError: ({ error }) => (
+      <div>
+        {error.status === 404 ? 'Not found' : 'Error'}
+      </div>
+    ),
+  })
+});
