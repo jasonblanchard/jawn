@@ -1,6 +1,7 @@
-import { combineReducers, compose, createStore } from 'redux';
+import { combineReducers, compose, createStore, applyMiddleware } from 'redux';
 import { BrowserProtocol, createHistoryEnhancer, queryMiddleware } from 'farce';
 import { createMatchEnhancer, foundReducer, Matcher } from 'found';
+import thunk from 'redux-thunk';
 
 import reducers from 'src/state/reducers';
 import routes from 'src/routes';
@@ -24,6 +25,7 @@ export default function() {
       createMatchEnhancer(
         new Matcher(routes),
       ),
+      applyMiddleware(thunk),
       window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
     ),
   );

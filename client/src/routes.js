@@ -1,29 +1,15 @@
 import { createConnectedRouter, createRender } from 'found';
-import http from 'superagent';
 import React from 'react';
 
 import EntriesIndexPage from 'src/pages/EntriesIndexPage';
-
-import {
-  LOAD_ENTRIES_INDEX_PAGE_STARTED,
-  LOAD_ENTRIES_INDEX_PAGE_COMPLETED,
-  LOAD_ENTRIES_INDEX_PAGE_FAILED
-} from 'src/actions/types';
+import fetchEntries from 'src/actions/fetchEntries';
 
 export default [
   {
     path: '/',
     Component: EntriesIndexPage,
     getData: ({ context }) => {
-      context.store.dispatch({ type: LOAD_ENTRIES_INDEX_PAGE_STARTED });
-      return http.get('/api/entries')
-        .then(response => {
-          const entries = response.body;
-          context.store.dispatch({ type: LOAD_ENTRIES_INDEX_PAGE_COMPLETED, entries });
-        })
-        .catch(error => {
-          context.store.dispatch({ type: LOAD_ENTRIES_INDEX_PAGE_FAILED, error });
-        });
+      context.store.dispatch(fetchEntries);
     }
   }
 ];
