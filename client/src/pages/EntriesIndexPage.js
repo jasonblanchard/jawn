@@ -42,7 +42,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    createEntry: (changes) => dispatch(createEntry(changes))
+    createEntry: (fields) => dispatch(createEntry(fields))
   }
 }
 
