@@ -9,7 +9,7 @@ export default [
     path: '/',
     Component: EntriesIndexPage,
     getData: ({ context }) => {
-      context.store.dispatch(fetchEntries);
+      context.store.dispatch(fetchEntries());
     }
   }
 ];

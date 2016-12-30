@@ -1,5 +1,7 @@
-import reduceLoadEntriesIndexPage from './reduceLoadEntriesIndexPage';
+import reduceFetchEntries from './reduceFetchEntries';
+import reduceCreateEntry from './reduceCreateEntry';
 
 export default {
-  LOAD_ENTRIES_INDEX_PAGE: reduceLoadEntriesIndexPage
+  CREATE_ENTRY: reduceCreateEntry,
+  FETCH_ENTRIES: reduceFetchEntries
 }

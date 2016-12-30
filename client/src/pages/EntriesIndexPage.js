@@ -1,11 +1,14 @@
 import { connect } from 'react-redux';
 import React, { Component, PropTypes } from 'react';
 
+import EntryForm from 'src/components/EntryForm';
+import createEntry from 'src/actions/createEntry';
 import selectors from 'src/state/selectors';
 
 class EntriesIndexPage extends Component {
   static propTypes = {
-    entries: PropTypes.array
+    entries: PropTypes.array,
+    createEntry: PropTypes.func
   }
 
   static defaultProps = {
@@ -13,8 +16,12 @@ class EntriesIndexPage extends Component {
   }
 
   render() {
-    if (this.props.entries.length === 0) return <div>No entries yet</div>;
-    return <div>{this.props.entries.reverse().map(this._renderEntry)}</div>;
+    return (
+      <div>
+        <EntryForm onSubmit={this.props.createEntry} />
+        {this.props.entries.length === 0 ? "No entries yet" : this.props.entries.reverse().map(this._renderEntry)}
+      </div>
+    );
   }
 
   _renderEntry(entry) {
@@ -33,4 +40,10 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(EntriesIndexPage);
+function mapDispatchToProps(dispatch) {
+  return {
+    createEntry: (text) => dispatch(createEntry(text))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(EntriesIndexPage);

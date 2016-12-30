@@ -1,14 +1,14 @@
 import {
-  LOAD_ENTRIES_INDEX_PAGE_STARTED,
-  LOAD_ENTRIES_INDEX_PAGE_COMPLETED
+  FETCH_ENTRIES_STARTED,
+  FETCH_ENTRIES_COMPLETED
 } from 'src/actions/types';
 
 export default function(state, action) {
   switch (action.type) {
-    case LOAD_ENTRIES_INDEX_PAGE_STARTED:
+    case FETCH_ENTRIES_STARTED:
       break;
 
-      case LOAD_ENTRIES_INDEX_PAGE_COMPLETED:
+      case FETCH_ENTRIES_COMPLETED:
         state = Object.assign({}, state, { entries: action.entries });
         break;
 

@@ -1,5 +1,6 @@
 const types = [
-  'LOAD_ENTRIES_INDEX_PAGE'
+  'CREATE_ENTRY',
+  'FETCH_ENTRIES'
 ];
 
 types.forEach(type => {
