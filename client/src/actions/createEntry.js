@@ -9,11 +9,11 @@ import {
   CREATE_ENTRY_FAILED
 } from 'src/actions/types';
 
-export default function(text) {
+export default function(fields) {
   return function(dispatch) {
-    dispatch({ type: CREATE_ENTRY_STARTED, text });
+    dispatch({ type: CREATE_ENTRY_STARTED, fields });
     return http.post('/api/entries')
-      .send({ text })
+      .send(fields)
       .then(response => {
         const entry = response.body;
         const { entities, result: entryId } = normalize(entry, entrySchema);

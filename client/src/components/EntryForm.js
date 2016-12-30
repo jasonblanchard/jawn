@@ -40,6 +40,12 @@ export default class EntryForm extends PureComponent {
 
   _handleSubmit(event) {
     event.preventDefault();
-    this.props.onSubmit(this.state.text);
+    this.props.onSubmit(this._getFormData());
+  }
+
+  _getFormData() {
+    return {
+      text: this.state.text
+    }
   }
 }
