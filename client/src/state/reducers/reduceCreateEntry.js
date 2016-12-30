@@ -1,3 +1,5 @@
+import merge from 'lodash.merge';
+
 import {
   CREATE_ENTRY_STARTED,
   CREATE_ENTRY_COMPLETED
@@ -9,7 +11,7 @@ export default function(state, action) {
       break;
 
       case CREATE_ENTRY_COMPLETED:
-        state = Object.assign({}, state, { entries: [...state.entries, action.entry] });
+        state = Object.assign({}, state, { entities: merge({}, state.entities, action.entities) }, {entryIds: [...state.entryIds, action.entryId] });
         break;
 
       default:

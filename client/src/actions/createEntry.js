@@ -1,4 +1,7 @@
+import { normalize } from 'normalizr';
 import http from 'superagent';
+
+import { entrySchema } from 'src/entities/schema';
 
 import {
   CREATE_ENTRY_STARTED,
@@ -13,7 +16,8 @@ export default function(text) {
       .send({ text })
       .then(response => {
         const entry = response.body;
-        dispatch({ type: CREATE_ENTRY_COMPLETED, entry });
+        const { entities, result: entryId } = normalize(entry, entrySchema);
+        dispatch({ type: CREATE_ENTRY_COMPLETED, entities, entryId });
       })
       .catch(error => {
         dispatch({ type: CREATE_ENTRY_FAILED, error });

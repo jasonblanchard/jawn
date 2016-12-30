@@ -6,12 +6,16 @@
     "react-scripts": "0.8.4"
   },
   "dependencies": {
+    "denormalizr": "^0.4.1",
     "found": "^0.2.0",
+    "lodash.merge": "^4.6.0",
+    "normalizr": "2",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
     "react-redux": "^5.0.1",
     "redux": "^3.6.0",
     "redux-thunk": "^2.1.0",
+    "reselect": "^2.5.4",
     "superagent": "^3.3.1"
   },
   "scripts": {

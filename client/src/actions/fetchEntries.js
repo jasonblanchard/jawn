@@ -1,4 +1,7 @@
+import { normalize, arrayOf } from 'normalizr';
 import http from 'superagent';
+
+import { entrySchema } from 'src/entities/schema';
 
 import {
   FETCH_ENTRIES_STARTED,
@@ -12,7 +15,8 @@ export default function() {
     return http.get('/api/entries')
       .then(response => {
         const entries = response.body;
-        dispatch({ type: FETCH_ENTRIES_COMPLETED, entries });
+        const { entities, result: entryIds } = normalize(entries, arrayOf(entrySchema));
+        dispatch({ type: FETCH_ENTRIES_COMPLETED, entities, entryIds });
       })
       .catch(error => {
         dispatch({ type: FETCH_ENTRIES_FAILED, error });

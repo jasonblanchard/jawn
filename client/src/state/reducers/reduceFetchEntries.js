@@ -9,7 +9,7 @@ export default function(state, action) {
       break;
 
       case FETCH_ENTRIES_COMPLETED:
-        state = Object.assign({}, state, { entries: action.entries });
+        state = Object.assign({}, state, { entities: action.entities, entryIds: action.entryIds });
         break;
 
       default:
