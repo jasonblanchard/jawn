@@ -13,7 +13,7 @@ export default class EntryForm extends PureComponent {
     super(props);
 
     this.state = {
-      text: undefined
+      text: null
     }
 
     this._handleChange = this._handleChange.bind(this);
@@ -26,7 +26,7 @@ export default class EntryForm extends PureComponent {
         <textarea
           className="EntryForm-textInput"
           aria-label="text"
-          value={this.state.text}
+          value={this.state.text || ''}
           onChange={this._handleChange}
         />
         <button>Submit</button>
@@ -41,6 +41,7 @@ export default class EntryForm extends PureComponent {
   _handleSubmit(event) {
     event.preventDefault();
     this.props.onSubmit(this._getFormData());
+    this.setState({ text: null });
   }
 
   _getFormData() {
