@@ -41,7 +41,7 @@ export default class EntryController {
         res.json(entry);
       }).catch(error => {
         next(error);
-      })
+      });
   }
 
   handleDelete(req, res, next) {

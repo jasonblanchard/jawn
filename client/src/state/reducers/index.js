@@ -7,5 +7,5 @@ export default {
   CREATE_ENTRY: reduceCreateEntry,
   DELETE_ENTRY: reduceDeleteEntry,
   FETCH_ENTRIES: reduceFetchEntries,
-  UPDATE_ENTRY: reduceUpdateEntry
-}
+  UPDATE_ENTRY: reduceUpdateEntry,
+};

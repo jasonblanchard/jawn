@@ -6,7 +6,7 @@ const LOG_TAG = 'EntryService';
 const EntrySchema = new Schema({
   text: String,
   timeCreated: String,
-  timeUpdated: String
+  timeUpdated: String,
 });
 
 function mapRecordToObject(record) {
@@ -14,8 +14,8 @@ function mapRecordToObject(record) {
     id: record.id,
     text: record.text,
     timeCreated: record.timeCreated,
-    timeUpdated: record.timeUpdated
-  }
+    timeUpdated: record.timeUpdated,
+  };
 }
 
 // TODO: Error handling.
@@ -34,7 +34,7 @@ export default class EntryService {
       this._logger.debug({ entries }, LOG_TAG);
 
       return entries;
-    })
+    });
   }
 
   create(params) {

@@ -4,22 +4,26 @@ import EntryForm from 'src/components/EntryForm';
 
 export default class Entry extends PureComponent {
   static propTypes = {
-    entry: PropTypes.object,
+    entry: PropTypes.shape({
+      id: PropTypes.string,
+      text: PropTypes.string,
+      timeCreated: PropTypes.string,
+    }),
     onDelete: PropTypes.func,
-    onSubmit: PropTypes.func
+    onSubmit: PropTypes.func,
   }
 
   static defaultProps = {
     onDelete: () => {},
-    onSubmit: () => {}
+    onSubmit: () => {},
   }
 
   constructor(props) {
     super(props);
 
     this.state = {
-      isEditing: false
-    }
+      isEditing: false,
+    };
 
     this._handleDoubleClick = this._handleDoubleClick.bind(this);
     this._handleSubmit = this._handleSubmit.bind(this);
@@ -28,12 +32,14 @@ export default class Entry extends PureComponent {
   }
 
   render() {
-    if (this.state.isEditing) return (
-      <div>
-        <EntryForm entry={this.props.entry} onSubmit={this._handleSubmit} />
-        <button onClick={this._handleClickCancel}>Cancel</button>
-      </div>
-    );
+    if (this.state.isEditing) {
+      return (
+        <div>
+          <EntryForm entry={this.props.entry} onSubmit={this._handleSubmit} />
+          <button onClick={this._handleClickCancel}>Cancel</button>
+        </div>
+      );
+    }
 
     return (
       <div onDoubleClick={this._handleDoubleClick}>

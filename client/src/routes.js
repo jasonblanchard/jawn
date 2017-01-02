@@ -10,16 +10,16 @@ export default [
     Component: EntriesIndexPage,
     getData: ({ context }) => {
       context.store.dispatch(fetchEntries());
-    }
-  }
+    },
+  },
 ];
 
 export const Router = createConnectedRouter({
   render: createRender({
-    renderError: ({ error }) => (
+    renderError: ({ error }) => ( // eslint-disable-line react/prop-types
       <div>
         {error.status === 404 ? 'Not found' : 'Error'}
       </div>
     ),
-  })
+  }),
 });

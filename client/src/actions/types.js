@@ -2,7 +2,7 @@ const types = [
   'CREATE_ENTRY',
   'DELETE_ENTRY',
   'FETCH_ENTRIES',
-  'UPDATE_ENTRY'
+  'UPDATE_ENTRY',
 ];
 
 types.forEach(type => {

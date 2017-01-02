@@ -1,6 +1,5 @@
 import bodyParser from 'body-parser';
 import express from 'express';
-import http from 'http';
 
 const LOG_TAG = 'app';
 
@@ -26,7 +25,7 @@ export default function(registry) {
     response.status(404).json({ error: 'No resource at this route' });
   });
 
-  app.use((error, request, response, next) => {
+  app.use((error, request, response) => {
     logger.error({ error, stack: error.stack }, LOG_TAG);
     response.status(500).json({ error: 'Something went wrong' });
   });

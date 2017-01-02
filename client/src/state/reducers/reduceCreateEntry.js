@@ -2,7 +2,7 @@ import Immutable from 'immutable';
 
 import {
   CREATE_ENTRY_STARTED,
-  CREATE_ENTRY_COMPLETED
+  CREATE_ENTRY_COMPLETED,
 } from 'src/actions/types';
 
 export default function(state, action) {
@@ -10,13 +10,13 @@ export default function(state, action) {
     case CREATE_ENTRY_STARTED:
       break;
 
-      case CREATE_ENTRY_COMPLETED:
-        state = state.update('entities', entities => entities.mergeDeep(Immutable.fromJS(action.entities)));
-        state = state.update('entryIds', entryIds => entryIds.push(action.entryId));
-        break;
+    case CREATE_ENTRY_COMPLETED:
+      state = state.update('entities', entities => entities.mergeDeep(Immutable.fromJS(action.entities)));
+      state = state.update('entryIds', entryIds => entryIds.push(action.entryId));
+      break;
 
-      default:
-        break;
+    default:
+      break;
   }
 
   return state;

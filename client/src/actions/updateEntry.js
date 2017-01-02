@@ -6,11 +6,11 @@ import { entrySchema } from 'src/entities/schema';
 import {
   UPDATE_ENTRY_STARTED,
   UPDATE_ENTRY_COMPLETED,
-  UPDATE_ENTRY_FAILED
+  UPDATE_ENTRY_FAILED,
 } from 'src/actions/types';
 
 export default function(id, fields) {
-  return function(dispatch) {
+  return (dispatch) => {
     dispatch({ type: UPDATE_ENTRY_STARTED, fields });
     return http.post(`/api/entries/${id}`)
       .send(fields)
@@ -22,5 +22,5 @@ export default function(id, fields) {
       .catch(error => {
         dispatch({ type: UPDATE_ENTRY_FAILED, error });
       });
-    }
+  };
 }

@@ -6,11 +6,11 @@ import { entrySchema } from 'src/entities/schema';
 import {
   FETCH_ENTRIES_STARTED,
   FETCH_ENTRIES_COMPLETED,
-  FETCH_ENTRIES_FAILED
+  FETCH_ENTRIES_FAILED,
 } from 'src/actions/types';
 
 export default function() {
-  return function(dispatch) {
+  return (dispatch) => {
     dispatch({ type: FETCH_ENTRIES_STARTED });
     return http.get('/api/entries')
       .then(response => {
@@ -21,5 +21,5 @@ export default function() {
       .catch(error => {
         dispatch({ type: FETCH_ENTRIES_FAILED, error });
       });
-  }
+  };
 }

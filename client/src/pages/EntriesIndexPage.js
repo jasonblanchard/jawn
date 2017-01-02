@@ -12,19 +12,21 @@ class EntriesIndexPage extends Component {
   static propTypes = {
     createEntry: PropTypes.func,
     deleteEntry: PropTypes.func,
-    entries: PropTypes.array,
-    updateEntry: PropTypes.func
+    entries: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.string,
+    })),
+    updateEntry: PropTypes.func,
   }
 
   static defaultProps = {
-    entries: []
+    entries: [],
   }
 
   render() {
     return (
       <div>
         <EntryForm onSubmit={this.props.createEntry} />
-        {this.props.entries.length === 0 ? "No entries yet" : this.props.entries.reverse().map(this._renderEntry, this)}
+        {this.props.entries.length === 0 ? 'No entries yet' : this.props.entries.reverse().map(this._renderEntry, this)}
       </div>
     );
   }
@@ -36,16 +38,16 @@ class EntriesIndexPage extends Component {
 
 function mapStateToProps(state) {
   return {
-    entries: selectors.getEntries(state)
-  }
+    entries: selectors.getEntries(state),
+  };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     createEntry: fields => dispatch(createEntry(fields)),
     deleteEntry: id => dispatch(deleteEntry(id)),
-    updateEntry: (id, fields) => dispatch(updateEntry(id, fields))
-  }
+    updateEntry: (id, fields) => dispatch(updateEntry(id, fields)),
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EntriesIndexPage);
