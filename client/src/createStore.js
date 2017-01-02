@@ -1,22 +1,21 @@
 import { combineReducers, compose, createStore, applyMiddleware } from 'redux';
 import { BrowserProtocol, createHistoryEnhancer, queryMiddleware } from 'farce';
 import { createMatchEnhancer, foundReducer, Matcher } from 'found';
+import Immutable from 'immutable';
 import thunk from 'redux-thunk';
 
 import reducers from 'src/state/reducers';
 import routes from 'src/routes';
 
-const createReducer = function() {
-  return (state, action) => {
-    const type = action.type.split(/_(STARTED|COMPLETED|FAILED)/)[0];
-    const reduce = reducers[type];
-    return reduce ? reduce(state, action) : combineReducers({ found: foundReducer })(state, action);
-  };
-}
+const appReducer = (state = Immutable.Map(), action) => {
+  const type = action.type.split(/_(STARTED|COMPLETED|FAILED)/)[0];
+  const reduce = reducers[type];
+  return reduce ? reduce(state, action) : state;
+};
 
 export default function() {
   return createStore(
-    createReducer(),
+    combineReducers({ found: foundReducer, app: appReducer }),
     compose(
       createHistoryEnhancer({
         protocol: new BrowserProtocol(),

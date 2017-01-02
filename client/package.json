@@ -8,6 +8,7 @@
   "dependencies": {
     "denormalizr": "^0.4.1",
     "found": "^0.2.0",
+    "immutable": "^3.8.1",
     "lodash.merge": "^4.6.0",
     "normalizr": "2",
     "react": "^15.4.1",

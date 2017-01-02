@@ -1,4 +1,4 @@
-import merge from 'lodash.merge';
+import Immutable from 'immutable';
 
 import {
   CREATE_ENTRY_STARTED,
@@ -11,7 +11,8 @@ export default function(state, action) {
       break;
 
       case CREATE_ENTRY_COMPLETED:
-        state = Object.assign({}, state, { entities: merge({}, state.entities, action.entities) }, {entryIds: [...state.entryIds, action.entryId] });
+        state = state.update('entities', entities => entities.mergeDeep(Immutable.fromJS(action.entities)));
+        state = state.update('entryIds', entryIds => entryIds.push(action.entryId));
         break;
 
       default:
