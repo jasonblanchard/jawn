@@ -20,11 +20,12 @@ export default class EntryForm extends PureComponent {
 
     this._handleChange = this._handleChange.bind(this);
     this._handleSubmit = this._handleSubmit.bind(this);
+    this._handleKeyDown = this._handleKeyDown.bind(this);
   }
 
   render() {
     return (
-      <form onSubmit={this._handleSubmit}>
+      <form onSubmit={this._handleSubmit} onKeyDown={this._handleKeyDown}>
         <textarea
           className="EntryForm-textInput"
           aria-label="text"
@@ -40,8 +41,15 @@ export default class EntryForm extends PureComponent {
     this.setState({ text: event.target.value });
   }
 
+  _handleKeyDown(event) {
+    const { metaKey, keyCode } = event;
+    if (metaKey && keyCode === 13) {
+      this._handleSubmit();
+    }
+  }
+
   _handleSubmit(event) {
-    event.preventDefault();
+    event && event.preventDefault();
     this.props.onSubmit(this._getFormData());
     this.setState({ text: null });
   }
