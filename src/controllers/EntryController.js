@@ -22,29 +22,35 @@ export default class EntryController {
       });
   }
 
-  handleIndex(req, res) {
+  handleIndex(req, res, next) {
     this._logger.debug('handleIndex', LOG_TAG);
     this._entryService.list().then(entries => {
       this._logger.debug({ entries }, LOG_TAG);
       res.json(entries);
+    }).catch(error => {
+      next(error);
     });
   }
 
-  handleUpdate(req, res) {
+  handleUpdate(req, res, next) {
     this._logger.debug('handleUpdate', 'LOG_TAG');
     this._logger.debug({ body: req.body, params: req.params }, LOG_TAG);
     this._entryService.update(req.params.entryId, req.body)
       .then(entry => {
         this._logger.debug({ entry }, LOG_TAG);
         res.json(entry);
+      }).catch(error => {
+        next(error);
       })
   }
 
-  handleDelete(req, res) {
+  handleDelete(req, res, next) {
     this._logger.debug('handleDelete', 'LOG_TAG');
     this._entryService.delete(req.params.entryId)
       .then(() => {
         res.status(201).send();
-      })
+      }).catch(error => {
+        next(error);
+      });
   }
 }
