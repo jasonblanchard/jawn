@@ -9,6 +9,7 @@ export default class EntryController {
     this.handleCreate = this.handleCreate.bind(this);
     this.handleIndex = this.handleIndex.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
   handleCreate(req, res) {
@@ -36,6 +37,14 @@ export default class EntryController {
       .then(entry => {
         this._logger.debug({ entry }, LOG_TAG);
         res.json(entry);
+      })
+  }
+
+  handleDelete(req, res) {
+    this._logger.debug('handleDelete', 'LOG_TAG');
+    this._entryService.delete(req.params.entryId)
+      .then(() => {
+        res.status(201).send();
       })
   }
 }

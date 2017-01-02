@@ -16,9 +16,11 @@ export default function(registry) {
     res.send('Hello');
   });
 
+  // TODO: Error handling
   app.get('/api/entries', entryController.handleIndex);
   app.post('/api/entries', entryController.handleCreate);
   app.post('/api/entries/:entryId', entryController.handleUpdate);
+  app.delete('/api/entries/:entryId', entryController.handleDelete);
 
   return app;
 }

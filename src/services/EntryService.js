@@ -18,6 +18,7 @@ function mapRecordToObject(record) {
   }
 }
 
+// TODO: Error handling.
 export default class EntryService {
   constructor(store, logger) {
     this._store = store;
@@ -49,5 +50,9 @@ export default class EntryService {
     this._logger.debug({ fields }, LOG_TAG);
 
     return this._model.findByIdAndUpdate(id, { $set: fields }, { new: true }).then(mapRecordToObject);
+  }
+
+  delete(id) {
+    return this._model.remove({ _id: id });
   }
 }
