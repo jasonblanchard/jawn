@@ -1,6 +1,7 @@
 const types = [
   'CREATE_ENTRY',
-  'FETCH_ENTRIES'
+  'FETCH_ENTRIES',
+  'UPDATE_ENTRY'
 ];
 
 types.forEach(type => {

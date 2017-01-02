@@ -17,7 +17,8 @@ export default function(registry) {
   });
 
   app.get('/api/entries', entryController.handleIndex);
-  app.post('/api/entries', entryController.handlePost);
+  app.post('/api/entries', entryController.handleCreate);
+  app.post('/api/entries/:entryId', entryController.handleUpdate);
 
   return app;
 }

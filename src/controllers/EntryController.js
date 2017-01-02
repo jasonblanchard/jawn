@@ -6,12 +6,13 @@ export default class EntryController {
     this._entryService = entryService;
     this._logger = logger;
 
-    this.handlePost = this.handlePost.bind(this);
+    this.handleCreate = this.handleCreate.bind(this);
     this.handleIndex = this.handleIndex.bind(this);
+    this.handleUpdate = this.handleUpdate.bind(this);
   }
 
-  handlePost(req, res) {
-    this._logger.debug('handlePost', LOG_TAG);
+  handleCreate(req, res) {
+    this._logger.debug('handleCreate', LOG_TAG);
     this._logger.debug({ body: req.body }, LOG_TAG);
     this._entryService.create(req.body)
       .then(entry => {
@@ -25,5 +26,15 @@ export default class EntryController {
     this._entryService.list().then(entries => {
       res.json(entries);
     });
+  }
+
+  handleUpdate(req, res) {
+    this._logger.debug('handleUpdate', 'LOG_TAG');
+    this._logger.debug({ body: req.body, params: req.params }, LOG_TAG);
+    this._entryService.update(req.params.entryId, req.body)
+      .then(entry => {
+        this._logger.debug({ entry }, LOG_TAG);
+        res.json(entry);
+      })
   }
 }

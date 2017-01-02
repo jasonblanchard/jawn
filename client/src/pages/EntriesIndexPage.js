@@ -1,14 +1,17 @@
 import { connect } from 'react-redux';
 import React, { Component, PropTypes } from 'react';
 
-import EntryForm from 'src/components/EntryForm';
 import createEntry from 'src/actions/createEntry';
+import Entry from 'src/components/Entry';
+import EntryForm from 'src/components/EntryForm';
 import selectors from 'src/state/selectors';
+import updateEntry from 'src/actions/updateEntry';
 
 class EntriesIndexPage extends Component {
   static propTypes = {
+    createEntry: PropTypes.func,
     entries: PropTypes.array,
-    createEntry: PropTypes.func
+    updateEntry: PropTypes.func
   }
 
   static defaultProps = {
@@ -19,18 +22,13 @@ class EntriesIndexPage extends Component {
     return (
       <div>
         <EntryForm onSubmit={this.props.createEntry} />
-        {this.props.entries.length === 0 ? "No entries yet" : this.props.entries.reverse().map(this._renderEntry)}
+        {this.props.entries.length === 0 ? "No entries yet" : this.props.entries.reverse().map(this._renderEntry, this)}
       </div>
     );
   }
 
   _renderEntry(entry) {
-    return (
-      <div key={entry.id}>
-        {entry.timeCreated}
-        <p>{entry.text}</p>
-      </div>
-    )
+    return <Entry key={entry.id} entry={entry} onSubmit={this.props.updateEntry} />;
   }
 }
 
@@ -42,7 +40,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    createEntry: (fields) => dispatch(createEntry(fields))
+    createEntry: fields => dispatch(createEntry(fields)),
+    updateEntry: (id, fields) => dispatch(updateEntry(id, fields))
   }
 }
 

@@ -2,10 +2,12 @@ import React, { PureComponent, PropTypes } from 'react';
 
 export default class EntryForm extends PureComponent {
   static propTypes = {
+    entry: PropTypes.object,
     onSubmit: PropTypes.func
   }
 
   static defaultProps = {
+    entry: {},
     onSubmit: () => {}
   }
 
@@ -13,7 +15,7 @@ export default class EntryForm extends PureComponent {
     super(props);
 
     this.state = {
-      text: null
+      text: props.entry.text
     }
 
     this._handleChange = this._handleChange.bind(this);
@@ -29,7 +31,7 @@ export default class EntryForm extends PureComponent {
           value={this.state.text || ''}
           onChange={this._handleChange}
         />
-        <button>Submit</button>
+        <button>{this.props.entry.id ? 'Update' : 'Create'}</button>
       </form>
     );
   }
