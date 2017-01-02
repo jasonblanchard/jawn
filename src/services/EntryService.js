@@ -18,22 +18,15 @@ export default class EntryService {
   }
 
   list() {
-    return new Promise((resolve, reject) => {
-      this._model.find((error, records) => {
-        if (error) {
-          this._logger.error(error, LOG_TAG);
-          return reject(error);
-        }
+    return this._model.find().then(records => {
+      const entries = records.map(record => ({
+        id: record.id,
+        text: record.text,
+        timeCreated: record.timeCreated
+      }));
 
-        const entries = records.map(record => ({
-          id: record.id,
-          text: record.text,
-          timeCreated: record.timeCreated
-        }));
-
-        this._logger.debug({ entries }, LOG_TAG);
-        return resolve(entries);
-      })
+      this._logger.debug({ entries }, LOG_TAG);
+      return entries;
     })
   }
 
@@ -43,23 +36,33 @@ export default class EntryService {
     this._logger.debug({ fields }, LOG_TAG);
 
     const entry = new this._model(fields);
-    return new Promise((resolve, reject) => {
-      entry.save((error, record) => {
-        if (error) {
-          this._logger.error(error, LOG_TAG);
-          return reject(error);
-        }
 
-        const entry = {
-          id: record.id,
-          text: record.text,
-          timeCreated: record.timeCreated
-        }
+    return entry.save().then(record => {
+      const entry = {
+        id: record.id,
+        text: record.text,
+        timeCreated: record.timeCreated
+      }
 
-        this._logger.debug({ entry }, LOG_TAG);
+      this._logger.debug({ entry }, LOG_TAG);
 
-        return resolve(entry);
-      });
+      return entry;
+    });
+  }
+
+  update(id, params) {
+    this._logger.debug({ params }, LOG_TAG);
+
+    return this._model.findByIdAndUpdate(id, { $set: params }, { new: true }).then(record => {
+      const entry = {
+        id: record.id,
+        text: record.text,
+        timeCreated: record.timeCreated
+      }
+
+      this._logger.debug({ entry }, LOG_TAG);
+
+      return entry;
     });
   }
 }

@@ -16,8 +16,8 @@ export default function(id, fields) {
       .send(fields)
       .then(response => {
         const entry = response.body;
-        const { entities, result: entryId } = normalize(entry, entrySchema);
-        dispatch({ type: UPDATE_ENTRY_COMPLETED, entities, entryId });
+        const { entities } = normalize(entry, entrySchema);
+        dispatch({ type: UPDATE_ENTRY_COMPLETED, entities });
       })
       .catch(error => {
         dispatch({ type: UPDATE_ENTRY_FAILED, error });
