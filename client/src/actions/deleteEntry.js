@@ -7,7 +7,7 @@ import {
 } from 'src/actions/types';
 
 export default function(id) {
-  return (dispatch) => {
+  return dispatch => {
     dispatch({ type: DELETE_ENTRY_STARTED, id });
     return http.delete(`/api/entries/${id}`)
       .then(() => {

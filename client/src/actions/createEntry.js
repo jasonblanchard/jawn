@@ -10,7 +10,7 @@ import {
 } from 'src/actions/types';
 
 export default function(fields) {
-  return (dispatch) => {
+  return dispatch => {
     dispatch({ type: CREATE_ENTRY_STARTED, fields });
     return http.post('/api/entries')
       .send(fields)

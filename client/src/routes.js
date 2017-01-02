@@ -3,8 +3,16 @@ import React from 'react';
 
 import EntriesIndexPage from 'src/pages/EntriesIndexPage';
 import fetchEntries from 'src/actions/fetchEntries';
+import LoginPage from 'src/pages/LoginPage';
 
 export default [
+  {
+    path: '/login',
+    Component: LoginPage,
+    getData: () => {
+      // TODO: Dispatch something and redirect if already logged in
+    },
+  },
   {
     path: '/',
     Component: EntriesIndexPage,

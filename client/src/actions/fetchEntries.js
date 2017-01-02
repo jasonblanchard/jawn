@@ -10,7 +10,7 @@ import {
 } from 'src/actions/types';
 
 export default function() {
-  return (dispatch) => {
+  return dispatch => {
     dispatch({ type: FETCH_ENTRIES_STARTED });
     return http.get('/api/entries')
       .then(response => {

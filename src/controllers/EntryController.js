@@ -12,13 +12,16 @@ export default class EntryController {
     this.handleDelete = this.handleDelete.bind(this);
   }
 
-  handleCreate(req, res) {
+  handleCreate(req, res, next) {
     this._logger.debug('handleCreate', LOG_TAG);
     this._logger.debug({ body: req.body }, LOG_TAG);
     this._entryService.create(req.body)
       .then(entry => {
         this._logger.debug({ entry }, LOG_TAG);
         res.json(entry);
+      })
+      .catch(error => {
+        next(error);
       });
   }
 
@@ -27,7 +30,8 @@ export default class EntryController {
     this._entryService.list().then(entries => {
       this._logger.debug({ entries }, LOG_TAG);
       res.json(entries);
-    }).catch(error => {
+    })
+    .catch(error => {
       next(error);
     });
   }
@@ -39,7 +43,8 @@ export default class EntryController {
       .then(entry => {
         this._logger.debug({ entry }, LOG_TAG);
         res.json(entry);
-      }).catch(error => {
+      })
+      .catch(error => {
         next(error);
       });
   }
@@ -49,7 +54,8 @@ export default class EntryController {
     this._entryService.delete(req.params.entryId)
       .then(() => {
         res.status(201).send();
-      }).catch(error => {
+      })
+      .catch(error => {
         next(error);
       });
   }

@@ -2,6 +2,7 @@ const types = [
   'CREATE_ENTRY',
   'DELETE_ENTRY',
   'FETCH_ENTRIES',
+  'LOGIN',
   'UPDATE_ENTRY',
 ];
 
