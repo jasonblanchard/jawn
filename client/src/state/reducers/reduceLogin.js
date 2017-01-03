@@ -11,7 +11,7 @@ export default function(state, action) {
       break;
 
     case LOGIN_COMPLETED:
-      state = state.set('currentUser', Immutable.fromJS(action.user));
+      state = state.set('currentUser', Immutable.fromJS(action.currentUser));
       break;
 
     default:

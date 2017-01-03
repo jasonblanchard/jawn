@@ -13,9 +13,10 @@ const appReducer = (state = Immutable.Map(), action) => {
   return reduce ? reduce(state, action) : state;
 };
 
-export default function() {
+export default function(initialState) {
   return createStore(
     combineReducers({ found: foundReducer, app: appReducer }),
+    initialState,
     compose(
       createHistoryEnhancer({
         protocol: new BrowserProtocol(),

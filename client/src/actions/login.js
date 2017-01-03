@@ -12,7 +12,10 @@ export default function(username, password) {
     return http.post('/api/login')
       .send({ username, password })
       .then(httpResponse => {
-        dispatch({ type: LOGIN_COMPLETED, user: httpResponse.body });
+        const currentUser = httpResponse.body;
+        // TODO: Only do this in dev? Merge with current state?
+        localStorage.setItem('appState', JSON.stringify({ currentUser }));
+        dispatch({ type: LOGIN_COMPLETED, currentUser });
       })
       .catch(error => {
         dispatch({ type: LOGIN_FAILED, error });
