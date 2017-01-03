@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import React, { PureComponent, PropTypes } from 'react';
-import { Link } from 'found';
 import { Actions as RouterActions } from 'farce';
 
 import login from 'src/actions/login';
@@ -20,7 +19,6 @@ class LoginPage extends PureComponent {
   render() {
     return (
       <form onSubmit={this._handleSubmit}>
-        <Link to="/">test</Link>
         <div>
           <label htmlFor="LoginPage-usernameInput">
             username

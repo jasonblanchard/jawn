@@ -7,6 +7,7 @@ const EntrySchema = new Schema({
   text: String,
   timeCreated: String,
   timeUpdated: String,
+  userId: String,
 });
 
 function mapRecordToObject(record) {
@@ -15,6 +16,7 @@ function mapRecordToObject(record) {
     text: record.text,
     timeCreated: record.timeCreated,
     timeUpdated: record.timeUpdated,
+    userId: record.userId,
   };
 }
 
@@ -28,8 +30,8 @@ export default class EntryService {
     this.create = this.create.bind(this);
   }
 
-  list() {
-    return this._model.find().then(records => {
+  list(userId) {
+    return this._model.find({ userId }).then(records => {
       const entries = records.map(mapRecordToObject);
       this._logger.debug({ entries }, LOG_TAG);
 
@@ -37,8 +39,8 @@ export default class EntryService {
     });
   }
 
-  create(params) {
-    const fields = Object.assign({}, params, { timeCreated: moment().format() });
+  create(params, userId) {
+    const fields = Object.assign({}, params, { timeCreated: moment().format(), userId });
     this._logger.debug({ fields }, LOG_TAG);
 
     const entry = new this._model(fields);

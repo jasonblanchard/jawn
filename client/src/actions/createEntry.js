@@ -2,6 +2,7 @@ import { normalize } from 'normalizr';
 import http from 'superagent';
 
 import { entrySchema } from 'src/entities/schema';
+import selectors from 'src/state/selectors';
 
 import {
   CREATE_ENTRY_STARTED,
@@ -10,16 +11,25 @@ import {
 } from 'src/actions/types';
 
 export default function(fields) {
-  return dispatch => {
+  return (dispatch, getState) => {
     dispatch({ type: CREATE_ENTRY_STARTED, fields });
-    return http.post('/api/entries')
-      .send(fields)
-      .then(response => {
-        const entry = response.body;
-        const { entities, result: entryId } = normalize(entry, entrySchema);
-        dispatch({ type: CREATE_ENTRY_COMPLETED, entities, entryId });
-      }).catch(error => {
-        dispatch({ type: CREATE_ENTRY_FAILED, error });
-      });
+
+    try {
+      const token = selectors.getCurrentUser(getState()).token;
+
+      return http.post('/api/entries')
+        .set('Authorization', `Bearer ${token}`)
+        .send(fields)
+        .then(response => {
+          const entry = response.body;
+          const { entities, result: entryId } = normalize(entry, entrySchema);
+          dispatch({ type: CREATE_ENTRY_COMPLETED, entities, entryId });
+        })
+        .catch(error => {
+          dispatch({ type: CREATE_ENTRY_FAILED, error });
+        });
+    } catch (error) {
+      dispatch({ type: CREATE_ENTRY_FAILED, error });
+    }
   };
 }
