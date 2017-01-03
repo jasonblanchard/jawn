@@ -9,6 +9,7 @@
     "bottlejs": "^1.5.0",
     "dotenv": "^2.0.0",
     "express": "^4.14.0",
+    "jsonwebtoken": "^7.2.1",
     "loglevel": "^1.4.1",
     "moment": "^2.17.1",
     "mongoose": "^4.7.4"

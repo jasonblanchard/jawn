@@ -1,12 +1,14 @@
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 const LOG_TAG = 'LoginController';
 
 export default class LoginController {
-  constructor(store, userService, logger) {
+  constructor(store, userService, logger, appSecret) {
     this._store = store;
     this._userService = userService;
     this._logger = logger;
+    this._appSecret = appSecret;
 
     this.handlePost = this.handlePost.bind(this);
   }
@@ -29,7 +31,11 @@ export default class LoginController {
 
           this._logger.debug({ user: Object.assign(user, { password: '***' }) }, LOG_TAG);
           delete user.password;
-          res.json(Object.assign(user, { token: '1234' }));
+
+          jwt.sign({ id: user.id }, this._appSecret, {}, (error, token) => {
+            if (error) return Promise.reject(error);
+            res.json(Object.assign(user, { token }));
+          });
         });
       })
       .catch(error => {

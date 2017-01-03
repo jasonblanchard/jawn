@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import React, { PureComponent, PropTypes } from 'react';
 import { Link } from 'found';
-import { Actions as FarceActions } from 'farce';
+import { Actions as RouterActions } from 'farce';
 
 import login from 'src/actions/login';
 
@@ -53,7 +53,7 @@ class LoginPage extends PureComponent {
 function mapDispatchToProps(dispatch) {
   return {
     login: (username, password) => dispatch(login(username, password)),
-    push: (path) => dispatch(FarceActions.push(path)),
+    push: (path) => dispatch(RouterActions.push(path)),
   };
 }
 
