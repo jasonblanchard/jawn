@@ -25,6 +25,8 @@
     "eslint-plugin-react": "^6.8.0"
   },
   "scripts": {
-    "start": "NODE_PATH=. nodemon --exec babel-node src/index.js -w src/"
+    "build": "cd ./client && npm run build && cd .. && babel --out-dir build/ src/",
+    "dev": "NODE_PATH=./src nodemon --exec babel-node src/app/index.js -w src/",
+    "start": "NODE_PATH=./build node ./build/app/index.js"
   }
 }

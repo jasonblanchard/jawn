@@ -1,4 +1,4 @@
-import EntryController from 'src/controllers/EntryController';
+import EntryController from 'app/controllers/EntryController';
 
 export default function(registry) {
   const { store, entryService, logger } = registry;

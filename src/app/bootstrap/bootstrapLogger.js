@@ -1,4 +1,4 @@
-import LoggerService from 'src/services/LoggerService';
+import LoggerService from 'app/services/LoggerService';
 
 export default function() {
   return new LoggerService(process.env.LOG_LEVEL);

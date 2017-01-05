@@ -1,4 +1,4 @@
-import bootstrap from 'src/bootstrap';
+import bootstrap from 'app/bootstrap';
 import environment from 'dotenv';
 
 environment.config();

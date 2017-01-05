@@ -1,4 +1,4 @@
-import LoginController from 'src/controllers/LoginController';
+import LoginController from 'app/controllers/LoginController';
 
 export default function(registry) {
   const { store, userService, logger } = registry;

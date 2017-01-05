@@ -1,4 +1,4 @@
-import UserService from 'src/services/UserService';
+import UserService from 'app/services/UserService';
 
 export default function(registry) {
   const { store, logger } = registry;

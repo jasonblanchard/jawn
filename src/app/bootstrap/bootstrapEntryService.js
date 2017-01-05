@@ -1,4 +1,4 @@
-import EntryService from 'src/services/EntryService';
+import EntryService from 'app/services/EntryService';
 
 export default function(registry) {
   const { store, logger } = registry;

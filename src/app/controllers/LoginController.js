@@ -15,7 +15,7 @@ export default class LoginController {
 
   handlePost(req, res, next) {
     const { username, password } = req.body;
-    this._logger.debug({ username, password }, LOG_TAG);
+    this._logger.debug({ username }, LOG_TAG);
     this._userService.get(username)
       .then(user => {
         if (!user) {

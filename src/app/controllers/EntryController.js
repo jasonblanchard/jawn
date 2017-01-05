@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import TokenUtils from 'src/utils/TokenUtils';
+import TokenUtils from 'app/utils/TokenUtils';
 
 const LOG_TAG = 'EntryController';
 
