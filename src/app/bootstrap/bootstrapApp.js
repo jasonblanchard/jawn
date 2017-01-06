@@ -30,8 +30,7 @@ export default function(registry) {
   app.get('*', (request, response, next) => {
     fs.readFile(path.join(__dirname, '../../../client/build', 'index.html'), 'utf8', (error, file) => {
       if (!file) return next();
-      file = file.replace('%INITIAL_STATE%', '{}');
-      file = file.replace('// ', '');
+      file = file.replace('__INITIAL_STATE={}', "__INITIAL_STATE={test: 'value'}"); // TODO: Set auth cookie
       response.set('Content-Type', 'text/html');
       response.send(file);
     });
