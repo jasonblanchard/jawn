@@ -5,6 +5,8 @@ import path from 'path';
 
 const LOG_TAG = 'app';
 
+const NODE_ENV = process.env.NODE_ENV || 'development';
+
 export default function(registry) {
   const { logger, entryController, loginController } = registry;
 
@@ -31,6 +33,7 @@ export default function(registry) {
     fs.readFile(path.join(__dirname, '../../../client/build', 'index.html'), 'utf8', (error, file) => {
       if (!file) return next();
       file = file.replace('__INITIAL_STATE={}', "__INITIAL_STATE={test: 'value'}"); // TODO: Set auth cookie
+      file = file.replace('__ENV={}', `__ENV={NODE_ENV: '${NODE_ENV}', LOG_LEVEL: '${process.env.LOG_LEVEL}'}`); // TODO: Set run-time environment vars here.
       response.set('Content-Type', 'text/html');
       response.send(file);
     });
