@@ -7,7 +7,7 @@ const EntrySchema = new Schema({
   text: String,
   timeCreated: String,
   timeUpdated: String,
-  userId: String,
+  userId: { type: [String], index: true },
 });
 
 function mapRecordToObject(record) {
