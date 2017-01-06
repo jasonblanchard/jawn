@@ -27,8 +27,9 @@ export default function(registry) {
     response.status(404).json({ error: 'No resource at this route' });
   });
 
-  app.get('*', (request, response) => {
+  app.get('*', (request, response, next) => {
     fs.readFile(path.join(__dirname, '../../../client/build', 'index.html'), 'utf8', (error, file) => {
+      if (!file) return next();
       file = file.replace('%INITIAL_STATE%', '{}');
       file = file.replace('// ', '');
       response.set('Content-Type', 'text/html');

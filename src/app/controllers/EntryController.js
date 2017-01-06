@@ -40,7 +40,7 @@ export default class EntryController {
     this._logger.debug('handleIndex', LOG_TAG);
     const token = TokenUtils.parseAuthorizationHeader(req.headers.authorization);
     jwt.verify(token, this._appSecret, (error, parsedToken) => {
-      if (error) throw new Error('authentication failed'); // TODO: Do something with this;
+      if (error) return next(new Error('authentication failed')); // TODO: Do something with this;
 
       this._entryService.list(parsedToken.id).then(entries => {
         this._logger.debug({ entries }, LOG_TAG);

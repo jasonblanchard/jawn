@@ -1,3 +1,3 @@
 export default {
-  parseAuthorizationHeader: header => header.match(/Bearer (.*)/)[1],
+  parseAuthorizationHeader: header => (header ? header.match(/Bearer (.*)/)[1] : undefined),
 };
