@@ -30,6 +30,7 @@ export default function(registry) {
   app.get('*', (request, response) => {
     fs.readFile(path.join(__dirname, '../../../client/build', 'index.html'), 'utf8', (error, file) => {
       file = file.replace('%INITIAL_STATE%', '{}');
+      file = file.replace('// ', '');
       response.set('Content-Type', 'text/html');
       response.send(file);
     });
