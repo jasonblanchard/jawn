@@ -33,7 +33,7 @@ export default function(registry) {
       createMatchEnhancer(
         new Matcher(routes),
       ),
-      applyMiddleware(thunk),
+      applyMiddleware(thunk.withExtraArgument(registry)),
       window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
     ),
   );

@@ -10,8 +10,12 @@ import {
   FETCH_ENTRIES_FAILED,
 } from 'src/actions/types';
 
+const LOG_TAG = 'fetchEntries';
+
 export default function() {
-  return (dispatch, getState) => {
+  return (dispatch, getState, registry) => {
+    const { logger } = registry;
+
     dispatch({ type: FETCH_ENTRIES_STARTED });
 
     try {
@@ -28,6 +32,7 @@ export default function() {
           dispatch({ type: FETCH_ENTRIES_FAILED, error });
         });
     } catch (error) {
+      logger.debug(error, LOG_TAG);
       dispatch({ type: FETCH_ENTRIES_FAILED, error });
     }
   };
