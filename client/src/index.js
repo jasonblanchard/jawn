@@ -1,17 +1,20 @@
 import { Actions as FarceActions } from 'farce';
 import { Provider } from 'react-redux';
 import { resolveElements } from 'found';
-import Immutable from 'immutable';
+import bootstrap from 'src/bootstrap';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { Router } from 'src/routes';
-import createStore from 'src/createStore';
 
 import './index.css';
 
-const initialAppState = Object.assign({}, JSON.parse(localStorage.getItem('appState'))); // TODO: Merge with window.__initialAppState
-const store = createStore({ app: Immutable.fromJS(initialAppState) });
+const LOG_TAG = 'entrypoint';
+
+const registry = bootstrap();
+const { logger, store } = registry;
+
+logger.debug('>>> bootstrapping <<<', LOG_TAG);
 
 store.dispatch(FarceActions.init());
 

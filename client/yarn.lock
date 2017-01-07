@@ -993,6 +993,12 @@ boom@2.x.x:
   dependencies:
     hoek "2.x.x"
 
+bottle:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/bottle/-/bottle-0.2.0.tgz#dea8d08c89eaca262bf5d287a2b6540555f8a170"
+  dependencies:
+    tide "*"
+
 brace-expansion@^1.0.0:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-1.1.6.tgz#7197d7eaa9b87e648390ea61fc66c84427420df9"
@@ -1623,7 +1629,7 @@ diff@^3.0.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/diff/-/diff-3.1.0.tgz#9406c73a401e6c2b3ba901c5e2c44eb6a60c5385"
 
-doctrine@^1.2.2:
+doctrine@^1.2.2, doctrine@1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/doctrine/-/doctrine-1.5.0.tgz#379dce730f6166f76cefa4e6707a159b02c5a6fa"
   dependencies:
@@ -1821,6 +1827,16 @@ escope@^3.6.0:
     esrecurse "^4.1.0"
     estraverse "^4.1.1"
 
+eslint-config-airbnb-base@^10.0.0:
+  version "10.0.1"
+  resolved "https://registry.yarnpkg.com/eslint-config-airbnb-base/-/eslint-config-airbnb-base-10.0.1.tgz#f17d4e52992c1d45d1b7713efbcd5ecd0e7e0506"
+
+eslint-config-airbnb@^13.0.0:
+  version "13.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-airbnb/-/eslint-config-airbnb-13.0.0.tgz#688d15d3c276c0c753ae538c92a44397d76ae46e"
+  dependencies:
+    eslint-config-airbnb-base "^10.0.0"
+
 eslint-config-react-app@^0.5.0:
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/eslint-config-react-app/-/eslint-config-react-app-0.5.0.tgz#68c6da07d1cfbce6a992bc244ba16186b942d89f"
@@ -1848,11 +1864,33 @@ eslint-module-utils@^1.0.0:
     debug "2.2.0"
     pkg-dir "^1.0.0"
 
+eslint-module-utils@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-module-utils/-/eslint-module-utils-2.0.0.tgz#a6f8c21d901358759cdc35dbac1982ae1ee58bce"
+  dependencies:
+    debug "2.2.0"
+    pkg-dir "^1.0.0"
+
 eslint-plugin-flowtype@2.21.0:
   version "2.21.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-flowtype/-/eslint-plugin-flowtype-2.21.0.tgz#a47e85abcdd181d37a336054bd552149ae387d9c"
   dependencies:
     lodash "^4.15.0"
+
+eslint-plugin-import@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-import/-/eslint-plugin-import-2.2.0.tgz#72ba306fad305d67c4816348a4699a4229ac8b4e"
+  dependencies:
+    builtin-modules "^1.1.1"
+    contains-path "^0.1.0"
+    debug "^2.2.0"
+    doctrine "1.5.0"
+    eslint-import-resolver-node "^0.2.0"
+    eslint-module-utils "^2.0.0"
+    has "^1.0.1"
+    lodash.cond "^4.3.0"
+    minimatch "^3.0.3"
+    pkg-up "^1.0.0"
 
 eslint-plugin-import@2.0.1:
   version "2.0.1"
@@ -1869,7 +1907,7 @@ eslint-plugin-import@2.0.1:
     minimatch "^3.0.3"
     pkg-up "^1.0.0"
 
-eslint-plugin-jsx-a11y@2.2.3:
+eslint-plugin-jsx-a11y@^2.2.3, eslint-plugin-jsx-a11y@2.2.3:
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/eslint-plugin-jsx-a11y/-/eslint-plugin-jsx-a11y-2.2.3.tgz#4e35cb71b8a7db702ac415c806eb8e8d9ea6c65d"
   dependencies:
@@ -1877,12 +1915,58 @@ eslint-plugin-jsx-a11y@2.2.3:
     jsx-ast-utils "^1.0.0"
     object-assign "^4.0.1"
 
+eslint-plugin-react@^6.8.0:
+  version "6.8.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-6.8.0.tgz#741ab5438a094532e5ce1bbb935d6832356f492d"
+  dependencies:
+    doctrine "^1.2.2"
+    jsx-ast-utils "^1.3.4"
+
 eslint-plugin-react@6.4.1:
   version "6.4.1"
   resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-6.4.1.tgz#7d1aade747db15892f71eee1fea4addf97bcfa2b"
   dependencies:
     doctrine "^1.2.2"
     jsx-ast-utils "^1.3.1"
+
+eslint@^3.12.2:
+  version "3.13.0"
+  resolved "https://registry.yarnpkg.com/eslint/-/eslint-3.13.0.tgz#636925fd163c9babe2e8be7ae43caf518d469577"
+  dependencies:
+    babel-code-frame "^6.16.0"
+    chalk "^1.1.3"
+    concat-stream "^1.4.6"
+    debug "^2.1.1"
+    doctrine "^1.2.2"
+    escope "^3.6.0"
+    espree "^3.3.1"
+    estraverse "^4.2.0"
+    esutils "^2.0.2"
+    file-entry-cache "^2.0.0"
+    glob "^7.0.3"
+    globals "^9.14.0"
+    ignore "^3.2.0"
+    imurmurhash "^0.1.4"
+    inquirer "^0.12.0"
+    is-my-json-valid "^2.10.0"
+    is-resolvable "^1.0.0"
+    js-yaml "^3.5.1"
+    json-stable-stringify "^1.0.0"
+    levn "^0.3.0"
+    lodash "^4.0.0"
+    mkdirp "^0.5.0"
+    natural-compare "^1.4.0"
+    optionator "^0.8.2"
+    path-is-inside "^1.0.1"
+    pluralize "^1.2.1"
+    progress "^1.1.8"
+    require-uncached "^1.0.2"
+    shelljs "^0.7.5"
+    strip-bom "^3.0.0"
+    strip-json-comments "~2.0.1"
+    table "^3.7.8"
+    text-table "~0.2.0"
+    user-home "^2.0.0"
 
 eslint@3.8.1:
   version "3.8.1"
@@ -2353,7 +2437,7 @@ glob@^5.0.15, glob@5.x:
     once "^1.3.0"
     path-is-absolute "^1.0.0"
 
-glob@^7.0.3, glob@^7.0.5:
+glob@^7.0.0, glob@^7.0.3, glob@^7.0.5:
   version "7.1.1"
   resolved "https://registry.yarnpkg.com/glob/-/glob-7.1.1.tgz#805211df04faaf1c63a3600306cdf5ade50b2ec8"
   dependencies:
@@ -2364,7 +2448,7 @@ glob@^7.0.3, glob@^7.0.5:
     once "^1.3.0"
     path-is-absolute "^1.0.0"
 
-globals@^9.0.0, globals@^9.2.0:
+globals@^9.0.0, globals@^9.14.0, globals@^9.2.0:
   version "9.14.0"
   resolved "https://registry.yarnpkg.com/globals/-/globals-9.14.0.tgz#8859936af0038741263053b39d0e76ca241e4034"
 
@@ -2576,13 +2660,19 @@ ieee754@^1.1.4:
   version "1.1.8"
   resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.1.8.tgz#be33d40ac10ef1926701f6f08a2d86fbfd1ad3e4"
 
-ignore@^3.1.5:
+ignore@^3.1.5, ignore@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-3.2.0.tgz#8d88f03c3002a0ac52114db25d2c673b0bf1e435"
 
-immutable:
+immutable, immutable@^3.2.1, immutable@^3.7.5:
   version "3.8.1"
   resolved "https://registry.yarnpkg.com/immutable/-/immutable-3.8.1.tgz#200807f11ab0f72710ea485542de088075f68cd2"
+
+immutablediff@^0.4.2:
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/immutablediff/-/immutablediff-0.4.4.tgz#a010e6948f700fe12436433f36c6e2ad86972ab1"
+  dependencies:
+    immutable "^3.2.1"
 
 imurmurhash@^0.1.4:
   version "0.1.4"
@@ -2636,6 +2726,10 @@ inquirer@^0.12.0:
 interpret@^0.6.4:
   version "0.6.6"
   resolved "https://registry.yarnpkg.com/interpret/-/interpret-0.6.6.tgz#fecd7a18e7ce5ca6abfb953e1f86213a49f1625b"
+
+interpret@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/interpret/-/interpret-1.0.1.tgz#d579fb7f693b858004947af39fa0db49f795602c"
 
 invariant@^2.0.0, invariant@^2.2.0, invariant@^2.2.1:
   version "2.2.2"
@@ -3217,7 +3311,7 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.3.6"
 
-jsx-ast-utils@^1.0.0, jsx-ast-utils@^1.3.1:
+jsx-ast-utils@^1.0.0, jsx-ast-utils@^1.3.1, jsx-ast-utils@^1.3.4:
   version "1.3.5"
   resolved "https://registry.yarnpkg.com/jsx-ast-utils/-/jsx-ast-utils-1.3.5.tgz#9ba6297198d9f754594d62e59496ffb923778dd4"
   dependencies:
@@ -3284,12 +3378,25 @@ lodash._arrayeach@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/lodash._arrayeach/-/lodash._arrayeach-3.0.0.tgz#bab156b2a90d3f1bbd5c653403349e5e5933ef9e"
 
+lodash._arraymap@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/lodash._arraymap/-/lodash._arraymap-3.0.0.tgz#1a8fd0f4c0df4b61dea076d717cdc97f0a3c3e66"
+
 lodash._baseassign@^3.0.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/lodash._baseassign/-/lodash._baseassign-3.2.0.tgz#8c38a099500f215ad09e59f1722fd0c52bfe0a4e"
   dependencies:
     lodash._basecopy "^3.0.0"
     lodash.keys "^3.0.0"
+
+lodash._basecallback@^3.0.0:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/lodash._basecallback/-/lodash._basecallback-3.3.1.tgz#b7b2bb43dc2160424a21ccf26c57e443772a8e27"
+  dependencies:
+    lodash._baseisequal "^3.0.0"
+    lodash._bindcallback "^3.0.0"
+    lodash.isarray "^3.0.0"
+    lodash.pairs "^3.0.0"
 
 lodash._baseclone@^3.0.0:
   version "3.3.0"
@@ -3306,17 +3413,101 @@ lodash._basecopy@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/lodash._basecopy/-/lodash._basecopy-3.0.1.tgz#8da0e6a876cf344c0ad8a54882111dd3c5c7ca36"
 
+lodash._basedifference@^3.0.0:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/lodash._basedifference/-/lodash._basedifference-3.0.3.tgz#f2c204296c2a78e02b389081b6edcac933cf629c"
+  dependencies:
+    lodash._baseindexof "^3.0.0"
+    lodash._cacheindexof "^3.0.0"
+    lodash._createcache "^3.0.0"
+
+lodash._baseeach@^3.0.0:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/lodash._baseeach/-/lodash._baseeach-3.0.4.tgz#cf8706572ca144e8d9d75227c990da982f932af3"
+  dependencies:
+    lodash.keys "^3.0.0"
+
+lodash._baseflatten@^3.0.0:
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/lodash._baseflatten/-/lodash._baseflatten-3.1.4.tgz#0770ff80131af6e34f3b511796a7ba5214e65ff7"
+  dependencies:
+    lodash.isarguments "^3.0.0"
+    lodash.isarray "^3.0.0"
+
 lodash._basefor@^3.0.0:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/lodash._basefor/-/lodash._basefor-3.0.3.tgz#7550b4e9218ef09fad24343b612021c79b4c20c2"
+
+lodash._baseindexof@^3.0.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/lodash._baseindexof/-/lodash._baseindexof-3.1.0.tgz#fe52b53a1c6761e42618d654e4a25789ed61822c"
+
+lodash._baseisequal@^3.0.0:
+  version "3.0.7"
+  resolved "https://registry.yarnpkg.com/lodash._baseisequal/-/lodash._baseisequal-3.0.7.tgz#d8025f76339d29342767dcc887ce5cb95a5b51f1"
+  dependencies:
+    lodash.isarray "^3.0.0"
+    lodash.istypedarray "^3.0.0"
+    lodash.keys "^3.0.0"
 
 lodash._bindcallback@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/lodash._bindcallback/-/lodash._bindcallback-3.0.1.tgz#e531c27644cf8b57a99e17ed95b35c748789392e"
 
+lodash._cacheindexof@^3.0.0:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/lodash._cacheindexof/-/lodash._cacheindexof-3.0.2.tgz#3dc69ac82498d2ee5e3ce56091bafd2adc7bde92"
+
+lodash._createassigner@^3.0.0:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/lodash._createassigner/-/lodash._createassigner-3.1.1.tgz#838a5bae2fdaca63ac22dee8e19fa4e6d6970b11"
+  dependencies:
+    lodash._bindcallback "^3.0.0"
+    lodash._isiterateecall "^3.0.0"
+    lodash.restparam "^3.0.0"
+
+lodash._createcache@^3.0.0:
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/lodash._createcache/-/lodash._createcache-3.1.2.tgz#56d6a064017625e79ebca6b8018e17440bdcf093"
+  dependencies:
+    lodash._getnative "^3.0.0"
+
+lodash._createwrapper@^3.0.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/lodash._createwrapper/-/lodash._createwrapper-3.2.0.tgz#df453e664163217b895a454065af1c47a0ea3c4d"
+  dependencies:
+    lodash._root "^3.0.0"
+
 lodash._getnative@^3.0.0:
   version "3.9.1"
   resolved "https://registry.yarnpkg.com/lodash._getnative/-/lodash._getnative-3.9.1.tgz#570bc7dede46d61cdcde687d65d3eecbaa3aaff5"
+
+lodash._isiterateecall@^3.0.0:
+  version "3.0.9"
+  resolved "https://registry.yarnpkg.com/lodash._isiterateecall/-/lodash._isiterateecall-3.0.9.tgz#5203ad7ba425fae842460e696db9cf3e6aac057c"
+
+lodash._pickbyarray@^3.0.0:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/lodash._pickbyarray/-/lodash._pickbyarray-3.0.2.tgz#1f898d9607eb560b0e167384b77c7c6d108aa4c5"
+
+lodash._pickbycallback@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/lodash._pickbycallback/-/lodash._pickbycallback-3.0.0.tgz#ff61b9a017a7b3af7d30e6c53de28afa19b8750a"
+  dependencies:
+    lodash._basefor "^3.0.0"
+    lodash.keysin "^3.0.0"
+
+lodash._root@^3.0.0:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/lodash._root/-/lodash._root-3.0.1.tgz#fba1c4524c19ee9a5f8136b4609f017cf4ded692"
+
+lodash.assign@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/lodash.assign/-/lodash.assign-3.2.0.tgz#3ce9f0234b4b2223e296b8fa0ac1fee8ebca64fa"
+  dependencies:
+    lodash._baseassign "^3.0.0"
+    lodash._createassigner "^3.0.0"
+    lodash.keys "^3.0.0"
 
 lodash.assign@^4.2.0:
   version "4.2.0"
@@ -3337,6 +3528,19 @@ lodash.cond@^4.3.0:
   version "4.5.2"
   resolved "https://registry.yarnpkg.com/lodash.cond/-/lodash.cond-4.5.2.tgz#f471a1da486be60f6ab955d17115523dd1d255d5"
 
+lodash.defer@^4.0.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/lodash.defer/-/lodash.defer-4.1.0.tgz#e9c158a961de1a46ea24fda34685b4ccdd358f3f"
+
+lodash.foreach@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/lodash.foreach/-/lodash.foreach-3.0.3.tgz#6fd7efb79691aecd67fdeac2761c98e701d6c39a"
+  dependencies:
+    lodash._arrayeach "^3.0.0"
+    lodash._baseeach "^3.0.0"
+    lodash._bindcallback "^3.0.0"
+    lodash.isarray "^3.0.0"
+
 lodash.indexof@^4.0.5:
   version "4.0.5"
   resolved "https://registry.yarnpkg.com/lodash.indexof/-/lodash.indexof-4.0.5.tgz#53714adc2cddd6ed87638f893aa9b6c24e31ef3c"
@@ -3345,11 +3549,19 @@ lodash.isarguments@^3.0.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/lodash.isarguments/-/lodash.isarguments-3.1.0.tgz#2f573d85c6a24289ff00663b491c1d338ff3458a"
 
-lodash.isarray@^3.0.0:
+lodash.isarray@^3.0.0, lodash.isarray@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/lodash.isarray/-/lodash.isarray-3.0.4.tgz#79e4eb88c36a8122af86f844aa9bcd851b5fbb55"
 
-lodash.keys@^3.0.0:
+lodash.isfunction@^3.0.8:
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/lodash.isfunction/-/lodash.isfunction-3.0.8.tgz#4db709fc81bc4a8fd7127a458a5346c5cdce2c6b"
+
+lodash.istypedarray@^3.0.0:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/lodash.istypedarray/-/lodash.istypedarray-3.0.6.tgz#c9a477498607501d8e8494d283b87c39281cef62"
+
+lodash.keys@^3.0.0, lodash.keys@^3.1.2:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/lodash.keys/-/lodash.keys-3.1.2.tgz#4dbc0472b156be50a0b286855d1bd0b0c656098a"
   dependencies:
@@ -3357,13 +3569,57 @@ lodash.keys@^3.0.0:
     lodash.isarguments "^3.0.0"
     lodash.isarray "^3.0.0"
 
+lodash.keysin@^3.0.0:
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/lodash.keysin/-/lodash.keysin-3.0.8.tgz#22c4493ebbedb1427962a54b445b2c8a767fb47f"
+  dependencies:
+    lodash.isarguments "^3.0.0"
+    lodash.isarray "^3.0.0"
+
+lodash.mapvalues@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/lodash.mapvalues/-/lodash.mapvalues-3.0.1.tgz#ed52ab322b9a46c68a016143d0696194f8eb5d5d"
+  dependencies:
+    lodash._basecallback "^3.0.0"
+    lodash._basefor "^3.0.0"
+    lodash.keys "^3.0.0"
+
 lodash.merge:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.0.tgz#69884ba144ac33fe699737a6086deffadd0f89c5"
 
+lodash.omit@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/lodash.omit/-/lodash.omit-3.1.0.tgz#897fe382e6413d9ac97c61f78ed1e057a00af9f3"
+  dependencies:
+    lodash._arraymap "^3.0.0"
+    lodash._basedifference "^3.0.0"
+    lodash._baseflatten "^3.0.0"
+    lodash._bindcallback "^3.0.0"
+    lodash._pickbyarray "^3.0.0"
+    lodash._pickbycallback "^3.0.0"
+    lodash.keysin "^3.0.0"
+    lodash.restparam "^3.0.0"
+
+lodash.pairs@^3.0.0:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/lodash.pairs/-/lodash.pairs-3.0.1.tgz#bbe08d5786eeeaa09a15c91ebf0dcb7d2be326a9"
+  dependencies:
+    lodash.keys "^3.0.0"
+
 lodash.pickby@^4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.pickby/-/lodash.pickby-4.6.0.tgz#7dea21d8c18d7703a27c704c15d3b84a67e33aff"
+
+lodash.restparam@^3.0.0:
+  version "3.6.1"
+  resolved "https://registry.yarnpkg.com/lodash.restparam/-/lodash.restparam-3.6.1.tgz#936a4e309ef330a7645ed4145986c85ae5b20805"
+
+lodash.wrap@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/lodash.wrap/-/lodash.wrap-3.0.1.tgz#3fcd8bef867b2ec8c21bac638d816180593f71ab"
+  dependencies:
+    lodash._createwrapper "^3.0.0"
 
 lodash@^4.0.0, lodash@^4.15.0, lodash@^4.16.2, lodash@^4.16.4, lodash@^4.17.2, lodash@^4.2.0, lodash@^4.3.0, "lodash@>=3.5 <5":
   version "4.17.2"
@@ -3372,6 +3628,10 @@ lodash@^4.0.0, lodash@^4.15.0, lodash@^4.16.2, lodash@^4.16.4, lodash@^4.17.2, l
 lodash@^4.16.3, lodash@^4.16.6, lodash@^4.2.1:
   version "4.17.3"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.3.tgz#557ed7d2a9438cac5fd5a43043ca60cb455e01f7"
+
+loglevel:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/loglevel/-/loglevel-1.4.1.tgz#95b383f91a3c2756fd4ab093667e4309161f2bcd"
 
 longest@^1.0.1:
   version "1.0.1"
@@ -4336,6 +4596,10 @@ react-prop-types@^0.4.0:
   dependencies:
     warning "^3.0.0"
 
+react-pure-render@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/react-pure-render/-/react-pure-render-1.0.2.tgz#9d8a928c7f2c37513c2d064e57b3e3c356e9fabb"
+
 react-redux, react-redux@^5.0.0-beta.3:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-5.0.1.tgz#84a41bd4cdd180452bb6922bc79ad25bd5abb7c4"
@@ -4463,6 +4727,12 @@ readline2@^1.0.1:
     code-point-at "^1.0.0"
     is-fullwidth-code-point "^1.0.0"
     mute-stream "0.0.5"
+
+rechoir@^0.6.2:
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/rechoir/-/rechoir-0.6.2.tgz#85204b54dba82d5742e28c96756ef43af50e3384"
+  dependencies:
+    resolve "^1.1.6"
 
 recursive-readdir@2.1.0:
   version "2.1.0"
@@ -4767,6 +5037,14 @@ shelljs@^0.6.0:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/shelljs/-/shelljs-0.6.1.tgz#ec6211bed1920442088fe0f70b2837232ed2c8a8"
 
+shelljs@^0.7.5:
+  version "0.7.5"
+  resolved "https://registry.yarnpkg.com/shelljs/-/shelljs-0.7.5.tgz#2eef7a50a21e1ccf37da00df767ec69e30ad0675"
+  dependencies:
+    glob "^7.0.0"
+    interpret "^1.0.0"
+    rechoir "^0.6.2"
+
 shellwords@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/shellwords/-/shellwords-0.1.0.tgz#66afd47b6a12932d9071cbfd98a52e785cd0ba14"
@@ -4959,6 +5237,10 @@ strip-json-comments@~1.0.1, strip-json-comments@~1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-1.0.4.tgz#1e15fbcac97d3ee99bf2d73b4c656b082bbafb91"
 
+strip-json-comments@~2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-2.0.1.tgz#3c531942e908c2697c0ec344858c286c7ca0a60a"
+
 style-loader@0.13.1:
   version "0.13.1"
   resolved "https://registry.yarnpkg.com/style-loader/-/style-loader-0.13.1.tgz#468280efbc0473023cd3a6cd56e33b5a1d7fc3a9"
@@ -5071,6 +5353,23 @@ throat@^3.0.0:
 through@^2.3.6:
   version "2.3.8"
   resolved "https://registry.yarnpkg.com/through/-/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
+
+tide@*:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/tide/-/tide-1.2.1.tgz#4a6568a3b04037616902ec4d5f6b8a24291ea35c"
+  dependencies:
+    immutable "^3.7.5"
+    immutablediff "^0.4.2"
+    lodash.assign "^3.2.0"
+    lodash.defer "^4.0.0"
+    lodash.foreach "^3.0.3"
+    lodash.isarray "^3.0.4"
+    lodash.isfunction "^3.0.8"
+    lodash.keys "^3.1.2"
+    lodash.mapvalues "^3.0.1"
+    lodash.omit "^3.1.0"
+    lodash.wrap "^3.0.1"
+    react-pure-render "^1.0.2"
 
 timers-browserify@^2.0.2:
   version "2.0.2"

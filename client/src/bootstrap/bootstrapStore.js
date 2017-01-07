@@ -7,13 +7,21 @@ import thunk from 'redux-thunk';
 import reducers from 'src/state/reducers';
 import routes from 'src/routes';
 
-const appReducer = (state = Immutable.Map(), action) => {
-  const type = action.type.split(/_(STARTED|COMPLETED|FAILED)/)[0];
-  const reduce = reducers[type];
-  return reduce ? reduce(state, action) : state;
-};
+const LOG_TAG = 'bootstrapStore';
 
-export default function(initialState) {
+export default function(registry) {
+  const { logger } = registry;
+
+  const appReducer = (state = Immutable.Map(), action) => {
+    const type = action.type.split(/_(STARTED|COMPLETED|FAILED)/)[0];
+    const reduce = reducers[type];
+    return reduce ? reduce(state, action) : state;
+  };
+
+  const initialAppState = Object.assign({}, JSON.parse(localStorage.getItem('appState'))); // TODO: Merge with window.__initialAppState
+  const initialState = { app: Immutable.fromJS(initialAppState) };
+  logger.debug({ initialState }, LOG_TAG);
+
   return createStore(
     combineReducers({ found: foundReducer, app: appReducer }),
     initialState,
