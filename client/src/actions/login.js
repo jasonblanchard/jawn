@@ -19,8 +19,11 @@ export default function(username, password) {
         .send({ username, password })
         .then(httpResponse => {
           const currentUser = httpResponse.body;
+          logger.debug({ currentUser }, LOG_TAG);
+
           // TODO: Only do this in dev? Merge with current state?
           localStorage.setItem('appState', JSON.stringify({ currentUser }));
+
           dispatch({ type: LOGIN_COMPLETED, currentUser });
         })
         .catch(error => {

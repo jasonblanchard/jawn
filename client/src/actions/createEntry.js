@@ -26,7 +26,11 @@ export default function(fields) {
         .send(fields)
         .then(response => {
           const entry = response.body;
+          logger.debug({ entry }, LOG_TAG);
+
           const { entities, result: entryId } = normalize(entry, entrySchema);
+          logger.debug({ entities }, LOG_TAG);
+
           dispatch({ type: CREATE_ENTRY_COMPLETED, entities, entryId });
         })
         .catch(error => {

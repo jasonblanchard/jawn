@@ -25,7 +25,11 @@ export default function() {
         .set('Authorization', `Bearer ${token}`)
         .then(response => {
           const entries = response.body;
+          logger.debug({ entries }, LOG_TAG);
+
           const { entities, result: entryIds } = normalize(entries, arrayOf(entrySchema));
+          logger.debug({ entities }, LOG_TAG);
+
           dispatch({ type: FETCH_ENTRIES_COMPLETED, entities, entryIds });
         })
         .catch(error => {
