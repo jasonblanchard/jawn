@@ -21,7 +21,8 @@ export default function(id) {
 
       return http.delete(`/api/entries/${id}`)
         .set('Authorization', `Bearer ${token}`)
-        .then(() => {
+        .then(response => {
+          logger.debug({ status: response.status }, LOG_TAG);
           dispatch({ type: DELETE_ENTRY_COMPLETED, id });
         })
         .catch(error => {
