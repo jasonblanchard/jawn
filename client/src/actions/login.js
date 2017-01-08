@@ -17,8 +17,8 @@ export default function(username, password) {
     try {
       return http.post('/api/login')
         .send({ username, password })
-        .then(httpResponse => {
-          const currentUser = httpResponse.body;
+        .then(response => {
+          const currentUser = response.body;
           logger.debug({ currentUser }, LOG_TAG);
 
           // TODO: Only do this in dev? Merge with current state?
