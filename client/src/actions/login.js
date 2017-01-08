@@ -15,13 +15,14 @@ export default function(username, password) {
     dispatch({ type: LOGIN_STARTED });
 
     try {
+      // Move to AuthenticationService and pass in NODE_ENV.
       return http.post('/api/login')
         .send({ username, password })
         .then(response => {
           const currentUser = response.body;
           logger.debug({ currentUser }, LOG_TAG);
 
-          // TODO: Only do this in dev? Merge with current state?
+          // TODO: Only do this in dev. Merge with current state? Encapsulate in a LocalStorageService.
           localStorage.setItem('appState', JSON.stringify({ currentUser }));
 
           dispatch({ type: LOGIN_COMPLETED, currentUser });

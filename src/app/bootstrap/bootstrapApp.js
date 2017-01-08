@@ -1,6 +1,8 @@
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 import express from 'express';
 import fs from 'fs';
+import jwt from 'jsonwebtoken';
 import path from 'path';
 
 const LOG_TAG = 'app';
@@ -8,17 +10,17 @@ const LOG_TAG = 'app';
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
 export default function(registry) {
-  const { logger, entryController, loginController } = registry;
+  const appSecret = process.env.APP_SECRET;
+  const { logger, entryController, loginController, userService } = registry;
 
   logger.debug('\n>>> BOOTSTRAPPING APP <<<<\n', LOG_TAG);
 
   const app = express();
   app.use(bodyParser.json());
-
+  app.use(cookieParser());
   app.use(express.static(path.join(__dirname, '../../../client/build')));
 
   app.post('/api/login', loginController.handlePost);
-
   app.get('/api/entries', entryController.handleIndex);
   app.post('/api/entries', entryController.handleCreate);
   app.post('/api/entries/:entryId', entryController.handleUpdate);
@@ -30,12 +32,28 @@ export default function(registry) {
   });
 
   app.get('*', (request, response, next) => {
-    fs.readFile(path.join(__dirname, '../../../client/build', 'index.html'), 'utf8', (error, file) => {
-      if (!file) return next();
-      file = file.replace('__INITIAL_STATE={}', "__INITIAL_STATE={test: 'value'}"); // TODO: Set auth cookie
-      file = file.replace('__ENV={}', `__ENV={NODE_ENV: '${NODE_ENV}', LOG_LEVEL: '${process.env.LOG_LEVEL}'}`); // TODO: Set run-time environment vars here.
-      response.set('Content-Type', 'text/html');
-      response.send(file);
+    const token = request.cookies.token;
+    logger.debug({ token }, LOG_TAG);
+
+    jwt.verify(token, appSecret, (parseError, parsedToken) => {
+      if (parseError) {
+        logger.error(parseError, LOG_TAG);
+      }
+
+      logger.debug({ parsedToken }, LOG_TAG);
+      const id = parsedToken ? parsedToken.id : undefined;
+
+      userService.findById(id).then(user => {
+        logger.debug({ user }, LOG_TAG);
+
+        fs.readFile(path.join(__dirname, '../../../client/build', 'index.html'), 'utf8', (error, file) => {
+          if (!file) return next();
+          file = file.replace('__INITIAL_STATE={}', "__INITIAL_STATE={test: 'value'}"); // TODO: Set auth cookie
+          file = file.replace('__ENV={}', `__ENV={NODE_ENV: '${NODE_ENV}', LOG_LEVEL: '${process.env.LOG_LEVEL}'}`); // TODO: Set run-time environment vars here.
+          response.set('Content-Type', 'text/html');
+          response.send(file);
+        });
+      });
     });
   });
 

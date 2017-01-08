@@ -15,6 +15,7 @@
     "denormalizr": "^0.4.1",
     "found": "^0.2.0",
     "immutable": "^3.8.1",
+    "lodash.isempty": "^4.4.0",
     "lodash.merge": "^4.6.0",
     "loglevel": "^1.4.1",
     "normalizr": "2",

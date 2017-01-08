@@ -29,7 +29,16 @@ export default class UserService {
     this._logger = logger;
   }
 
-  get(username) {
+  findById(id) {
+    this._logger.debug({ id }, LOG_TAG);
+
+    if (!id) return Promise.resolve();
+
+    return this._model.findOne({ _id: id })
+      .then(mapRecordToObject);
+  }
+
+  findByUsername(username) {
     this._logger.debug({ username }, LOG_TAG);
     return this._model.findOne({ username })
       .then(mapRecordToObject);

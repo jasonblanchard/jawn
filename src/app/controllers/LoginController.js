@@ -16,7 +16,8 @@ export default class LoginController {
   handlePost(req, res, next) {
     const { username, password } = req.body;
     this._logger.debug({ username }, LOG_TAG);
-    this._userService.get(username)
+
+    this._userService.findByUsername(username)
       .then(user => {
         if (!user) {
           this._logger.debug('User does not exist', LOG_TAG);
@@ -29,11 +30,13 @@ export default class LoginController {
             return res.status(400).json({ error: 'Username & password did not match' });
           }
 
-          this._logger.debug({ user: Object.assign(user, { password: '***' }) }, LOG_TAG);
           delete user.password;
+
+          this._logger.debug({ user }, LOG_TAG);
 
           jwt.sign({ id: user.id }, this._appSecret, {}, (error, token) => {
             if (error) return Promise.reject(error);
+            res.cookie('token', token); // TODO: httpOnly and secure in in dev
             res.json(Object.assign(user, { token }));
           });
         });

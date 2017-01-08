@@ -18,7 +18,7 @@ export default function(registry) {
     return reduce ? reduce(state, action) : state;
   };
 
-  const initialAppState = Object.assign({}, JSON.parse(localStorage.getItem('appState'))); // TODO: Merge with window.__initialAppState
+  const initialAppState = Object.assign({}, JSON.parse(localStorage.getItem('appState'))); // TODO: Merge with window.__initialAppState. Encapsulate in LocalStorageService.
   const initialState = { app: Immutable.fromJS(initialAppState) };
   logger.debug({ initialState }, LOG_TAG);
 
