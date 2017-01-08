@@ -20,6 +20,13 @@ export default class LoggerService {
   }
 
   static format(level, message, tag) {
-    return `\n${level}: ${tag}\n${JSON.stringify(message, null, 2)}`;
+    if (message instanceof Error) {
+      message = {
+        message: message.message,
+        stack: message.stack,
+      };
+    }
+    message = JSON.stringify(message, null, 2).replace(/\\n/g, '\n');
+    return `\n${level}: ${tag}\n${message}`;
   }
 }

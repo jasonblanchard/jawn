@@ -10,8 +10,12 @@ import {
   CREATE_ENTRY_FAILED,
 } from 'src/actions/types';
 
+const LOG_TAG = 'createEntry';
+
 export default function(fields) {
-  return (dispatch, getState) => {
+  return (dispatch, getState, registry) => {
+    const { logger } = registry;
+
     dispatch({ type: CREATE_ENTRY_STARTED, fields });
 
     try {
@@ -26,9 +30,11 @@ export default function(fields) {
           dispatch({ type: CREATE_ENTRY_COMPLETED, entities, entryId });
         })
         .catch(error => {
+          logger.debug(error, LOG_TAG);
           dispatch({ type: CREATE_ENTRY_FAILED, error });
         });
     } catch (error) {
+      logger.debug(error, LOG_TAG);
       dispatch({ type: CREATE_ENTRY_FAILED, error });
     }
   };

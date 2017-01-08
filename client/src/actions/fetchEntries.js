@@ -29,6 +29,7 @@ export default function() {
           dispatch({ type: FETCH_ENTRIES_COMPLETED, entities, entryIds });
         })
         .catch(error => {
+          logger.debug(error, LOG_TAG);
           dispatch({ type: FETCH_ENTRIES_FAILED, error });
         });
     } catch (error) {
