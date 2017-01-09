@@ -18,7 +18,7 @@ export default function(registry) {
     return reduce ? reduce(state, action) : state;
   };
 
-  let initialAppState = Object.assign({}, JSON.parse(localStorage.getItem('appState')));
+  let initialAppState = Object.assign({}, JSON.parse(localStorage.getItem('appState'))); // TODO: LocalStorageService
   initialAppState = Object.assign(initialAppState, window.__INITIAL_STATE.app);
   const initialState = { app: Immutable.fromJS(initialAppState) };
   logger.debug({ initialState }, LOG_TAG);

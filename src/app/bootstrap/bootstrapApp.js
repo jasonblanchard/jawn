@@ -47,7 +47,7 @@ export default function(registry) {
       userService.findById(id).then(user => {
         logger.debug({ user }, LOG_TAG);
 
-        user.token = token;
+        user = Object.assign({}, user, { token });
 
         fs.readFile(path.join(__dirname, '../../../client/build', 'index.html'), 'utf8', (error, file) => {
           if (!file) return next();

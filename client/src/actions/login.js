@@ -1,5 +1,3 @@
-import http from 'superagent';
-
 import {
   LOGIN_COMPLETED,
   LOGIN_FAILED,
@@ -10,21 +8,14 @@ const LOG_TAG = 'login';
 
 export default function(username, password) {
   return (dispatch, getState, registry) => {
-    const { logger } = registry;
+    const { logger, authenticationService } = registry;
 
     dispatch({ type: LOGIN_STARTED });
 
     try {
       // Move to AuthenticationService and pass in NODE_ENV.
-      return http.post('/api/login')
-        .send({ username, password })
-        .then(response => {
-          const currentUser = response.body;
-          logger.debug({ currentUser }, LOG_TAG);
-
-          // TODO: Only do this in dev. Merge with current state? Encapsulate in a LocalStorageService.
-          localStorage.setItem('appState', JSON.stringify({ currentUser }));
-
+      return authenticationService.login(username, password)
+        .then(currentUser => {
           dispatch({ type: LOGIN_COMPLETED, currentUser });
         })
         .catch(error => {
