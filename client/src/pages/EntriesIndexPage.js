@@ -8,6 +8,8 @@ import EntryForm from 'src/components/EntryForm';
 import selectors from 'src/state/selectors';
 import updateEntry from 'src/actions/updateEntry';
 
+import './EntriesIndexPage.css';
+
 class EntriesIndexPage extends Component {
   static propTypes = {
     createEntry: PropTypes.func,
@@ -24,8 +26,8 @@ class EntriesIndexPage extends Component {
 
   render() {
     return (
-      <div>
-        <EntryForm onSubmit={this.props.createEntry} />
+      <div className="EntriesIndexPage">
+        <EntryForm className="EntriesIndexPage-form" onSubmit={this.props.createEntry} />
         {this.props.entries.length === 0 ? 'No entries yet' : this.props.entries.reverse().map(this._renderEntry, this)}
       </div>
     );

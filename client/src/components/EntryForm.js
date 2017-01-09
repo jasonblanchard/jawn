@@ -1,4 +1,7 @@
+import classNames from 'classnames';
 import React, { PureComponent, PropTypes } from 'react';
+
+import './EntryForm.css';
 
 export default class EntryForm extends PureComponent {
   static propTypes = {
@@ -6,6 +9,7 @@ export default class EntryForm extends PureComponent {
       id: PropTypes.string,
       text: PropTypes.string,
     }),
+    className: PropTypes.string,
     onSubmit: PropTypes.func,
   }
 
@@ -27,8 +31,9 @@ export default class EntryForm extends PureComponent {
   }
 
   render() {
+    const className = classNames('EntryForm', this.props.className);
     return (
-      <form onSubmit={this._handleSubmit}>
+      <form className={className} onSubmit={this._handleSubmit}>
         <textarea
           className="EntryForm-textInput"
           aria-label="text"
