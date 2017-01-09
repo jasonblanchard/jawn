@@ -16,19 +16,19 @@ export default class EntryController {
     this.handleDelete = this.handleDelete.bind(this);
   }
 
-  handleCreate(req, res, next) {
+  handleCreate(request, response, next) {
     this._logger.debug('handleCreate', LOG_TAG);
-    const token = TokenUtils.parseAuthorizationHeader(req.headers.authorization);
-    this._logger.debug({ body: req.body, token }, LOG_TAG);
+    const token = TokenUtils.parseAuthorizationHeader(request.headers.authorization);
+    this._logger.debug({ body: request.body, token }, LOG_TAG);
     jwt.verify(token, this._appSecret, (error, parsedToken) => {
       if (error) throw new Error('authentication failed'); // TODO: Do something with this;
 
       this._logger.debug({ userId: parsedToken.id }, LOG_TAG);
 
-      this._entryService.create(req.body, parsedToken.id)
+      this._entryService.create(request.body, parsedToken.id)
         .then(entry => {
           this._logger.debug({ entry }, LOG_TAG);
-          res.json(entry);
+          response.json(entry);
         })
         .catch(entryServiceError => {
           next(entryServiceError);
@@ -36,15 +36,15 @@ export default class EntryController {
     });
   }
 
-  handleIndex(req, res, next) {
+  handleIndex(request, response, next) {
     this._logger.debug('handleIndex', LOG_TAG);
-    const token = TokenUtils.parseAuthorizationHeader(req.headers.authorization);
+    const token = TokenUtils.parseAuthorizationHeader(request.headers.authorization);
     jwt.verify(token, this._appSecret, (error, parsedToken) => {
       if (error) return next(new Error('authentication failed')); // TODO: Do something with this;
 
       this._entryService.list(parsedToken.id).then(entries => {
         this._logger.debug({ entries }, LOG_TAG);
-        res.json(entries);
+        response.json(entries);
       })
       .catch(entryServiceError => {
         next(entryServiceError);
@@ -52,26 +52,26 @@ export default class EntryController {
     });
   }
 
-  handleUpdate(req, res, next) {
+  handleUpdate(request, response, next) {
     // TODO: Authorization
     this._logger.debug('handleUpdate', 'LOG_TAG');
-    this._logger.debug({ body: req.body, params: req.params }, LOG_TAG);
-    this._entryService.update(req.params.entryId, req.body)
+    this._logger.debug({ body: request.body, params: request.params }, LOG_TAG);
+    this._entryService.update(request.params.entryId, request.body)
       .then(entry => {
         this._logger.debug({ entry }, LOG_TAG);
-        res.json(entry);
+        response.json(entry);
       })
       .catch(error => {
         next(error);
       });
   }
 
-  handleDelete(req, res, next) {
+  handleDelete(request, response, next) {
     // TODO: Authorization
     this._logger.debug('handleDelete', 'LOG_TAG');
-    this._entryService.delete(req.params.entryId)
+    this._entryService.delete(request.params.entryId)
       .then(() => {
-        res.status(201).send();
+        response.status(201).send();
       })
       .catch(error => {
         next(error);
