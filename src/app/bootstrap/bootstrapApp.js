@@ -16,9 +16,10 @@ export default function(registry) {
   logger.debug('\n>>> BOOTSTRAPPING APP <<<<\n', LOG_TAG);
 
   const app = express();
+
   app.use(bodyParser.json());
   app.use(cookieParser());
-  app.use(express.static(path.join(__dirname, '../../../client/build')));
+  app.use('/static', express.static(path.join(__dirname, '../../../client/build/static')));
 
   app.post('/api/login', loginController.handlePost);
   app.get('/api/entries', entryController.handleIndex);
