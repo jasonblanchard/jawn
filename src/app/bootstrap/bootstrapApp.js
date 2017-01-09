@@ -47,8 +47,6 @@ export default function(registry) {
       userService.findById(id).then(user => {
         logger.debug({ user }, LOG_TAG);
 
-        delete user.password; // TODO yuck
-
         user.token = token;
 
         fs.readFile(path.join(__dirname, '../../../client/build', 'index.html'), 'utf8', (error, file) => {

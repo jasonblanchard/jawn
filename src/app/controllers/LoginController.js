@@ -17,7 +17,7 @@ export default class LoginController {
     const { username, password } = req.body;
     this._logger.debug({ username }, LOG_TAG);
 
-    this._userService.findByUsername(username)
+    this._userService.findForAuth(username)
       .then(user => {
         if (!user) {
           this._logger.debug('User does not exist', LOG_TAG);
@@ -29,8 +29,6 @@ export default class LoginController {
             this._logger.debug('Password did not match', LOG_TAG);
             return res.status(400).json({ error: 'Username & password did not match' });
           }
-
-          delete user.password;
 
           this._logger.debug({ user }, LOG_TAG);
 

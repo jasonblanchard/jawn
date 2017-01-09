@@ -17,7 +17,6 @@ function mapRecordToObject(record) {
     username: record.username,
     email: record.email,
     timeCreated: record.timeCreated,
-    password: record.password,
   };
 }
 
@@ -42,5 +41,11 @@ export default class UserService {
     this._logger.debug({ username }, LOG_TAG);
     return this._model.findOne({ username })
       .then(mapRecordToObject);
+  }
+
+  findForAuth(username) {
+    this._logger.debug({ username }, LOG_TAG);
+    return this._model.findOne({ username })
+      .then(user => Object.assign({}, mapRecordToObject(user), { password: user.password }));
   }
 }
