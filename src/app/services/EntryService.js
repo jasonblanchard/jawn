@@ -47,14 +47,17 @@ export default class EntryService {
     return entry.save().then(mapRecordToObject);
   }
 
-  update(id, params) {
+  update(id, userId, params) {
     const fields = Object.assign({}, params, { timeUpdated: moment().format() });
-    this._logger.debug({ fields }, LOG_TAG);
+    const query = { _id: id, userId };
+    this._logger.debug({ fields, query }, LOG_TAG);
 
-    return this._model.findByIdAndUpdate(id, { $set: fields }, { new: true }).then(mapRecordToObject);
+    // TODO: If not found, raise an error.
+    return this._model.findOneAndUpdate(query, { $set: fields }, { new: true }).then(mapRecordToObject);
   }
 
-  delete(id) {
-    return this._model.remove({ _id: id });
+  delete(id, userId) {
+    // TODO: If not found, raise an error;
+    return this._model.remove({ _id: id, userId });
   }
 }

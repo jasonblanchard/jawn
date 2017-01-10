@@ -18,10 +18,11 @@ export default class EntryController {
 
   handleCreate(request, response, next) {
     this._logger.debug('handleCreate', LOG_TAG);
+
     const token = TokenUtils.parseAuthorizationHeader(request.headers.authorization);
     this._logger.debug({ body: request.body, token }, LOG_TAG);
-    jwt.verify(token, this._appSecret, (error, parsedToken) => {
-      if (error) throw new Error('authentication failed'); // TODO: Do something with this;
+    jwt.verify(token, this._appSecret, (tokenError, parsedToken) => {
+      if (tokenError) throw new Error('authentication failed'); // TODO: Do something with this;
 
       this._logger.debug({ userId: parsedToken.id }, LOG_TAG);
 
@@ -38,9 +39,10 @@ export default class EntryController {
 
   handleIndex(request, response, next) {
     this._logger.debug('handleIndex', LOG_TAG);
+
     const token = TokenUtils.parseAuthorizationHeader(request.headers.authorization);
-    jwt.verify(token, this._appSecret, (error, parsedToken) => {
-      if (error) return next(new Error('authentication failed')); // TODO: Do something with this;
+    jwt.verify(token, this._appSecret, (tokenError, parsedToken) => {
+      if (tokenError) return next(new Error('authentication failed')); // TODO: Do something with this;
 
       this._entryService.list(parsedToken.id).then(entries => {
         this._logger.debug({ entries }, LOG_TAG);
@@ -53,28 +55,38 @@ export default class EntryController {
   }
 
   handleUpdate(request, response, next) {
-    // TODO: Authorization
     this._logger.debug('handleUpdate', 'LOG_TAG');
     this._logger.debug({ body: request.body, params: request.params }, LOG_TAG);
-    this._entryService.update(request.params.entryId, request.body)
-      .then(entry => {
-        this._logger.debug({ entry }, LOG_TAG);
-        response.json(entry);
-      })
-      .catch(error => {
-        next(error);
-      });
+
+    const token = TokenUtils.parseAuthorizationHeader(request.headers.authorization);
+    jwt.verify(token, this._appSecret, (tokenError, parsedToken) => {
+      if (tokenError) return next(new Error('authentication failed')); // TODO: Do something with this;
+
+      this._entryService.update(request.params.entryId, parsedToken.id, request.body)
+        .then(entry => {
+          this._logger.debug({ entry }, LOG_TAG);
+          response.json(entry);
+        })
+        .catch(error => {
+          next(error);
+        });
+    });
   }
 
   handleDelete(request, response, next) {
-    // TODO: Authorization
     this._logger.debug('handleDelete', 'LOG_TAG');
-    this._entryService.delete(request.params.entryId)
-      .then(() => {
-        response.status(201).send();
-      })
-      .catch(error => {
-        next(error);
-      });
+
+    const token = TokenUtils.parseAuthorizationHeader(request.headers.authorization);
+    jwt.verify(token, this._appSecret, (tokenError, parsedToken) => {
+      if (tokenError) return next(new Error('authentication failed')); // TODO: Do something with this;
+
+      this._entryService.delete(request.params.entryId, parsedToken.id)
+        .then(() => {
+          response.status(201).send();
+        })
+        .catch(error => {
+          next(error);
+        });
+    });
   }
 }
