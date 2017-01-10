@@ -33,6 +33,7 @@ export default class Entry extends PureComponent {
     this._handleSubmit = this._handleSubmit.bind(this);
     this._handleClickCancel = this._handleClickCancel.bind(this);
     this._handleClickDelete = this._handleClickDelete.bind(this);
+    this._handleClickEditButton = this._handleClickEditButton.bind(this);
   }
 
   render() {
@@ -47,17 +48,24 @@ export default class Entry extends PureComponent {
     }
 
     return (
-      <div className="Entry" onDoubleClick={this._handleDoubleClick}>
-        <div className="Entry-date">
-          {moment(this.props.entry.timeCreated).format('MMMM Do YYYY, h:mm a')}
-          {this.props.entry.timeUpdated ? ` • updated ${moment(this.props.entry.timeUpdated).format('MMMM Do YYYY, h:mm a')}` : null}
+      <div className="Entry">
+        <div className="Entry-meta">
+          <div className="Entry-date">
+            {moment(this.props.entry.timeCreated).format('MMMM Do YYYY, h:mm a')}
+            {this.props.entry.timeUpdated ? ` • updated ${moment(this.props.entry.timeUpdated).format('MMMM Do YYYY, h:mm a')}` : null}
+          </div>
+          <button onClick={this._handleClickEditButton}>edit</button>
         </div>
-        <p>{this.props.entry.text}</p>
+        <p onDoubleClick={this._handleDoubleClick}>{this.props.entry.text}</p>
       </div>
     );
   }
 
   _handleDoubleClick() {
+    this.setState({ isEditing: true });
+  }
+
+  _handleClickEditButton() {
     this.setState({ isEditing: true });
   }
 

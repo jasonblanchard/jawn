@@ -8,6 +8,11 @@
   font-size: 12px;
 }
 
-.Entry-form {
-  height: 200px;
+.Entry-form textarea {
+  min-height: 200px;
+}
+
+.Entry-meta {
+  display: flex;
+  justify-content: space-between;
 }

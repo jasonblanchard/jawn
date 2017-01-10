@@ -4,6 +4,9 @@
 }
 
 .EntriesIndexPage-form {
-  height: 300px;
   margin: 10px 0 40px;
+}
+
+.EntriesIndexPage-form textarea {
+  min-height: 300px;
 }
