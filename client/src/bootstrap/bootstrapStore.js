@@ -35,7 +35,7 @@ export default function(registry) {
         new Matcher(routes),
       ),
       applyMiddleware(thunk.withExtraArgument(registry)),
-      window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+      window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : createStore => createStore,
     ),
   );
 }
