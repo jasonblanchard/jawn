@@ -30,6 +30,7 @@ export default class LoginController {
             return response.status(400).json({ error: 'Username & password did not match' });
           }
 
+          delete user.password;
           this._logger.debug({ user }, LOG_TAG);
 
           jwt.sign({ id: user.id }, this._appSecret, {}, (error, token) => {
