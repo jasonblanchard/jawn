@@ -1,3 +1,4 @@
+import Boom from 'boom';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
@@ -14,6 +15,8 @@ export default class LoginController {
   }
 
   handlePost(request, response, next) {
+    if (!request.body.username || !request.body.password) return next(Boom.badRequest('Username or password not provided'));
+
     const { username, password } = request.body;
     this._logger.debug({ username }, LOG_TAG);
 
@@ -21,13 +24,13 @@ export default class LoginController {
       .then(user => {
         if (!user) {
           this._logger.debug('User does not exist', LOG_TAG);
-          return response.status(400).json({ error: 'Username & password did not match' });
+          return next(Boom.unauthorized('Username & password do not match'));
         }
 
         bcrypt.compare(password, user.password).then(result => {
           if (!result) {
             this._logger.debug('Password did not match', LOG_TAG);
-            return response.status(400).json({ error: 'Username & password did not match' });
+            return next(Boom.unauthorized('Username & password do not match'));
           }
 
           delete user.password;
@@ -35,7 +38,7 @@ export default class LoginController {
 
           jwt.sign({ id: user.id }, this._appSecret, {}, (error, token) => {
             if (error) return Promise.reject(error);
-            response.cookie('token', token); // TODO: httpOnly and secure in in dev
+            response.cookie('token', token); // TODO: httpOnly and secure in !dev
             response.json(Object.assign(user, { token }));
           });
         });

@@ -1,3 +1,4 @@
+import Boom from 'boom';
 import jwt from 'jsonwebtoken';
 import TokenUtils from 'app/utils/TokenUtils';
 
@@ -22,7 +23,7 @@ export default class EntryController {
     const token = TokenUtils.parseAuthorizationHeader(request.headers.authorization);
     this._logger.debug({ body: request.body, token }, LOG_TAG);
     jwt.verify(token, this._appSecret, (tokenError, parsedToken) => {
-      if (tokenError) throw new Error('authentication failed'); // TODO: Do something with this;
+      if (tokenError) return next(Boom.unauthorized());
 
       this._logger.debug({ userId: parsedToken.id }, LOG_TAG);
 
@@ -42,7 +43,7 @@ export default class EntryController {
 
     const token = TokenUtils.parseAuthorizationHeader(request.headers.authorization);
     jwt.verify(token, this._appSecret, (tokenError, parsedToken) => {
-      if (tokenError) return next(new Error('authentication failed')); // TODO: Do something with this;
+      if (tokenError) return next(Boom.unauthorized());
 
       this._entryService.list(parsedToken.id).then(entries => {
         this._logger.debug({ entries }, LOG_TAG);
@@ -60,7 +61,7 @@ export default class EntryController {
 
     const token = TokenUtils.parseAuthorizationHeader(request.headers.authorization);
     jwt.verify(token, this._appSecret, (tokenError, parsedToken) => {
-      if (tokenError) return next(new Error('authentication failed')); // TODO: Do something with this;
+      if (tokenError) return next(Boom.unauthorized());
 
       this._entryService.update(request.params.entryId, parsedToken.id, request.body)
         .then(entry => {
@@ -78,7 +79,7 @@ export default class EntryController {
 
     const token = TokenUtils.parseAuthorizationHeader(request.headers.authorization);
     jwt.verify(token, this._appSecret, (tokenError, parsedToken) => {
-      if (tokenError) return next(new Error('authentication failed')); // TODO: Do something with this;
+      if (tokenError) return next(Boom.unauthorized());
 
       this._entryService.delete(request.params.entryId, parsedToken.id)
         .then(() => {

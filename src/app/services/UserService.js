@@ -46,6 +46,9 @@ export default class UserService {
   findForAuth(username) {
     this._logger.debug({ username }, LOG_TAG);
     return this._model.findOne({ username })
-      .then(user => Object.assign({}, mapRecordToObject(user), { password: user.password }));
+      .then(user => {
+        if (!user) return undefined; // TODO: Raise error
+        return Object.assign({}, mapRecordToObject(user), { password: user.password });
+      });
   }
 }

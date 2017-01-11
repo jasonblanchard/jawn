@@ -1,3 +1,4 @@
+import Boom from 'boom';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import express from 'express';
@@ -60,9 +61,12 @@ export default function(registry) {
     });
   });
 
-  app.use((error, request, response) => {
+  app.use((error, request, response, next) => { // eslint-disable-line no-unused-vars
+    error = error.isBoom ? error : Boom.wrap(error);
+    error.reformat();
     logger.error({ error, stack: error.stack }, LOG_TAG);
-    response.status(500).json({ error: 'Something went wrong' });
+    const output = error.output;
+    return response.status(output.statusCode).set(output.headers).json(output.payload);
   });
 
   return app;
