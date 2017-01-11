@@ -10,3 +10,9 @@
 .EntriesIndexPage-form textarea {
   min-height: 300px;
 }
+
+@media (max-width: 960px) {
+  .EntriesIndexPage {
+    width: 100%;
+  }
+}
