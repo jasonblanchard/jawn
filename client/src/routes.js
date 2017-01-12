@@ -1,5 +1,6 @@
 import { Actions as RouterActions } from 'farce';
 import { createConnectedRouter, createRender } from 'found';
+import isEmpty from 'lodash.isEmpty';
 import React from 'react';
 
 import EntriesIndexPage from 'src/pages/EntriesIndexPage';
@@ -20,7 +21,7 @@ export default [
     Component: EntriesIndexPage,
     getData: ({ context }) => {
       const currentUser = selectors.getCurrentUser(context.store.getState());
-      if (!currentUser) {
+      if (isEmpty(currentUser)) {
         context.store.dispatch(RouterActions.push('/login'));
         return;
       }

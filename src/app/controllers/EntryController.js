@@ -41,7 +41,7 @@ export default class EntryController {
   handleIndex(request, response, next) {
     this._logger.debug('handleIndex', LOG_TAG);
 
-    const token = TokenUtils.parseAuthorizationHeader(request.headers.authorization);
+    const token = TokenUtils.parseAuthorizationHeader(request.headers.authorization) || '';
     jwt.verify(token, this._appSecret, (tokenError, parsedToken) => {
       if (tokenError) return next(Boom.unauthorized());
 
