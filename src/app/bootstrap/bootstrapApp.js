@@ -34,29 +34,38 @@ export default function(registry) {
   });
 
   app.get('*', (request, response, next) => {
+    if (request.originalUrl === '/favicon.ico') return next(); // TODO: Figure out a better solution for this.
+
     const token = request.cookies.token;
-    logger.debug({ token }, LOG_TAG);
+    logger.debug({ token: token || '' }, LOG_TAG);
 
-    jwt.verify(token, appSecret, (parseError, parsedToken) => {
-      if (parseError) {
-        logger.error(parseError, LOG_TAG);
-      }
+    new Promise((resolve) => {
+      if (!token) return resolve();
+      jwt.verify(token, appSecret, (parseError, parsedToken) => {
+        if (parseError) {
+          logger.error(parseError, LOG_TAG);
+        }
 
-      logger.debug({ parsedToken }, LOG_TAG);
-      const id = parsedToken ? parsedToken.id : undefined;
+        logger.debug({ parsedToken }, LOG_TAG);
+        const id = parsedToken ? parsedToken.id : undefined;
+        return resolve(id);
+      });
+    })
+    .then(id => {
+      if (!id) return Promise.resolve();
+      return userService.findById(id);
+    })
+    .then(user => {
+      logger.debug({ user: user || {} }, LOG_TAG);
 
-      userService.findById(id).then(user => {
-        logger.debug({ user }, LOG_TAG);
+      user = Object.assign({}, user, { token });
 
-        user = Object.assign({}, user, { token });
-
-        fs.readFile(path.join(__dirname, '../../../client/build', 'index.html'), 'utf8', (error, file) => {
-          if (!file) return next();
-          file = file.replace('__INITIAL_STATE={}', `__INITIAL_STATE=${JSON.stringify({ app: { currentUser: user } })}`);
-          file = file.replace('__ENV={}', `__ENV={NODE_ENV: '${NODE_ENV}', LOG_LEVEL: '${process.env.LOG_LEVEL}'}`);
-          response.set('Content-Type', 'text/html');
-          response.send(file);
-        });
+      fs.readFile(path.join(__dirname, '../../../client/build', 'index.html'), 'utf8', (error, file) => {
+        if (!file) return next();
+        file = file.replace('__INITIAL_STATE={}', `__INITIAL_STATE=${JSON.stringify({ app: { currentUser: user } })}`);
+        file = file.replace('__ENV={}', `__ENV={NODE_ENV: '${NODE_ENV}', LOG_LEVEL: '${process.env.LOG_LEVEL}'}`);
+        response.set('Content-Type', 'text/html');
+        response.send(file);
       });
     });
   });

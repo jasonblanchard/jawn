@@ -1,6 +1,6 @@
 import { Actions as RouterActions } from 'farce';
 import { createConnectedRouter, createRender } from 'found';
-import isEmpty from 'lodash.isEmpty';
+import isEmpty from 'lodash.isempty';
 import React from 'react';
 
 import EntriesIndexPage from 'src/pages/EntriesIndexPage';
