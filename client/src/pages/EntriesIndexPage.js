@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import moment from 'moment';
 import React, { Component, PropTypes } from 'react';
 
 import createEntry from 'src/actions/createEntry';
@@ -28,7 +29,7 @@ class EntriesIndexPage extends Component {
     return (
       <div className="EntriesIndexPage">
         <EntryForm className="EntriesIndexPage-form" onSubmit={this.props.createEntry} />
-        {this.props.entries.length === 0 ? 'No entries yet' : this.props.entries.reverse().map(this._renderEntry, this)}
+        {this.props.entries.length === 0 ? 'No entries yet' : this.props.entries.sort((first, second) => moment(first.timeCreated).diff(second.timeCreated)).reverse().map(this._renderEntry, this)}
       </div>
     );
   }
