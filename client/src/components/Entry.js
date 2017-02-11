@@ -13,13 +13,14 @@ export default class Entry extends PureComponent {
       timeCreated: PropTypes.string,
       timeUpdated: PropTypes.string,
     }),
-    onDelete: PropTypes.func,
-    onSubmit: PropTypes.func,
+    isEntryFormDisabled: PropTypes.bool,
+    onClickDelete: PropTypes.func,
+    onSubmitEntryForm: PropTypes.func,
   }
 
   static defaultProps = {
-    onDelete: () => {},
-    onSubmit: () => {},
+    onClickDelete: () => {},
+    onSubmitEntryForm: () => {},
   }
 
   constructor(props) {
@@ -40,7 +41,7 @@ export default class Entry extends PureComponent {
     if (this.state.isEditing) {
       return (
         <div>
-          <EntryForm className="Entry Entry-form" entry={this.props.entry} onSubmit={this._handleSubmit} />
+          <EntryForm className="Entry Entry-form" isDisabled={this.props.isEntryFormDisabled} entry={this.props.entry} onSubmit={this._handleSubmit} />
           <button onClick={this._handleClickCancel}>Cancel</button>
           <button onClick={this._handleClickDelete}>Delete</button>
         </div>
@@ -74,12 +75,14 @@ export default class Entry extends PureComponent {
   }
 
   _handleSubmit(changes) {
-    this.props.onSubmit(this.props.entry.id, changes);
-    this.setState({ isEditing: false });
+    this.props.onSubmitEntryForm(this.props.entry.id, changes)
+      .then(() => {
+        this.setState({ isEditing: false });
+      });
   }
 
   _handleClickDelete(event) {
     event.stopPropagation();
-    this.props.onDelete(this.props.entry.id);
+    this.props.onClickDelete(this.props.entry.id);
   }
 }

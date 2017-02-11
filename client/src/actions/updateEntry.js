@@ -16,12 +16,12 @@ export default function(id, fields) {
   return (dispatch, getState, registry) => {
     const { logger } = registry;
 
-    dispatch({ type: UPDATE_ENTRY_STARTED, fields });
+    dispatch({ type: UPDATE_ENTRY_STARTED, id, fields });
 
-    try {
+    return new Promise((resolve, reject) => {
       const token = selectors.getCurrentUser(getState()).token;
 
-      return http.post(`/api/entries/${id}`)
+      http.post(`/api/entries/${id}`)
         .set('Authorization', `Bearer ${token}`)
         .send(fields)
         .then(response => {
@@ -32,14 +32,13 @@ export default function(id, fields) {
           logger.debug({ entities }, LOG_TAG);
 
           dispatch({ type: UPDATE_ENTRY_COMPLETED, entities });
+          return resolve();
         })
         .catch(error => {
           logger.debug(error, LOG_TAG);
           dispatch({ type: UPDATE_ENTRY_FAILED, error });
+          return reject();
         });
-    } catch (error) {
-      logger.debug(error, LOG_TAG);
-      dispatch({ type: UPDATE_ENTRY_FAILED, error });
-    }
+    });
   };
 }

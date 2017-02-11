@@ -18,7 +18,7 @@ export default function(fields) {
 
     dispatch({ type: CREATE_ENTRY_STARTED, fields });
 
-    try {
+    return new Promise((resolve, reject) => {
       const token = selectors.getCurrentUser(getState()).token;
 
       return http.post('/api/entries')
@@ -32,14 +32,13 @@ export default function(fields) {
           logger.debug({ entities }, LOG_TAG);
 
           dispatch({ type: CREATE_ENTRY_COMPLETED, entities, entryId });
+          return resolve();
         })
         .catch(error => {
           logger.debug(error, LOG_TAG);
           dispatch({ type: CREATE_ENTRY_FAILED, error });
+          return reject();
         });
-    } catch (error) {
-      logger.debug(error, LOG_TAG);
-      dispatch({ type: CREATE_ENTRY_FAILED, error });
-    }
+    });
   };
 }

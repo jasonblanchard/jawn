@@ -5,11 +5,12 @@ import './EntryForm.css';
 
 export default class EntryForm extends PureComponent {
   static propTypes = {
+    className: PropTypes.string,
     entry: PropTypes.shape({
       id: PropTypes.string,
       text: PropTypes.string,
     }),
-    className: PropTypes.string,
+    isDisabled: PropTypes.bool,
     onSubmit: PropTypes.func,
   }
 
@@ -41,9 +42,13 @@ export default class EntryForm extends PureComponent {
           onKeyDown={this._handleKeyDown}
           onChange={this._handleChange}
         />
-        <button>{this.props.entry.id ? 'Update' : 'Create'}</button>
+        <button disabled={this.props.isDisabled}>{this.props.entry.id ? 'Update' : 'Create'}</button>
       </form>
     );
+  }
+
+  reset() {
+    this.setState({ text: null });
   }
 
   _handleChange(event) {
@@ -60,7 +65,6 @@ export default class EntryForm extends PureComponent {
   _handleSubmit(event) {
     if (event) event.preventDefault();
     this.props.onSubmit(this._getFormData());
-    this.setState({ text: null });
   }
 
   _getFormData() {

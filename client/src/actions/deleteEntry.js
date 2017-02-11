@@ -16,7 +16,7 @@ export default function(id) {
 
     dispatch({ type: DELETE_ENTRY_STARTED, id });
 
-    try {
+    return new Promise((resolve, reject) => {
       const token = selectors.getCurrentUser(getState()).token;
 
       return http.delete(`/api/entries/${id}`)
@@ -24,14 +24,13 @@ export default function(id) {
         .then(response => {
           logger.debug({ status: response.status }, LOG_TAG);
           dispatch({ type: DELETE_ENTRY_COMPLETED, id });
+          return resolve();
         })
         .catch(error => {
           logger.debug(error, LOG_TAG);
           dispatch({ type: DELETE_ENTRY_FAILED, error });
+          return reject();
         });
-    } catch (error) {
-      logger.debug(error, LOG_TAG);
-      dispatch({ type: DELETE_ENTRY_FAILED, error });
-    }
+    });
   };
 }
