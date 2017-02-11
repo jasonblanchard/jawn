@@ -30,7 +30,7 @@
   },
   "scripts": {
     "build": "cd ./client && npm run build && cd .. && babel --out-dir build/ src/",
-    "dev": "NODE_PATH=./src nodemon --exec babel-node src/app/index.js -w src/",
+    "server": "NODE_PATH=./src nodemon --exec babel-node src/app/index.js -w src -w client/build",
     "start": "NODE_PATH=./build node ./build/app/index.js"
   }
 }

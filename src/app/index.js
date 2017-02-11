@@ -11,4 +11,6 @@ const { logger, app } = registry;
 logger.debug('>>> STARTING <<<', LOG_TAG);
 
 const port = process.env.PORT || 8081;
-app.listen(port);
+app.listen(port, () => {
+  logger.debug(`running on port ${port}`, LOG_TAG);
+});
