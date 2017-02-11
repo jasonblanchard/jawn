@@ -62,7 +62,7 @@ export default function(registry) {
 
       fs.readFile(path.join(__dirname, '../../../client/build', 'index.html'), 'utf8', (error, file) => {
         if (!file) return next();
-        file = file.replace('__INITIAL_STATE={}', `__INITIAL_STATE=${JSON.stringify({ app: { currentUser: user } })}`);
+        file = file.replace('__INITIAL_STATE={}', `__INITIAL_STATE=${JSON.stringify({ currentUser: user })}`);
         file = file.replace('__ENV={}', `__ENV={NODE_ENV: '${NODE_ENV}', LOG_LEVEL: '${process.env.LOG_LEVEL}'}`);
         response.set('Content-Type', 'text/html');
         response.send(file);

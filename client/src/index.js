@@ -1,11 +1,9 @@
-import { Actions as FarceActions } from 'farce';
 import { Provider } from 'react-redux';
-import { resolveElements } from 'found';
 import bootstrap from 'src/bootstrap';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { Router } from 'src/routes';
+import RootPage from 'src/pages/RootPage';
 
 import './index.css';
 
@@ -16,11 +14,9 @@ const { logger, store } = registry;
 
 logger.debug('>>> bootstrapping <<<', LOG_TAG);
 
-store.dispatch(FarceActions.init());
-
 ReactDOM.render(
   <Provider store={store}>
-    <Router resolveElements={resolveElements} matchContext={{ store }} />
+    <RootPage />
   </Provider>,
   document.getElementById('root'),
 );

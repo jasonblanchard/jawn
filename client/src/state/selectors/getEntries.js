@@ -5,7 +5,7 @@ import { denormalize } from 'denormalizr';
 import { entrySchema } from 'src/entities/schema';
 
 export default createSelector(
-  state => state.app.get('entryIds'),
-  state => state.app.get('entities'),
+  state => state.get('entryIds'),
+  state => state.get('entities'),
   (entryIds, entities) => entryIds && denormalize(entryIds, entities, arrayOf(entrySchema)).toJS(),
 );

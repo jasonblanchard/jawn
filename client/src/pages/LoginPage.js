@@ -1,13 +1,11 @@
 import { connect } from 'react-redux';
 import React, { PureComponent, PropTypes } from 'react';
-import { Actions as RouterActions } from 'farce';
 
 import login from 'src/actions/login';
 
 class LoginPage extends PureComponent {
   static propTypes = {
     login: PropTypes.func,
-    push: PropTypes.func,
   }
 
   constructor(props) {
@@ -39,9 +37,6 @@ class LoginPage extends PureComponent {
   _handleSubmit(event) {
     event.preventDefault();
     this.props.login(this.usernameInput.value, this.passwordInput.value)
-      .then(() => {
-        this.props.push('/');
-      })
       .catch(() => {
         // TODO: Something
       });
@@ -51,7 +46,6 @@ class LoginPage extends PureComponent {
 function mapDispatchToProps(dispatch) {
   return {
     login: (username, password) => dispatch(login(username, password)),
-    push: (path) => dispatch(RouterActions.push(path)),
   };
 }
 

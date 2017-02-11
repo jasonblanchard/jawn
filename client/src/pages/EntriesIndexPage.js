@@ -6,6 +6,7 @@ import createEntry from 'src/actions/createEntry';
 import deleteEntry from 'src/actions/deleteEntry';
 import Entry from 'src/components/Entry';
 import EntryForm from 'src/components/EntryForm';
+import fetchEntries from 'src/actions/fetchEntries';
 import selectors from 'src/state/selectors';
 import updateEntry from 'src/actions/updateEntry';
 
@@ -18,6 +19,7 @@ class EntriesIndexPage extends Component {
     entries: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.string,
     })),
+    fetchEntries: PropTypes.func,
     updateEntry: PropTypes.func,
   }
 
@@ -37,6 +39,11 @@ class EntriesIndexPage extends Component {
   _renderEntry(entry) {
     return <Entry key={entry.id} entry={entry} onSubmit={this.props.updateEntry} onDelete={this.props.deleteEntry} />;
   }
+
+  componentDidMount() {
+    // TODO: Move to a routes file when we have a proper router.
+    this.props.fetchEntries();
+  }
 }
 
 function mapStateToProps(state) {
@@ -49,6 +56,7 @@ function mapDispatchToProps(dispatch) {
   return {
     createEntry: fields => dispatch(createEntry(fields)),
     deleteEntry: id => dispatch(deleteEntry(id)),
+    fetchEntries: () => dispatch(fetchEntries()),
     updateEntry: (id, fields) => dispatch(updateEntry(id, fields)),
   };
 }

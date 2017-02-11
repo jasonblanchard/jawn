@@ -1,11 +1,8 @@
-import { combineReducers, compose, createStore, applyMiddleware } from 'redux';
-import { BrowserProtocol, createHistoryEnhancer, queryMiddleware } from 'farce';
-import { createMatchEnhancer, foundReducer, Matcher } from 'found';
+import { compose, createStore, applyMiddleware } from 'redux';
 import Immutable from 'immutable';
 import thunk from 'redux-thunk';
 
 import reducers from 'src/state/reducers';
-import routes from 'src/routes';
 
 const LOG_TAG = 'bootstrapStore';
 
@@ -18,22 +15,13 @@ export default function(registry) {
     return reduce ? reduce(state, action) : state;
   };
 
-  let initialAppState = Object.assign({}, JSON.parse(localStorage.getItem('appState'))); // TODO: LocalStorageService
-  initialAppState = Object.assign(initialAppState, window.__INITIAL_STATE.app);
-  const initialState = { app: Immutable.fromJS(initialAppState) };
+  const initialState = Immutable.fromJS(window.__INITIAL_STATE);
   logger.debug({ initialState }, LOG_TAG);
 
   return createStore(
-    combineReducers({ found: foundReducer, app: appReducer }),
+    appReducer,
     initialState,
     compose(
-      createHistoryEnhancer({
-        protocol: new BrowserProtocol(),
-        middlewares: [queryMiddleware],
-      }),
-      createMatchEnhancer(
-        new Matcher(routes),
-      ),
       applyMiddleware(thunk.withExtraArgument(registry)),
       window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : createStore => createStore,
     ),
