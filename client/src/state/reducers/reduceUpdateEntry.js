@@ -13,7 +13,7 @@ export default function(state, action) {
       break;
 
     case UPDATE_ENTRY_COMPLETED:
-      // state = state.delete('updatingEntryId');
+      state = state.delete('updatingEntryId');
       state = state.update('entities', entities => entities.mergeDeep(Immutable.fromJS(action.entities)));
       break;
 
