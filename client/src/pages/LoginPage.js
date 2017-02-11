@@ -11,12 +11,15 @@ class LoginPage extends PureComponent {
   constructor(props) {
     super(props);
 
+    this.state = { errorMessage: undefined };
+
     this._handleSubmit = this._handleSubmit.bind(this);
   }
 
   render() {
     return (
       <form onSubmit={this._handleSubmit}>
+        {this.state.errorMessage}
         <div>
           <label htmlFor="LoginPage-usernameInput">
             username
@@ -37,8 +40,14 @@ class LoginPage extends PureComponent {
   _handleSubmit(event) {
     event.preventDefault();
     this.props.login(this.usernameInput.value, this.passwordInput.value)
+      .then(() => {
+        this.setState({ errorMessage: undefined });
+      })
       .catch(() => {
-        // TODO: Something
+        // TODO: Better error handling.
+        this.setState({
+          errorMessage: "Didn't work, try again",
+        });
       });
   }
 }
