@@ -40,6 +40,7 @@ class EntriesIndexPage extends Component {
       <div className="EntriesIndexPage">
         <EntryForm className="EntriesIndexPage-form" isDisabled={this.props.isEntryCreating} ref={component => { this.entryForm = component; }} onSubmit={this._handleSubmitEntryForm} />
         {this.props.entries.length === 0 ? 'No entries yet' : this.props.entries.sort((first, second) => moment(first.timeCreated).diff(second.timeCreated)).reverse().map(this._renderEntry, this)}
+        <a href={`data:text/plain;charset=utf-8,${encodeURIComponent(JSON.stringify(this.props.entries))}`} download={`jawn-entries-${moment().format()}.json`}>download</a>
       </div>
     );
   }
