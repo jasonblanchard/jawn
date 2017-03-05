@@ -20,6 +20,8 @@ export default class EntryController {
   handleCreate(request, response, next) {
     this._logger.debug('handleCreate', LOG_TAG);
 
+    // TODO: Input validation
+
     const token = TokenUtils.parseAuthorizationHeader(request.headers.authorization);
     this._logger.debug({ body: request.body, token }, LOG_TAG);
     jwt.verify(token, this._appSecret, (tokenError, parsedToken) => {
@@ -58,6 +60,8 @@ export default class EntryController {
   handleUpdate(request, response, next) {
     this._logger.debug('handleUpdate', 'LOG_TAG');
     this._logger.debug({ body: request.body, params: request.params }, LOG_TAG);
+
+    // TODO: Input validation
 
     const token = TokenUtils.parseAuthorizationHeader(request.headers.authorization);
     jwt.verify(token, this._appSecret, (tokenError, parsedToken) => {

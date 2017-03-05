@@ -42,7 +42,7 @@ export default class Entry extends PureComponent {
     if (this.state.isEditing) {
       return (
         <div>
-          <EntryForm className="Entry Entry-form" isDisabled={this.props.isEntryFormDisabled} entry={this.props.entry} onSubmit={this._handleSubmit}>
+          <EntryForm className="Entry Entry-form" ref={element => { this.entryForm = element; }} isDisabled={this.props.isEntryFormDisabled} entry={this.props.entry} onSubmit={this._handleSubmit} onCancel={this._handleClickCancel}>
             <div className="Entry-entryFormActions">
               {this.state.isDeleteConfirmationVisible ? this._renderDeleteConfirmation() : this._renderEntryFormActions()}
             </div>
@@ -85,11 +85,17 @@ export default class Entry extends PureComponent {
   }
 
   _handleDoubleClick() {
-    this.setState({ isEditing: true });
+    this._setIsEditing();
   }
 
   _handleClickEditButton() {
-    this.setState({ isEditing: true });
+    this._setIsEditing();
+  }
+
+  _setIsEditing() {
+    this.setState({ isEditing: true }, () => {
+      this.entryForm.focus();
+    });
   }
 
   _handleClickCancel() {
@@ -103,13 +109,11 @@ export default class Entry extends PureComponent {
       });
   }
 
-  _handleClickToggleDeleteConfirmation(isDeleteConfirmationVisible, event) {
-    event.stopPropagation();
+  _handleClickToggleDeleteConfirmation(isDeleteConfirmationVisible) {
     this.setState({ isDeleteConfirmationVisible });
   }
 
-  _handleClickDelete(event) {
-    event.stopPropagation();
+  _handleClickDelete() {
     this.props.onClickDelete(this.props.entry.id);
   }
 }

@@ -13,11 +13,13 @@ export default class EntryForm extends PureComponent {
       text: PropTypes.string,
     }),
     isDisabled: PropTypes.bool,
+    onCancel: PropTypes.func,
     onSubmit: PropTypes.func,
   }
 
   static defaultProps = {
     entry: {},
+    onCancel: () => {},
     onSubmit: () => {},
   }
 
@@ -39,6 +41,7 @@ export default class EntryForm extends PureComponent {
       <form className={className} onSubmit={this._handleSubmit}>
         <textarea
           className="EntryForm-textInput"
+          ref={element => { this.textInput = element; }}
           aria-label="text"
           value={this.state.text || ''}
           onKeyDown={this._handleKeyDown}
@@ -56,6 +59,10 @@ export default class EntryForm extends PureComponent {
     this.setState({ text: null });
   }
 
+  focus() {
+    this.textInput.focus();
+  }
+
   _handleChange(event) {
     this.setState({ text: event.target.value });
   }
@@ -64,6 +71,10 @@ export default class EntryForm extends PureComponent {
     const { metaKey, keyCode } = event;
     if (metaKey && keyCode === 13) {
       this._handleSubmit();
+    }
+
+    if (keyCode === 27) {
+      this.props.onCancel();
     }
   }
 
