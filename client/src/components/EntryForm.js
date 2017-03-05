@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import isEmpty from 'lodash.isempty';
 import React, { PureComponent, PropTypes } from 'react';
 
 import './EntryForm.css';
@@ -44,7 +45,7 @@ export default class EntryForm extends PureComponent {
           onChange={this._handleChange}
         />
         <div className="EntryForm-actions">
-          <button type="submit" disabled={this.props.isDisabled}>{this.props.entry.id ? 'Update' : 'Create'}</button>
+          <button type="submit" disabled={this.props.isDisabled || !this._canSubmit()}>{this.props.entry.id ? 'Update' : 'Create'}</button>
           {this.props.children}
         </div>
       </form>
@@ -75,5 +76,9 @@ export default class EntryForm extends PureComponent {
     return {
       text: this.state.text,
     };
+  }
+
+  _canSubmit() {
+    return !isEmpty(this.state.text);
   }
 }
