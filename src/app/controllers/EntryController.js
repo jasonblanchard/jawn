@@ -1,4 +1,5 @@
 import Boom from 'boom';
+import isEmpty from 'lodash.isempty';
 import jwt from 'jsonwebtoken';
 import TokenUtils from 'app/utils/TokenUtils';
 
@@ -20,7 +21,8 @@ export default class EntryController {
   handleCreate(request, response, next) {
     this._logger.debug('handleCreate', LOG_TAG);
 
-    // TODO: Input validation
+    // TODO: Use a schema for input validation
+    if (isEmpty(request.body.text)) return next(Boom.badData());
 
     const token = TokenUtils.parseAuthorizationHeader(request.headers.authorization);
     this._logger.debug({ body: request.body, token }, LOG_TAG);
@@ -61,7 +63,8 @@ export default class EntryController {
     this._logger.debug('handleUpdate', 'LOG_TAG');
     this._logger.debug({ body: request.body, params: request.params }, LOG_TAG);
 
-    // TODO: Input validation
+    // TODO: Use a schema for input validation
+    if (isEmpty(request.body.text)) return next(Boom.badData());
 
     const token = TokenUtils.parseAuthorizationHeader(request.headers.authorization);
     jwt.verify(token, this._appSecret, (tokenError, parsedToken) => {
