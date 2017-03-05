@@ -1,7 +1,5 @@
 import Boom from 'boom';
 import isEmpty from 'lodash.isempty';
-import jwt from 'jsonwebtoken';
-import TokenUtils from 'app/utils/TokenUtils';
 
 const LOG_TAG = 'EntryController';
 
@@ -24,38 +22,25 @@ export default class EntryController {
     // TODO: Use a schema for input validation
     if (isEmpty(request.body.text)) return next(Boom.badData());
 
-    const token = TokenUtils.parseAuthorizationHeader(request.headers.authorization);
-    this._logger.debug({ body: request.body, token }, LOG_TAG);
-    jwt.verify(token, this._appSecret, (tokenError, parsedToken) => {
-      if (tokenError) return next(Boom.unauthorized());
-
-      this._logger.debug({ userId: parsedToken.id }, LOG_TAG);
-
-      this._entryService.create(request.body, parsedToken.id)
-        .then(entry => {
-          this._logger.debug({ entry }, LOG_TAG);
-          response.json(entry);
-        })
-        .catch(entryServiceError => {
-          next(entryServiceError);
-        });
-    });
+    this._entryService.create(request.body, request.accessTokenPayload.id)
+      .then(entry => {
+        this._logger.debug({ entry }, LOG_TAG);
+        response.json(entry);
+      })
+      .catch(entryServiceError => {
+        next(entryServiceError);
+      });
   }
 
   handleIndex(request, response, next) {
     this._logger.debug('handleIndex', LOG_TAG);
 
-    const token = TokenUtils.parseAuthorizationHeader(request.headers.authorization) || '';
-    jwt.verify(token, this._appSecret, (tokenError, parsedToken) => {
-      if (tokenError) return next(Boom.unauthorized());
-
-      this._entryService.list(parsedToken.id).then(entries => {
-        this._logger.debug({ entries }, LOG_TAG);
-        response.json(entries);
-      })
-      .catch(entryServiceError => {
-        next(entryServiceError);
-      });
+    this._entryService.list(request.accessTokenPayload.id).then(entries => {
+      this._logger.debug({ entries }, LOG_TAG);
+      response.json(entries);
+    })
+    .catch(entryServiceError => {
+      next(entryServiceError);
     });
   }
 
@@ -66,35 +51,25 @@ export default class EntryController {
     // TODO: Use a schema for input validation
     if (isEmpty(request.body.text)) return next(Boom.badData());
 
-    const token = TokenUtils.parseAuthorizationHeader(request.headers.authorization);
-    jwt.verify(token, this._appSecret, (tokenError, parsedToken) => {
-      if (tokenError) return next(Boom.unauthorized());
-
-      this._entryService.update(request.params.entryId, parsedToken.id, request.body)
-        .then(entry => {
-          this._logger.debug({ entry }, LOG_TAG);
-          response.json(entry);
-        })
-        .catch(error => {
-          next(error);
-        });
-    });
+    this._entryService.update(request.params.entryId, request.accessTokenPayload.id, request.body)
+      .then(entry => {
+        this._logger.debug({ entry }, LOG_TAG);
+        response.json(entry);
+      })
+      .catch(error => {
+        next(error);
+      });
   }
 
   handleDelete(request, response, next) {
     this._logger.debug('handleDelete', 'LOG_TAG');
 
-    const token = TokenUtils.parseAuthorizationHeader(request.headers.authorization);
-    jwt.verify(token, this._appSecret, (tokenError, parsedToken) => {
-      if (tokenError) return next(Boom.unauthorized());
-
-      this._entryService.delete(request.params.entryId, parsedToken.id)
-        .then(() => {
-          response.status(201).send();
-        })
-        .catch(error => {
-          next(error);
-        });
-    });
+    this._entryService.delete(request.params.entryId, request.accessTokenPayload.id)
+      .then(() => {
+        response.status(201).send();
+      })
+      .catch(error => {
+        next(error);
+      });
   }
 }

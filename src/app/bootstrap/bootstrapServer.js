@@ -2,10 +2,12 @@ import bodyParser from 'body-parser';
 import Boom from 'boom';
 import cookieParser from 'cookie-parser';
 import express from 'express';
+import expressJwt from 'express-jwt';
 import fs from 'fs';
-import jwt from 'jsonwebtoken';
-import path from 'path';
+import get from 'lodash.get';
 import morgan from 'morgan';
+import path from 'path';
+import TokenUtils from 'app/utils/TokenUtils';
 
 const LOG_TAG = 'app';
 
@@ -23,6 +25,12 @@ export default function(registry) {
   app.use(cookieParser());
   app.use('/static', express.static(path.join(__dirname, '../../../client/build/static')));
   app.use(morgan(NODE_ENV === 'development' ? 'dev' : 'combined'));
+  app.use(expressJwt({
+    secret: appSecret,
+    requestProperty: 'accessTokenPayload',
+    getToken: request => TokenUtils.parseAuthorizationHeader(request.headers.authorization) || request.cookies.token,
+    credentialsRequired: false,
+  }));
 
   app.post('/api/login', loginController.handlePost);
   app.get('/api/entries', entryController.handleIndex);
@@ -36,20 +44,9 @@ export default function(registry) {
   });
 
   app.get('*', (request, response, next) => {
-    const token = request.cookies.token;
-    logger.debug({ token: token || '' }, LOG_TAG);
-
-    new Promise((resolve) => {
-      if (!token) return resolve();
-      jwt.verify(token, appSecret, (parseError, parsedToken) => {
-        if (parseError) {
-          logger.error(parseError, LOG_TAG);
-        }
-
-        logger.debug({ parsedToken }, LOG_TAG);
-        const id = parsedToken ? parsedToken.id : undefined;
-        return resolve(id);
-      });
+    new Promise(resolve => {
+      const id = get(request, 'accessTokenPayload.id');
+      resolve(id);
     })
     .then(id => {
       if (!id) return Promise.resolve();
@@ -58,19 +55,27 @@ export default function(registry) {
     .then(user => {
       logger.debug({ user: user || {} }, LOG_TAG);
 
+      const token = request.cookies.token;
       user = Object.assign({}, user, { token });
 
       fs.readFile(path.join(__dirname, '../../../client/build', 'index.html'), 'utf8', (error, file) => {
+        if (error) return next(error);
         if (!file) return next();
         file = file.replace('__INITIAL_STATE={}', `__INITIAL_STATE=${JSON.stringify({ currentUser: user })}`);
         file = file.replace('__ENV={}', `__ENV={NODE_ENV: '${NODE_ENV}', LOG_LEVEL: '${process.env.LOG_LEVEL}'}`);
         response.set('Content-Type', 'text/html');
         response.send(file);
       });
+    })
+    .catch((error) => {
+      next(error);
     });
   });
 
   app.use((error, request, response, next) => { // eslint-disable-line no-unused-vars
+    if (error.name === 'UnauthorizedError') {
+      error = Boom.unauthorized();
+    }
     error = error.isBoom ? error : Boom.wrap(error);
     error.reformat();
     logger.error({ error, stack: error.stack }, LOG_TAG);
