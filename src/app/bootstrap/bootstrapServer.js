@@ -25,11 +25,12 @@ export default function(registry) {
   app.use(cookieParser());
   app.use('/static', express.static(path.join(__dirname, '../../../client/build/static')));
   app.use(morgan(NODE_ENV === 'development' ? 'dev' : 'combined'));
+  // TODO: Include audience and issuer values?
   app.use(expressJwt({
     secret: appSecret,
     requestProperty: 'accessTokenPayload',
     getToken: request => TokenUtils.parseAuthorizationHeader(request.headers.authorization) || request.cookies.token,
-    credentialsRequired: false,
+    credentialsRequired: false, // TODO: Replace with `unless` values when using client-side router.
   }));
 
   app.post('/api/login', loginController.handlePost);
@@ -38,38 +39,31 @@ export default function(registry) {
   app.post('/api/entries/:entryId', entryController.handleUpdate);
   app.delete('/api/entries/:entryId', entryController.handleDelete);
 
-  app.use('/api/*', (request, response) => {
-    logger.error({ noMatchingRoute: request.originalUrl }, LOG_TAG);
-    response.status(404).json({ error: 'No resource at this route' });
+  app.use('/api/*', (request, response, next) => {
+    next(Boom.notFound());
   });
 
   app.get('*', (request, response, next) => {
-    new Promise(resolve => {
-      const id = get(request, 'accessTokenPayload.id');
-      resolve(id);
-    })
-    .then(id => {
-      if (!id) return Promise.resolve();
-      return userService.findById(id);
-    })
-    .then(user => {
-      logger.debug({ user: user || {} }, LOG_TAG);
+    const id = get(request, 'accessTokenPayload.id');
+    userService.findById(id)
+      .then(user => {
+        logger.debug({ user: user || {} }, LOG_TAG);
 
-      const token = request.cookies.token;
-      user = Object.assign({}, user, { token });
+        const token = request.cookies.token;
+        user = Object.assign({}, user, { token });
 
-      fs.readFile(path.join(__dirname, '../../../client/build', 'index.html'), 'utf8', (error, file) => {
-        if (error) return next(error);
-        if (!file) return next();
-        file = file.replace('__INITIAL_STATE={}', `__INITIAL_STATE=${JSON.stringify({ currentUser: user })}`);
-        file = file.replace('__ENV={}', `__ENV={NODE_ENV: '${NODE_ENV}', LOG_LEVEL: '${process.env.LOG_LEVEL}'}`);
-        response.set('Content-Type', 'text/html');
-        response.send(file);
+        fs.readFile(path.join(__dirname, '../../../client/build', 'index.html'), 'utf8', (error, file) => {
+          if (error) return next(error);
+          if (!file) return next();
+          file = file.replace('__INITIAL_STATE={}', `__INITIAL_STATE=${JSON.stringify({ currentUser: user })}`);
+          file = file.replace('__ENV={}', `__ENV={NODE_ENV: '${NODE_ENV}', LOG_LEVEL: '${process.env.LOG_LEVEL}'}`);
+          response.set('Content-Type', 'text/html');
+          response.send(file);
+        });
+      })
+      .catch((error) => {
+        next(error);
       });
-    })
-    .catch((error) => {
-      next(error);
-    });
   });
 
   app.use((error, request, response, next) => { // eslint-disable-line no-unused-vars
