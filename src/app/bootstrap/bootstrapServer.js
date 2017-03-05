@@ -1,11 +1,11 @@
-import Boom from 'boom';
 import bodyParser from 'body-parser';
+import Boom from 'boom';
 import cookieParser from 'cookie-parser';
 import express from 'express';
-// import serverFavicon from 'serve-favicon';
 import fs from 'fs';
 import jwt from 'jsonwebtoken';
 import path from 'path';
+import morgan from 'morgan';
 
 const LOG_TAG = 'app';
 
@@ -22,7 +22,7 @@ export default function(registry) {
   app.use(bodyParser.json());
   app.use(cookieParser());
   app.use('/static', express.static(path.join(__dirname, '../../../client/build/static')));
-  // app.use(serverFavicon(path.join(__dirname, '../../../client/build/favicon.ico')));
+  app.use(morgan(NODE_ENV === 'development' ? 'dev' : 'combined'));
 
   app.post('/api/login', loginController.handlePost);
   app.get('/api/entries', entryController.handleIndex);
