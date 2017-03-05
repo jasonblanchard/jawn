@@ -42,10 +42,11 @@ export default class Entry extends PureComponent {
     if (this.state.isEditing) {
       return (
         <div>
-          <EntryForm className="Entry Entry-form" isDisabled={this.props.isEntryFormDisabled} entry={this.props.entry} onSubmit={this._handleSubmit} />
-          <button onClick={this._handleClickCancel}>Cancel</button>
-          <button onClick={this._handleClickToggleDeleteConfirmation.bind(this, true)}>Delete</button>
-          {this._renderDeleteConfirmation()}
+          <EntryForm className="Entry Entry-form" isDisabled={this.props.isEntryFormDisabled} entry={this.props.entry} onSubmit={this._handleSubmit}>
+            <div className="Entry-entryFormActions">
+              {this.state.isDeleteConfirmationVisible ? this._renderDeleteConfirmation() : this._renderEntryFormActions()}
+            </div>
+          </EntryForm>
         </div>
       );
     }
@@ -59,18 +60,26 @@ export default class Entry extends PureComponent {
           </div>
           <button onClick={this._handleClickEditButton}>edit</button>
         </div>
-        <p onDoubleClick={this._handleDoubleClick}>{this.props.entry.text}</p>
+        <p className="Entry-text" onDoubleClick={this._handleDoubleClick}>{this.props.entry.text}</p>
+      </div>
+    );
+  }
+
+  _renderEntryFormActions() {
+    return (
+      <div className="Entry-entryFormActions">
+        <button type="button" onClick={this._handleClickCancel}>Cancel</button>
+        <button type="button" onClick={this._handleClickToggleDeleteConfirmation.bind(this, true)}>Delete</button>
       </div>
     );
   }
 
   _renderDeleteConfirmation() {
-    if (!this.state.isDeleteConfirmationVisible) return null;
     return (
       <div>
         Are you sure you want to delete it?
-        <button onClick={this._handleClickDelete}>Yep</button>
-        <button onClick={this._handleClickToggleDeleteConfirmation.bind(this, false)}>Nope</button>
+        <button type="button" onClick={this._handleClickDelete}>Yep</button>
+        <button type="button" onClick={this._handleClickToggleDeleteConfirmation.bind(this, false)}>Nope</button>
       </div>
     );
   }
@@ -84,13 +93,13 @@ export default class Entry extends PureComponent {
   }
 
   _handleClickCancel() {
-    this.setState({ isEditing: false });
+    this.setState({ isEditing: false, isDeleteConfirmationVisible: false });
   }
 
   _handleSubmit(changes) {
     this.props.onSubmitEntryForm(this.props.entry.id, changes)
       .then(() => {
-        this.setState({ isEditing: false });
+        this.setState({ isEditing: false, isDeleteConfirmationVisible: false });
       });
   }
 

@@ -3,3 +3,8 @@
   height: 100%;
   resize: vertical;
 }
+
+.EntryForm-actions {
+  display: flex;
+  justify-content: space-between;
+}

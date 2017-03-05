@@ -5,6 +5,7 @@ import './EntryForm.css';
 
 export default class EntryForm extends PureComponent {
   static propTypes = {
+    children: PropTypes.node,
     className: PropTypes.string,
     entry: PropTypes.shape({
       id: PropTypes.string,
@@ -42,7 +43,10 @@ export default class EntryForm extends PureComponent {
           onKeyDown={this._handleKeyDown}
           onChange={this._handleChange}
         />
-        <button disabled={this.props.isDisabled}>{this.props.entry.id ? 'Update' : 'Create'}</button>
+        <div className="EntryForm-actions">
+          <button type="submit" disabled={this.props.isDisabled}>{this.props.entry.id ? 'Update' : 'Create'}</button>
+          {this.props.children}
+        </div>
       </form>
     );
   }

@@ -16,3 +16,7 @@
   display: flex;
   justify-content: space-between;
 }
+
+.Entry-text {
+  cursor: pointer;
+}
