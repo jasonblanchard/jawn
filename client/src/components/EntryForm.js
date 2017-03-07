@@ -27,16 +27,19 @@ export default class EntryForm extends PureComponent {
     super(props);
 
     this.state = {
+      isFocused: false,
       text: props.entry.text,
     };
 
     this._handleChange = this._handleChange.bind(this);
     this._handleSubmit = this._handleSubmit.bind(this);
     this._handleKeyDown = this._handleKeyDown.bind(this);
+    this._handleFocus = this._handleFocus.bind(this);
+    this._handleBlur = this._handleBlur.bind(this);
   }
 
   render() {
-    const className = classNames('EntryForm', this.props.className);
+    const className = classNames('EntryForm', this.props.className, { isFocused: this.state.isFocused });
     return (
       <form className={className} onSubmit={this._handleSubmit}>
         <textarea
@@ -44,6 +47,8 @@ export default class EntryForm extends PureComponent {
           ref={element => { this.textInput = element; }}
           aria-label="text"
           value={this.state.text || ''}
+          onFocus={this._handleFocus}
+          onBlur={this._handleBlur}
           onKeyDown={this._handleKeyDown}
           onChange={this._handleChange}
         />
@@ -61,6 +66,10 @@ export default class EntryForm extends PureComponent {
 
   focus() {
     this.textInput.focus();
+  }
+
+  blur() {
+    this.textInput.blur();
   }
 
   _handleChange(event) {
@@ -81,6 +90,14 @@ export default class EntryForm extends PureComponent {
   _handleSubmit(event) {
     if (event) event.preventDefault();
     this.props.onSubmit(this._getFormData());
+  }
+
+  _handleFocus() {
+    this.setState({ isFocused: true });
+  }
+
+  _handleBlur() {
+    this.setState({ isFocused: false });
   }
 
   _getFormData() {

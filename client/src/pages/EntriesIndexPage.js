@@ -58,6 +58,7 @@ class EntriesIndexPage extends Component {
     this.props.createEntry(fields)
       .then(() => {
         this.entryForm.reset();
+        this.entryForm.blur();
       });
   }
 }

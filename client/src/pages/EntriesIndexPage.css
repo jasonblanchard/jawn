@@ -1,14 +1,21 @@
 .EntriesIndexPage {
-  width: 70%;
+  height: 100%;
   margin: 0 auto;
+  width: 70%;
 }
 
 .EntriesIndexPage-form {
+  height: 50px;
   margin: 10px 0 40px;
+  transition: height .1s;
+}
+
+.EntriesIndexPage-form.isFocused {
+  height: 90%;
 }
 
 .EntriesIndexPage-form textarea {
-  min-height: 300px;
+  height: 100%;
 }
 
 @media (max-width: 960px) {
