@@ -35,7 +35,6 @@ export default class EntryForm extends PureComponent {
     this._handleSubmit = this._handleSubmit.bind(this);
     this._handleKeyDown = this._handleKeyDown.bind(this);
     this._handleFocus = this._handleFocus.bind(this);
-    this._handleBlur = this._handleBlur.bind(this);
   }
 
   render() {
@@ -48,7 +47,6 @@ export default class EntryForm extends PureComponent {
           aria-label="text"
           value={this.state.text || ''}
           onFocus={this._handleFocus}
-          onBlur={this._handleBlur}
           onKeyDown={this._handleKeyDown}
           onChange={this._handleChange}
         />
@@ -69,6 +67,7 @@ export default class EntryForm extends PureComponent {
   }
 
   blur() {
+    this.setState({ isFocused: false });
     this.textInput.blur();
   }
 
@@ -84,6 +83,8 @@ export default class EntryForm extends PureComponent {
 
     if (keyCode === 27) {
       this.props.onCancel();
+      this.setState({ isFocused: false });
+      this.textInput.blur();
     }
   }
 
@@ -94,10 +95,6 @@ export default class EntryForm extends PureComponent {
 
   _handleFocus() {
     this.setState({ isFocused: true });
-  }
-
-  _handleBlur() {
-    this.setState({ isFocused: false });
   }
 
   _getFormData() {
