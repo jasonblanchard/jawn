@@ -35,7 +35,7 @@ export default function(fields) {
           return resolve();
         })
         .catch(error => {
-          logger.debug(error, LOG_TAG);
+          logger.error(error, LOG_TAG);
           dispatch({ type: CREATE_ENTRY_FAILED, error });
           return reject();
         });

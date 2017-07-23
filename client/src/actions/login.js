@@ -20,7 +20,7 @@ export default function(username, password) {
           return resolve();
         })
         .catch(error => {
-          logger.debug(error, LOG_TAG);
+          logger.error(error, LOG_TAG);
           dispatch({ type: LOGIN_FAILED, error });
           return reject();
         });

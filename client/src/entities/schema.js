@@ -1,3 +1,4 @@
-import { Schema } from 'normalizr';
+import { schema } from 'normalizr';
 
-export const entrySchema = new Schema('entries');
+export const entrySchema = new schema.Entity('entries');
+export const entryListSchema = new schema.Array(entrySchema);

@@ -27,7 +27,7 @@ export default function(id) {
           return resolve();
         })
         .catch(error => {
-          logger.debug(error, LOG_TAG);
+          logger.error(error, LOG_TAG);
           dispatch({ type: DELETE_ENTRY_FAILED, error });
           return reject();
         });

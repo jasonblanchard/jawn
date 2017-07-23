@@ -1,7 +1,7 @@
-import { normalize, arrayOf } from 'normalizr';
+import { normalize } from 'normalizr';
 import http from 'superagent';
 
-import { entrySchema } from 'src/entities/schema';
+import { entryListSchema } from 'src/entities/schema';
 import selectors from 'src/state/selectors';
 
 import {
@@ -27,17 +27,17 @@ export default function() {
           const entries = response.body;
           logger.debug({ entries }, LOG_TAG);
 
-          const { entities, result: entryIds } = normalize(entries, arrayOf(entrySchema));
+          const { entities, result: entryIds } = normalize(entries, entryListSchema);
           logger.debug({ entities }, LOG_TAG);
 
           dispatch({ type: FETCH_ENTRIES_COMPLETED, entities, entryIds });
         })
         .catch(error => {
-          logger.debug(error, LOG_TAG);
+          logger.error(error, LOG_TAG);
           dispatch({ type: FETCH_ENTRIES_FAILED, error });
         });
     } catch (error) {
-      logger.debug(error, LOG_TAG);
+      logger.error(error, LOG_TAG);
       dispatch({ type: FETCH_ENTRIES_FAILED, error });
     }
   };

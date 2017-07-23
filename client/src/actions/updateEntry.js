@@ -35,7 +35,7 @@ export default function(id, fields) {
           return resolve();
         })
         .catch(error => {
-          logger.debug(error, LOG_TAG);
+          logger.error(error, LOG_TAG);
           dispatch({ type: UPDATE_ENTRY_FAILED, error });
           return reject();
         });
