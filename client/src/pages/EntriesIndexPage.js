@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import moment from 'moment';
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 
 import createEntry from 'src/actions/createEntry';
 import deleteEntry from 'src/actions/deleteEntry';

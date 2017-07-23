@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import React, { PureComponent, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { PureComponent } from 'react';
 
 import login from 'src/actions/login';
 
