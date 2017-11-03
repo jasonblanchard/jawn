@@ -10,6 +10,7 @@ import path from 'path';
 import TokenUtils from 'app/utils/TokenUtils';
 
 const LOG_TAG = 'app';
+const BUILD_PATH = '../../../client2/build';
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
@@ -23,7 +24,7 @@ export default function(registry) {
 
   app.use(bodyParser.json());
   app.use(cookieParser());
-  app.use('/static', express.static(path.join(__dirname, '../../../client/build/static')));
+  app.use('/static', express.static(path.join(__dirname, BUILD_PATH + '/static')));
   app.use(morgan(NODE_ENV === 'development' ? 'dev' : 'combined'));
   // TODO: Include audience and issuer values?
   app.use(expressJwt({
@@ -52,7 +53,7 @@ export default function(registry) {
         const token = request.cookies.token;
         user = Object.assign({}, user, { token });
 
-        fs.readFile(path.join(__dirname, '../../../client/build', 'index.html'), 'utf8', (error, file) => {
+        fs.readFile(path.join(__dirname, BUILD_PATH, 'index.html'), 'utf8', (error, file) => {
           if (error) return next(error);
           if (!file) return next();
           file = file.replace('__INITIAL_STATE={}', `__INITIAL_STATE=${JSON.stringify({ currentUser: user })}`);
