@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 
-import connectToAppProvider from 'src/connectToAppProvider';
+import connectToAppProvider from 'src/state/connectToAppProvider';
 
 export default class LoginPage extends PureComponent {
   static propTypes = {

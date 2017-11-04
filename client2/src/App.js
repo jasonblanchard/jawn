@@ -4,7 +4,7 @@ import {
 } from 'react-router-dom';
 import React, { Component } from 'react';
 
-import AppProvider from 'src/AppProvider';
+import AppProvider from 'src/state/AppProvider';
 import { ConnectedLoginPage } from 'src/pages/LoginPage';
 
 import cssClasses from './App.scss';
