@@ -1,5 +1,5 @@
 const _path = require('path');
-var sassLintPlugin = require('sasslint-webpack-plugin');
+const sassLintPlugin = require('sasslint-webpack-plugin');
 
 function relativePath(path) {
   return _path.join(__dirname, path);
@@ -43,7 +43,12 @@ module.exports = {
               sourceMap: true
             }
           },
-          { loader: 'sass-loader' }
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true
+            }
+          }
         ]
       }
     ]
