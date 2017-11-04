@@ -15,6 +15,7 @@ export default class AuthenticatedRoute extends Component {
   render() {
     const { render, authenticatedUserId, ...rest } = this.props;
 
+    // TODO: Tack on original path to the redirect path in query param.
     return (
       <Route {...rest} render={authenticatedUserId ? render : () => <Redirect to="/login" />} />
     );
