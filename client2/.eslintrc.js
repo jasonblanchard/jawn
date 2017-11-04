@@ -14,6 +14,9 @@ module.exports = {
       "import/extensions": 0,
       "import/no-extraneous-dependencies": 0,
       "import/no-unresolved": 0,
+      "jsx-a11y/anchor-is-valid": [ "error", {
+        "components": [],
+      }],
       "jsx-a11y/label-has-for": [ 2, {
         "required": {
           "every": [ "id" ]
@@ -21,6 +24,7 @@ module.exports = {
         "allowChildren": false,
       }],
       "max-len": 0,
+      "react/forbid-prop-types": 0,
       "react/jsx-filename-extension": 0,
       "react/no-unused-state": 0,
       "react/prefer-stateless-function": 0,
