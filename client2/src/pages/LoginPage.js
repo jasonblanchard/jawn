@@ -1,13 +1,15 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 
+import connectToAppProvider from 'src/connectToAppProvider';
+
 export default class LoginPage extends PureComponent {
   static propTypes = {
     login: PropTypes.func,
   }
 
   static defaultProps = {
-    login: () => {},
+    login: () => (Promise.resolve()),
   }
 
   state = {
@@ -49,3 +51,11 @@ export default class LoginPage extends PureComponent {
       });
   }
 }
+
+function mapActionsToProps(actions) {
+  return {
+    login: actions.login,
+  };
+}
+
+export const ConnectedLoginPage = connectToAppProvider(undefined, mapActionsToProps)(LoginPage);

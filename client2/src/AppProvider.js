@@ -4,15 +4,29 @@ import http from 'superagent';
 
 export default class AppProvider extends Component {
   static propTypes = {
-    children: PropTypes.func.isRequired,
+    children: PropTypes.node.isRequired,
+  }
+
+  static childContextTypes = {
+    state: PropTypes.object,
+    actions: PropTypes.object,
   }
 
   state = {
     authenticatedUser: undefined,
   }
 
+  getChildContext() {
+    return {
+      state: this.state,
+      actions: {
+        login: this.login,
+      },
+    };
+  }
+
   render() {
-    return this.props.children(this.state, { login: this.login });
+    return this.props.children;
   }
 
   login = (username, password) => (
