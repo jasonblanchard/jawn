@@ -22,7 +22,7 @@ export default class LoginPage extends PureComponent {
 
   render() {
     // TODO: Grab redirect path from query param.
-    if (this.state.didAuthenticated) return <Redirect to="/protected" />;
+    if (this.state.didAuthenticated) return <Redirect to="/" />;
 
     return (
       <form onSubmit={this.handleSubmit}>

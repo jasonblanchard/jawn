@@ -1,6 +1,5 @@
 import {
   BrowserRouter as Router,
-  Link,
   Route,
 } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -26,9 +25,8 @@ export default class Routes extends Component {
     return (
       <Router>
         <div>
-          <Link to="/protected">Protected route</Link>
+          <AuthenticatedRoute path="/" authenticatedUserId={this.props.authenticatedUser.id} render={() => <ProtectedPage />} />
           <Route path="/login" render={() => <ConnectedLoginPage />} />
-          <AuthenticatedRoute path="/protected" authenticatedUserId={this.props.authenticatedUser.id} render={() => <ProtectedPage />} />
         </div>
       </Router>
     );
