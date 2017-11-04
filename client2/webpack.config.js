@@ -1,8 +1,8 @@
-const _path = require('path');
+const path = require('path');
 const sassLintPlugin = require('sasslint-webpack-plugin');
 
-function relativePath(path) {
-  return _path.join(__dirname, path);
+function relativePath(_path) {
+  return path.join(__dirname, _path);
 }
 
 // TODO: Configure production build with https://github.com/kentcdodds/webpack-config-utils
@@ -15,7 +15,10 @@ module.exports = {
   },
   devtool: 'cheap-module-source-map',
   resolve: {
-    modules: [relativePath('src'), 'node_modules']
+    modules: [relativePath('src'), 'node_modules'],
+    alias: {
+      src: relativePath('src')
+    }
   },
   module: {
     rules: [
