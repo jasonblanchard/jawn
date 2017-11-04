@@ -4,7 +4,12 @@ import http from 'superagent';
 
 export default class AppProvider extends Component {
   static propTypes = {
+    initialState: PropTypes.object,
     children: PropTypes.node.isRequired,
+  }
+
+  static defaultProps = {
+    initialState: {},
   }
 
   static childContextTypes = {
@@ -12,9 +17,7 @@ export default class AppProvider extends Component {
     actions: PropTypes.object,
   }
 
-  state = {
-    authenticatedUser: undefined,
-  }
+  state = this.props.initialState
 
   getChildContext() {
     return {
