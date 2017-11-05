@@ -4,6 +4,8 @@ import React, { Component } from 'react';
 import AppProvider from 'src/state/AppProvider';
 import Routes from 'src/Routes';
 
+import './App.scss';
+
 export default class App extends Component {
   static propTypes = {
     initialState: PropTypes.object,

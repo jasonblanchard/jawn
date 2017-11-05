@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
+import Entry from 'src/components/Entry';
 import connectToAppProvider from 'src/state/connectToAppProvider';
 
 export default class EntriesIndexPage extends Component {
@@ -14,9 +15,7 @@ export default class EntriesIndexPage extends Component {
 
   render() {
     return this.props.entries.map(entry => (
-      <div key={entry.id}>
-        <p>{entry.text}</p>
-      </div>
+      <Entry key={entry.id} entry={entry} />
     ));
   }
 }
