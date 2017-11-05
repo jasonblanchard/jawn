@@ -2,6 +2,8 @@ import PropTypes from 'prop-types';
 import { Component } from 'react';
 import http from 'superagent';
 
+import TokenUtils from 'src/utils/TokenUtils';
+
 export default class AppProvider extends Component {
   static propTypes = {
     initialState: PropTypes.object,
@@ -24,6 +26,7 @@ export default class AppProvider extends Component {
       state: this.state,
       actions: {
         login: this.login,
+        fetchEntries: this.fetchEntries,
       },
     };
   }
@@ -36,4 +39,15 @@ export default class AppProvider extends Component {
     http.post('/api/login')
       .send({ username, password })
   )
+
+  fetchEntries = () => {
+    const accessToken = TokenUtils.getAccessToken();
+    return http.get('/api/entries')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .then(response => {
+        this.setState({
+          entries: response.body,
+        });
+      });
+  }
 }
