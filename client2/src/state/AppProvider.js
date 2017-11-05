@@ -35,11 +35,5 @@ export default class AppProvider extends Component {
   login = (username, password) => (
     http.post('/api/login')
       .send({ username, password })
-      .then(response => {
-        const authenticatedUser = response.body;
-        this.setState({
-          authenticatedUser,
-        });
-      })
   )
 }
