@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import Entry from 'src/components/Entry';
 import connectToAppProvider from 'src/state/connectToAppProvider';
+import EditableEntry from 'src/components/EditableEntry';
 
 export default class EntriesIndexPage extends Component {
   static propTypes = {
@@ -15,7 +15,7 @@ export default class EntriesIndexPage extends Component {
 
   render() {
     return this.props.entries.map(entry => (
-      <Entry key={entry.id} entry={entry} />
+      <EditableEntry key={entry.id} entry={entry} />
     ));
   }
 }
