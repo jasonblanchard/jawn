@@ -4,6 +4,8 @@ import React, { Component } from 'react';
 import connectToAppProvider from 'src/state/connectToAppProvider';
 import EditableEntry from 'src/components/EditableEntry';
 
+import css from './EntriesIndexPage.scss';
+
 export default class EntriesIndexPage extends Component {
   static propTypes = {
     entries: PropTypes.array,
@@ -14,9 +16,13 @@ export default class EntriesIndexPage extends Component {
   }
 
   render() {
-    return this.props.entries.map(entry => (
-      <EditableEntry key={entry.id} entry={entry} />
-    ));
+    return (
+      <div className={css.container}>
+        {this.props.entries.map(entry => (
+          <EditableEntry key={entry.id} entry={entry} />
+        ))}
+      </div>
+    );
   }
 }
 

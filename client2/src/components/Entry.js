@@ -3,7 +3,7 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import cssClassNames from './Entry.scss';
+import css from './Entry.scss';
 
 export default class Entry extends Component {
   static propTypes = {
@@ -12,11 +12,11 @@ export default class Entry extends Component {
   }
 
   render() {
-    const className = classNames(cssClassNames.container, this.props.className);
+    const className = classNames(css.container, this.props.className);
     return (
       <div className={className}>
-        <div className={cssClassNames.meta}>
-          <div className={cssClassNames.date}>
+        <div className={css.meta}>
+          <div className={css.date}>
             {moment(this.props.entry.timeCreated).format('MMMM Do YYYY, h:mm a')}
             {this.props.entry.timeUpdated ? ` • updated ${moment(this.props.entry.timeUpdated).format('MMMM Do YYYY, h:mm a')}` : null}
           </div>

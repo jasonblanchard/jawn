@@ -1,6 +1,12 @@
 :local(.container) {
   margin-bottom: 40px;
   position: relative;
+
+  &:hover :local(.selectButton) {
+    clip: auto;
+    height: auto;
+    overflow: visible;
+  }
 }
 
 :local(.entry) {
