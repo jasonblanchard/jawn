@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "bottlejs": "^1.6.1",
+    "js-cookie": "^2.2.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-router": "^4.2.0",

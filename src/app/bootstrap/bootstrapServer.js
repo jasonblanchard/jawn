@@ -30,7 +30,7 @@ export default function(registry) {
   app.use(expressJwt({
     secret: appSecret,
     requestProperty: 'accessTokenPayload',
-    getToken: request => TokenUtils.parseAuthorizationHeader(request.headers.authorization) || request.cookies.token,
+    getToken: request => TokenUtils.parseAuthorizationHeader(request.headers.authorization),
     credentialsRequired: false, // TODO: Replace with `unless` values when using client-side router.
   }));
 

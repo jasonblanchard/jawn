@@ -39,7 +39,7 @@ export default class LoginController {
           jwt.sign({ id: user.id }, this._appSecret, {}, (error, token) => {
             if (error) return Promise.reject(error);
             response.cookie('token', token); // TODO: secure in !dev
-            response.json(Object.assign(user, { token }));
+            response.json(user);
           });
         });
       })

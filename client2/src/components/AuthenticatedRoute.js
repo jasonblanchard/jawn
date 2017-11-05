@@ -5,19 +5,19 @@ import { Route, Redirect } from 'react-router';
 export default class AuthenticatedRoute extends Component {
   static propTypes = {
     render: PropTypes.func.isRequired,
-    authenticatedUserId: PropTypes.string,
+    accessToken: PropTypes.string,
   }
 
   static defaultProps = {
-    authenticatedUserId: undefined,
+    accessToken: undefined,
   }
 
   render() {
-    const { render, authenticatedUserId, ...rest } = this.props;
+    const { render, accessToken, ...rest } = this.props;
 
     // TODO: Tack on original path to the redirect path in query param.
     return (
-      <Route {...rest} render={authenticatedUserId ? render : () => <Redirect to="/login" />} />
+      <Route {...rest} render={accessToken ? render : () => <Redirect to="/login" />} />
     );
   }
 }
