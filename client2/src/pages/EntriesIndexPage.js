@@ -31,7 +31,7 @@ export default class EntriesIndexPage extends Component {
   }
 }
 
-class EntiresIndexPageRenderer extends Component {
+class EntiresIndexPageContainer extends Component {
   static propTypes = {
     fetchEntries: PropTypes.func.isRequired,
     entries: PropTypes.array,
@@ -62,4 +62,4 @@ function mapActionsToProps(actions) {
   };
 }
 
-export const ConnectedEntriesIndexPage = connectToAppProvider(mapStateToProps, mapActionsToProps)(EntiresIndexPageRenderer);
+export const ConnectedEntriesIndexPage = connectToAppProvider(mapStateToProps, mapActionsToProps)(EntiresIndexPageContainer);

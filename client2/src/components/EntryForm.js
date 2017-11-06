@@ -57,7 +57,7 @@ export default class EntryForm extends Component {
   }
 }
 
-class EntryFormRenderer extends Component {
+class EntryFormContainer extends Component {
   static propTypes = {
     entry: PropTypes.object,
     onSubmit: PropTypes.func.isRequired,
@@ -86,4 +86,4 @@ function mapActionsToProps(actions) {
   };
 }
 
-export const ConnectedEntryForm = connectToAppProvider(undefined, mapActionsToProps)(EntryFormRenderer);
+export const ConnectedEntryForm = connectToAppProvider(undefined, mapActionsToProps)(EntryFormContainer);
