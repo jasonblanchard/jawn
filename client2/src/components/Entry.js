@@ -7,7 +7,7 @@ import css from './Entry.scss';
 
 export default class Entry extends Component {
   static propTypes = {
-    className: PropTypes.className,
+    className: PropTypes.string,
     entry: PropTypes.object.isRequired,
   }
 

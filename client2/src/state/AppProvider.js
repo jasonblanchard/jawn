@@ -27,6 +27,7 @@ export default class AppProvider extends Component {
       actions: {
         login: this.login,
         fetchEntries: this.fetchEntries,
+        updateEntry: this.updateEntry,
       },
     };
   }
@@ -47,6 +48,25 @@ export default class AppProvider extends Component {
       .then(response => {
         this.setState({
           entries: response.body,
+        });
+      });
+  }
+
+  updateEntry = (id, fields) => {
+    const accessToken = TokenUtils.getAccessToken();
+    return http.post(`/api/entries/${id}`)
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send(fields)
+      .then(response => {
+        const entryIndex = this.state.entries.findIndex(entry => entry.id === id);
+        const entries = [
+          ...this.state.entries.slice(0, entryIndex),
+          response.body,
+          ...this.state.entries.slice(entryIndex + 1, this.state.entries.length - 1),
+        ];
+
+        this.setState({
+          entries,
         });
       });
   }

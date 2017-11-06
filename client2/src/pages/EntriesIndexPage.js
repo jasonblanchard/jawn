@@ -1,3 +1,4 @@
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
@@ -18,11 +19,15 @@ export default class EntriesIndexPage extends Component {
   render() {
     return (
       <div className={css.container}>
-        {this.props.entries.map(entry => (
+        {this.getEntries().map(entry => (
           <EditableEntry key={entry.id} entry={entry} />
         ))}
       </div>
     );
+  }
+
+  getEntries() {
+    return this.props.entries.sort((entry1, entry2) => (moment(entry1.timeCreated).isBefore(entry2.timeCreated) ? 1 : -1));
   }
 }
 
