@@ -67,6 +67,14 @@ export default class AppProvider extends Component {
 
         this.setState({
           entries,
+        }, () => {
+          this.setState({
+            didUpdateEntryId: id,
+          }, () => {
+            this.setState({
+              didUpdateEntryId: undefined,
+            });
+          });
         });
       });
   }

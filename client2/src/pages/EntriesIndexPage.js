@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import connectToAppProvider from 'src/state/connectToAppProvider';
-import EditableEntry from 'src/components/EditableEntry';
+import { ConnectedEditableEntry } from 'src/components/EditableEntry';
 
 import css from './EntriesIndexPage.scss';
 
@@ -20,7 +20,7 @@ export default class EntriesIndexPage extends Component {
     return (
       <div className={css.container}>
         {this.getEntries().map(entry => (
-          <EditableEntry key={entry.id} entry={entry} />
+          <ConnectedEditableEntry key={entry.id} entry={entry} />
         ))}
       </div>
     );

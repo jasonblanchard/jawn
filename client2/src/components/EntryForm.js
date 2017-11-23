@@ -60,23 +60,17 @@ export default class EntryForm extends Component {
 class EntryFormContainer extends Component {
   static propTypes = {
     entry: PropTypes.object,
-    onSubmit: PropTypes.func.isRequired,
     updateEntry: PropTypes.func.isRequired,
   }
 
   render() {
-    const { onSubmit, ...rest } = this.props;
-
     return (
-      <EntryForm initialValues={{ text: this.props.entry.text }} onSubmit={this.handleSubmit} {...rest} />
+      <EntryForm initialValues={{ text: this.props.entry.text }} onSubmit={this.handleSubmit} {...this.props} />
     );
   }
 
   handleSubmit = ({ text }) => {
-    this.props.updateEntry(this.props.entry.id, { text })
-      .then(() => {
-        this.props.onSubmit();
-      });
+    this.props.updateEntry(this.props.entry.id, { text });
   }
 }
 

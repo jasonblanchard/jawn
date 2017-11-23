@@ -1,13 +1,28 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
+import connectToAppProvider from 'src/state/connectToAppProvider';
 import Entry from 'src/components/Entry';
 import { ConnectedEntryForm } from 'src/components/EntryForm';
 
 import css from './EditableEntry.scss';
 
 export default class EditableEntry extends Component {
+  static propTypes = {
+    didUpdateEntryId: PropTypes.string,
+    entry: PropTypes.object,
+  };
+
   state = {
     isSelected: false,
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.didUpdateEntryId === this.props.entry.id) {
+      this.setState({
+        isSelected: false,
+      });
+    }
   }
 
   render() {
@@ -15,7 +30,7 @@ export default class EditableEntry extends Component {
     return (
       <div className={css.container} onDoubleClick={this.select}>
         {isSelected ? null : <button className={css.selectButton} onClick={this.select}>edit</button>}
-        {isSelected ? <ConnectedEntryForm onSubmit={this.deselect} onCancel={this.deselect} {...this.props} /> : <Entry className={css.entry} {...this.props} />}
+        {isSelected ? <ConnectedEntryForm onCancel={this.deselect} {...this.props} /> : <Entry className={css.entry} {...this.props} />}
       </div>
     );
   }
@@ -28,3 +43,11 @@ export default class EditableEntry extends Component {
     this.setState({ isSelected: false });
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    didUpdateEntryId: state.didUpdateEntryId,
+  };
+}
+
+export const ConnectedEditableEntry = connectToAppProvider(mapStateToProps)(EditableEntry);
