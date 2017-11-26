@@ -3,9 +3,12 @@ import React, { Component } from 'react';
 
 import connectToAppProvider from 'src/state/connectToAppProvider';
 
+import css from './EntryForm.scss';
+
 export default class EntryForm extends Component {
   static propTypes = {
     initialValues: PropTypes.object,
+    isDisabled: PropTypes.bool,
     onSubmit: PropTypes.func.isRequired,
     onCancel: PropTypes.func,
   }
@@ -19,6 +22,7 @@ export default class EntryForm extends Component {
       <form onSubmit={this.handleSubmit}>
         <label htmlFor="EntryForm-textInput" />
         <textarea
+          className={css.textInput}
           id="EntryForm-textInput"
           ref={element => { this.textInput = element; }}
           name="text"
@@ -26,7 +30,7 @@ export default class EntryForm extends Component {
           onChange={this.handleChangeTextInput}
           onKeyDown={this.handleKeyDown}
         />
-        <button>submit</button>
+        <button disabled={this.props.isDisabled}>submit</button>
       </form>
     );
   }
@@ -61,11 +65,17 @@ class EntryFormContainer extends Component {
   static propTypes = {
     entry: PropTypes.object,
     updateEntry: PropTypes.func.isRequired,
+    isUpdatingEntryId: PropTypes.string,
   }
 
   render() {
     return (
-      <EntryForm initialValues={{ text: this.props.entry.text }} onSubmit={this.handleSubmit} {...this.props} />
+      <EntryForm
+        initialValues={{ text: this.props.entry.text }}
+        onSubmit={this.handleSubmit}
+        isDisabled={this.props.isUpdatingEntryId === this.props.entry.id}
+        {...this.props}
+      />
     );
   }
 
@@ -74,10 +84,16 @@ class EntryFormContainer extends Component {
   }
 }
 
+function mapStateToProps(state) {
+  return {
+    isUpdatingEntryId: state.isUpdatingEntryId,
+  };
+}
+
 function mapActionsToProps(actions) {
   return {
     updateEntry: actions.updateEntry,
   };
 }
 
-export const ConnectedEntryForm = connectToAppProvider(undefined, mapActionsToProps)(EntryFormContainer);
+export const ConnectedEntryForm = connectToAppProvider(mapStateToProps, mapActionsToProps)(EntryFormContainer);

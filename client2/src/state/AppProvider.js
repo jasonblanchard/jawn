@@ -53,29 +53,34 @@ export default class AppProvider extends Component {
   }
 
   updateEntry = (id, fields) => {
-    const accessToken = TokenUtils.getAccessToken();
-    return http.post(`/api/entries/${id}`)
-      .set('Authorization', `Bearer ${accessToken}`)
-      .send(fields)
-      .then(response => {
-        const entryIndex = this.state.entries.findIndex(entry => entry.id === id);
-        const entries = [
-          ...this.state.entries.slice(0, entryIndex),
-          response.body,
-          ...this.state.entries.slice(entryIndex + 1, this.state.entries.length - 1),
-        ];
+    this.setState({
+      isUpdatingEntryId: id,
+    }, () => {
+      const accessToken = TokenUtils.getAccessToken();
+      return http.post(`/api/entries/${id}`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(fields)
+        .then(response => {
+          const entryIndex = this.state.entries.findIndex(entry => entry.id === id);
+          const entries = [
+            ...this.state.entries.slice(0, entryIndex),
+            response.body,
+            ...this.state.entries.slice(entryIndex + 1, this.state.entries.length - 1),
+          ];
 
-        this.setState({
-          entries,
-        }, () => {
           this.setState({
-            didUpdateEntryId: id,
+            entries,
+            isUpdatingEntryId: undefined,
           }, () => {
             this.setState({
-              didUpdateEntryId: undefined,
+              didUpdateEntryId: id,
+            }, () => {
+              this.setState({
+                didUpdateEntryId: undefined,
+              });
             });
           });
         });
-      });
+    });
   }
 }
