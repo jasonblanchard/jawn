@@ -30,7 +30,10 @@ export default class EntryForm extends Component {
           onChange={this.handleChangeTextInput}
           onKeyDown={this.handleKeyDown}
         />
-        <button disabled={this.props.isDisabled}>submit</button>
+        <footer>
+          <button disabled={this.props.isDisabled} type="submit">submit</button>
+          <button type="button" onClick={this.props.onCancel}>cancel</button>
+        </footer>
       </form>
     );
   }
