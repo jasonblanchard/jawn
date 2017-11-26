@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 
 import connectToAppProvider from 'src/state/connectToAppProvider';
 import Entry from 'src/components/Entry';
-import { ConnectedEntryForm } from 'src/components/EntryForm';
+import { EditEntryFormContainer } from 'src/components/EntryForm';
 
 import css from './EditableEntry.scss';
 
@@ -30,7 +30,7 @@ export default class EditableEntry extends Component {
     return (
       <div className={css.container} onDoubleClick={this.select}>
         {isSelected ? null : <button className={css.selectButton} onClick={this.select}>edit</button>}
-        {isSelected ? <ConnectedEntryForm onCancel={this.deselect} {...this.props} /> : <Entry className={css.entry} {...this.props} />}
+        {isSelected ? <EditEntryFormContainer onCancel={this.deselect} {...this.props} /> : <Entry className={css.entry} {...this.props} />}
       </div>
     );
   }
@@ -50,4 +50,4 @@ function mapStateToProps(state) {
   };
 }
 
-export const ConnectedEditableEntry = connectToAppProvider(mapStateToProps)(EditableEntry);
+export const EditableEntryContainer = connectToAppProvider(mapStateToProps)(EditableEntry);

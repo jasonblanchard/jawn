@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import connectToAppProvider from 'src/state/connectToAppProvider';
-import { ConnectedEditableEntry } from 'src/components/EditableEntry';
+import { EditableEntryContainer } from 'src/components/EditableEntry';
 
 import css from './EntriesIndexPage.scss';
 
@@ -20,7 +20,7 @@ export default class EntriesIndexPage extends Component {
     return (
       <div className={css.container}>
         {this.getEntries().map(entry => (
-          <ConnectedEditableEntry key={entry.id} entry={entry} />
+          <EditableEntryContainer key={entry.id} entry={entry} />
         ))}
       </div>
     );
@@ -31,7 +31,7 @@ export default class EntriesIndexPage extends Component {
   }
 }
 
-class EntriesIndexPageContainer extends Component {
+class EntriesIndexPageLoader extends Component {
   static propTypes = {
     fetchEntries: PropTypes.func.isRequired,
     entries: PropTypes.array,
@@ -62,4 +62,4 @@ function mapActionsToProps(actions) {
   };
 }
 
-export const ConnectedEntriesIndexPage = connectToAppProvider(mapStateToProps, mapActionsToProps)(EntriesIndexPageContainer);
+export const EntriesIndexPageContainer = connectToAppProvider(mapStateToProps, mapActionsToProps)(EntriesIndexPageLoader);

@@ -64,7 +64,7 @@ export default class EntryForm extends Component {
   }
 }
 
-class EntryFormContainer extends Component {
+class EditEntryForm extends Component {
   static propTypes = {
     entry: PropTypes.object,
     updateEntry: PropTypes.func.isRequired,
@@ -99,4 +99,4 @@ function mapActionsToProps(actions) {
   };
 }
 
-export const ConnectedEntryForm = connectToAppProvider(mapStateToProps, mapActionsToProps)(EntryFormContainer);
+export const EditEntryFormContainer = connectToAppProvider(mapStateToProps, mapActionsToProps)(EditEntryForm);
