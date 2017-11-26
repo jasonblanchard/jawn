@@ -20,10 +20,10 @@ export default class EntryForm extends Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        <label htmlFor="EntryForm-textInput" />
         <textarea
           className={css.textInput}
           id="EntryForm-textInput"
+          aria-label="Entry text"
           ref={element => { this.textInput = element; }}
           name="text"
           value={this.state.text || ''}
