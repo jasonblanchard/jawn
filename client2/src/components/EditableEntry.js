@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 
 import connectToAppProvider from 'src/state/connectToAppProvider';
 import Entry from 'src/components/Entry';
-import { EditEntryFormContainer } from 'src/components/EntryForm';
+import { EditEntryFormContainer } from 'src/components/EditEntryForm';
 
 import css from './EditableEntry.scss';
 

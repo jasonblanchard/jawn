@@ -28,6 +28,7 @@ export default class AppProvider extends Component {
         login: this.login,
         fetchEntries: this.fetchEntries,
         updateEntry: this.updateEntry,
+        createEntry: this.createEntry,
       },
     };
   }
@@ -78,6 +79,33 @@ export default class AppProvider extends Component {
               this.setState({
                 didUpdateEntryId: undefined,
               });
+            });
+          });
+        });
+    });
+  }
+
+  createEntry = fields => {
+    this.setState({
+      isCreatingEntry: true,
+    }, () => {
+      const accessToken = TokenUtils.getAccessToken();
+      return http.post('/api/entries')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(fields)
+        .then(response => {
+          const entries = [
+            ...this.state.entries,
+            response.body,
+          ];
+
+          this.setState({
+            entries,
+            isCreatingEntry: undefined,
+            didCreateEntry: true,
+          }, () => {
+            this.setState({
+              didCreateEntry: undefined,
             });
           });
         });

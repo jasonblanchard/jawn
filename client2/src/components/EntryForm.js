@@ -1,12 +1,11 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import connectToAppProvider from 'src/state/connectToAppProvider';
-
 import css from './EntryForm.scss';
 
 export default class EntryForm extends Component {
   static propTypes = {
+    clear: PropTypes.bool,
     initialValues: PropTypes.object,
     isDisabled: PropTypes.bool,
     onSubmit: PropTypes.func.isRequired,
@@ -15,6 +14,14 @@ export default class EntryForm extends Component {
 
   state = {
     ...this.props.initialValues,
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.clear) {
+      this.setState({
+        text: undefined,
+      });
+    }
   }
 
   render() {
@@ -63,40 +70,3 @@ export default class EntryForm extends Component {
     }
   }
 }
-
-class EditEntryForm extends Component {
-  static propTypes = {
-    entry: PropTypes.object,
-    updateEntry: PropTypes.func.isRequired,
-    isUpdatingEntryId: PropTypes.string,
-  }
-
-  render() {
-    return (
-      <EntryForm
-        initialValues={{ text: this.props.entry.text }}
-        onSubmit={this.handleSubmit}
-        isDisabled={this.props.isUpdatingEntryId === this.props.entry.id}
-        {...this.props}
-      />
-    );
-  }
-
-  handleSubmit = ({ text }) => {
-    this.props.updateEntry(this.props.entry.id, { text });
-  }
-}
-
-function mapStateToProps(state) {
-  return {
-    isUpdatingEntryId: state.isUpdatingEntryId,
-  };
-}
-
-function mapActionsToProps(actions) {
-  return {
-    updateEntry: actions.updateEntry,
-  };
-}
-
-export const EditEntryFormContainer = connectToAppProvider(mapStateToProps, mapActionsToProps)(EditEntryForm);

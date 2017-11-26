@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 
 import connectToAppProvider from 'src/state/connectToAppProvider';
 import { EditableEntryContainer } from 'src/components/EditableEntry';
+import { CreateEntryFormContainer } from 'src/components/CreateEntryForm';
 
 import css from './EntriesIndexPage.scss';
 
@@ -19,6 +20,7 @@ export default class EntriesIndexPage extends Component {
   render() {
     return (
       <div className={css.container}>
+        <CreateEntryFormContainer />
         {this.getEntries().map(entry => (
           <EditableEntryContainer key={entry.id} entry={entry} />
         ))}
