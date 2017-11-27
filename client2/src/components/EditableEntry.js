@@ -30,7 +30,7 @@ export default class EditableEntry extends Component {
     return (
       <div className={css.container} onDoubleClick={this.select}>
         {isSelected ? null : <button className={css.selectButton} onClick={this.select}>edit</button>}
-        {isSelected ? <EditEntryFormContainer onCancel={this.deselect} {...this.props} /> : <Entry className={css.entry} {...this.props} />}
+        {isSelected ? <EditEntryFormContainer focusOnMount onCancel={this.deselect} {...this.props} /> : <Entry className={css.entry} {...this.props} />}
       </div>
     );
   }

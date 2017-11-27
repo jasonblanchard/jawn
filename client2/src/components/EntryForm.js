@@ -6,6 +6,7 @@ import css from './EntryForm.scss';
 export default class EntryForm extends Component {
   static propTypes = {
     clear: PropTypes.bool,
+    focusOnMount: PropTypes.bool,
     initialValues: PropTypes.object,
     isDisabled: PropTypes.bool,
     onSubmit: PropTypes.func.isRequired,
@@ -46,7 +47,7 @@ export default class EntryForm extends Component {
   }
 
   componentDidMount() {
-    this.textInput.focus();
+    if (this.props.focusOnMount) this.textInput.focus();
   }
 
   handleChangeTextInput = event => {
