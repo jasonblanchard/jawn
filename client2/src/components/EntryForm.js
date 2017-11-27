@@ -5,6 +5,7 @@ import css from './EntryForm.scss';
 
 export default class EntryForm extends Component {
   static propTypes = {
+    children: PropTypes.node,
     clear: PropTypes.bool,
     focusOnMount: PropTypes.bool,
     initialValues: PropTypes.object,
@@ -38,9 +39,9 @@ export default class EntryForm extends Component {
           onChange={this.handleChangeTextInput}
           onKeyDown={this.handleKeyDown}
         />
-        <footer>
+        <footer className={css.footer}>
           <button disabled={this.props.isDisabled} type="submit">submit</button>
-          <button type="button" onClick={this.props.onCancel}>cancel</button>
+          {this.props.children}
         </footer>
       </form>
     );

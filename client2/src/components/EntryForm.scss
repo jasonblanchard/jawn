@@ -1,4 +1,10 @@
 :local(.textInput) {
   min-height: 250px;
+  resize: vertical;
   width: 100%;
+}
+
+:local(.footer) {
+  display: flex;
+  justify-content: space-between;
 }
