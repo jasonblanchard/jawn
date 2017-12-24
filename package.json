@@ -30,6 +30,8 @@
     "nodemon": "^1.14.3"
   },
   "scripts": {
+    "build-all": "cd ./client2 && npm run build && cd .. && npm run build",
+    "build": "babel --out-dir build/ src/",
     "watch": "NODE_PATH=./src nodemon --exec babel-node src/app/index.js -w src",
     "start": "NODE_PATH=./build node ./build/app/index.js"
   }
