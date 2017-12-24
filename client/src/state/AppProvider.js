@@ -55,6 +55,7 @@ export default class AppProvider extends Component {
 
   updateEntry = (id, fields) => {
     this.setState({
+      updatingEntryFailedId: undefined,
       isUpdatingEntryId: id,
     }, () => {
       const accessToken = TokenUtils.getAccessToken();
@@ -81,12 +82,19 @@ export default class AppProvider extends Component {
               });
             });
           });
+        })
+        .catch(() => {
+          this.setState({
+            updatingEntryFailedId: id,
+            isUpdatingEntryId: undefined,
+          });
         });
     });
   }
 
   createEntry = fields => {
     this.setState({
+      didCreateEntryFail: undefined,
       isCreatingEntry: true,
     }, () => {
       const accessToken = TokenUtils.getAccessToken();
@@ -107,6 +115,12 @@ export default class AppProvider extends Component {
             this.setState({
               didCreateEntry: undefined,
             });
+          });
+        })
+        .catch(() => {
+          this.setState({
+            didCreateEntryFail: true,
+            isCreatingEntry: false,
           });
         });
     });

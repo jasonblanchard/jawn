@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import isBlank from 'underscore.string/isBlank';
 
 import css from './EntryForm.scss';
 
@@ -40,7 +41,7 @@ export default class EntryForm extends Component {
           onKeyDown={this.handleKeyDown}
         />
         <footer className={css.footer}>
-          <button disabled={this.props.isDisabled} type="submit">submit</button>
+          <button disabled={!this.canSubmit()} type="submit">submit</button>
           {this.props.children}
         </footer>
       </form>
@@ -70,5 +71,9 @@ export default class EntryForm extends Component {
     if (keyCode === 27) {
       this.props.onCancel();
     }
+  }
+
+  canSubmit() {
+    return !this.props.isDisabled && !isBlank(this.state.text);
   }
 }
