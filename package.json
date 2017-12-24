@@ -30,7 +30,7 @@
     "nodemon": "^1.14.3"
   },
   "scripts": {
-    "dev-server": "NODE_PATH=./src nodemon --exec babel-node src/app/index.js -w src",
+    "watch": "NODE_PATH=./src nodemon --exec babel-node src/app/index.js -w src",
     "start": "NODE_PATH=./build node ./build/app/index.js"
   }
 }
