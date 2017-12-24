@@ -11,9 +11,15 @@ export default class EditableEntry extends Component {
   static propTypes = {
     didUpdateEntryId: PropTypes.string,
     entry: PropTypes.object,
+    onClickDeleteEntry: PropTypes.func,
   };
 
+  static defaultProps = {
+    onClickDeleteEntry: () => {},
+  }
+
   state = {
+    isDeleteConfirmationOpen: false,
     isSelected: false,
   }
 
@@ -38,10 +44,27 @@ export default class EditableEntry extends Component {
   renderEditEntryForm() {
     return (
       <EditEntryFormContainer focusOnMount onCancel={this.deselect} {...this.props}>
-        <div>
-          <button type="button" onClick={this.deselect}>cancel</button>
-        </div>
+        {this.renderEntryFormActions()}
       </EditEntryFormContainer>
+    );
+  }
+
+  renderEntryFormActions() {
+    if (this.state.isDeleteConfirmationOpen) {
+      return (
+        <div>
+          Are you sure?
+          <button type="button" onClick={this.handleClickConfirmDelete}>yes</button>
+          <button type="button" onClick={this.handleClickCancelDelete}>nah</button>
+        </div>
+      );
+    }
+
+    return (
+      <div>
+        <button type="button" onClick={this.deselect}>cancel</button>
+        <button type="button" onClick={this.handleClickDelete}>delete</button>
+      </div>
     );
   }
 
@@ -52,6 +75,22 @@ export default class EditableEntry extends Component {
   deselect = () => {
     this.setState({ isSelected: false });
   }
+
+  handleClickDelete = () => {
+    this.setState({
+      isDeleteConfirmationOpen: true,
+    });
+  }
+
+  handleClickConfirmDelete = () => {
+    this.props.onClickDeleteEntry(this.props.entry.id);
+  }
+
+  handleClickCancelDelete = () => {
+    this.setState({
+      isDeleteConfirmationOpen: false,
+    });
+  }
 }
 
 function mapStateToProps(state) {
@@ -60,4 +99,10 @@ function mapStateToProps(state) {
   };
 }
 
-export const EditableEntryContainer = connectToAppProvider(mapStateToProps)(EditableEntry);
+function mapActionsToProps(actions) {
+  return {
+    onClickDeleteEntry: actions.deleteEntry,
+  };
+}
+
+export const EditableEntryContainer = connectToAppProvider(mapStateToProps, mapActionsToProps)(EditableEntry);

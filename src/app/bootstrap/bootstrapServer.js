@@ -71,7 +71,7 @@ export default function(registry) {
     if (error.name === 'UnauthorizedError') {
       error = Boom.unauthorized();
     }
-    error = error.isBoom ? error : Boom.wrap(error);
+    error = error.isBoom ? error : Boom.boomify(error);
     error.reformat();
     logger.error({ error, stack: error.stack }, LOG_TAG);
     const output = error.output;

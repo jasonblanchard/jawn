@@ -29,6 +29,7 @@ export default class AppProvider extends Component {
         fetchEntries: this.fetchEntries,
         updateEntry: this.updateEntry,
         createEntry: this.createEntry,
+        deleteEntry: this.deleteEntry,
       },
     };
   }
@@ -121,6 +122,28 @@ export default class AppProvider extends Component {
           this.setState({
             didCreateEntryFail: true,
             isCreatingEntry: false,
+          });
+        });
+    });
+  }
+
+  deleteEntry = entryId => {
+    this.setState({
+      isDeletingEntryId: entryId,
+    }, () => {
+      const accessToken = TokenUtils.getAccessToken();
+      http.delete(`/api/entries/${entryId}`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .then(() => {
+          const entries = this.state.entries.filter(entry => entry.id !== entryId);
+          this.setState({
+            entries,
+            isDeletingEntryId: undefined,
+          });
+        })
+        .catch(() => {
+          this.setState({
+            isDeletingEntryId: undefined,
           });
         });
     });
