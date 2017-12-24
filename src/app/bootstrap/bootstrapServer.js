@@ -10,7 +10,7 @@ import path from 'path';
 import TokenUtils from 'app/utils/TokenUtils';
 
 const LOG_TAG = 'app';
-const BUILD_PATH = '../../../client2/build';
+const BUILD_PATH = '../../../client/build';
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 

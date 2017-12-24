@@ -1,110 +1,74 @@
-import classNames from 'classnames';
-import isEmpty from 'lodash.isempty';
 import PropTypes from 'prop-types';
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 
-import './EntryForm.css';
+import css from './EntryForm.scss';
 
-export default class EntryForm extends PureComponent {
+export default class EntryForm extends Component {
   static propTypes = {
     children: PropTypes.node,
-    className: PropTypes.string,
-    entry: PropTypes.shape({
-      id: PropTypes.string,
-      text: PropTypes.string,
-    }),
+    clear: PropTypes.bool,
+    focusOnMount: PropTypes.bool,
+    initialValues: PropTypes.object,
     isDisabled: PropTypes.bool,
+    onSubmit: PropTypes.func.isRequired,
     onCancel: PropTypes.func,
-    onSubmit: PropTypes.func,
   }
 
-  static defaultProps = {
-    entry: {},
-    onCancel: () => {},
-    onSubmit: () => {},
+  state = {
+    ...this.props.initialValues,
   }
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isFocused: false,
-      text: props.entry.text,
-    };
-
-    this._handleChange = this._handleChange.bind(this);
-    this._handleSubmit = this._handleSubmit.bind(this);
-    this._handleKeyDown = this._handleKeyDown.bind(this);
-    this._handleFocus = this._handleFocus.bind(this);
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.clear) {
+      this.setState({
+        text: undefined,
+      });
+    }
   }
 
   render() {
-    const className = classNames('EntryForm', this.props.className, { isFocused: this.state.isFocused });
     return (
-      <form className={className} onSubmit={this._handleSubmit}>
+      <form onSubmit={this.handleSubmit}>
         <textarea
-          className="EntryForm-textInput"
+          className={css.textInput}
+          id="EntryForm-textInput"
+          aria-label="Entry text"
           ref={element => { this.textInput = element; }}
-          aria-label="text"
+          name="text"
           value={this.state.text || ''}
-          onFocus={this._handleFocus}
-          onKeyDown={this._handleKeyDown}
-          onChange={this._handleChange}
+          onChange={this.handleChangeTextInput}
+          onKeyDown={this.handleKeyDown}
         />
-        <div className="EntryForm-actions">
-          <button type="submit" disabled={this.props.isDisabled || !this._canSubmit()}>{this.props.entry.id ? 'Update' : 'Create'}</button>
+        <footer className={css.footer}>
+          <button disabled={this.props.isDisabled} type="submit">submit</button>
           {this.props.children}
-        </div>
+        </footer>
       </form>
     );
   }
 
-  reset() {
-    this.setState({ text: null });
+  componentDidMount() {
+    if (this.props.focusOnMount) this.textInput.focus();
   }
 
-  focus() {
-    this.textInput.focus();
+  handleChangeTextInput = event => {
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
   }
 
-  blur() {
-    this.setState({ isFocused: false });
-    this.textInput.blur();
+  handleSubmit = event => {
+    if (event) event.preventDefault();
+    this.props.onSubmit({ text: this.state.text });
   }
 
-  _handleChange(event) {
-    this.setState({ text: event.target.value });
-  }
-
-  _handleKeyDown(event) {
+  handleKeyDown = event => {
     const { metaKey, keyCode } = event;
     if (metaKey && keyCode === 13) {
-      this._handleSubmit();
+      this.handleSubmit();
     }
 
     if (keyCode === 27) {
       this.props.onCancel();
-      this.setState({ isFocused: false });
-      this.textInput.blur();
     }
-  }
-
-  _handleSubmit(event) {
-    if (event) event.preventDefault();
-    this.props.onSubmit(this._getFormData());
-  }
-
-  _handleFocus() {
-    this.setState({ isFocused: true });
-  }
-
-  _getFormData() {
-    return {
-      text: this.state.text,
-    };
-  }
-
-  _canSubmit() {
-    return !isEmpty(this.state.text);
   }
 }

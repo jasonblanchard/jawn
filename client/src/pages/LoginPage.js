@@ -1,25 +1,31 @@
-import { connect } from 'react-redux';
+import {
+  Redirect,
+} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 
-import login from 'src/actions/login';
+import connectToAppProvider from 'src/state/connectToAppProvider';
 
-class LoginPage extends PureComponent {
+export default class LoginPage extends PureComponent {
   static propTypes = {
     login: PropTypes.func,
   }
 
-  constructor(props) {
-    super(props);
+  static defaultProps = {
+    login: () => (Promise.resolve()),
+  }
 
-    this.state = { errorMessage: undefined };
-
-    this._handleSubmit = this._handleSubmit.bind(this);
+  state = {
+    didAuthenticated: false,
+    errorMessage: undefined,
   }
 
   render() {
+    // TODO: Grab redirect path from query param.
+    if (this.state.didAuthenticated) return <Redirect to="/" />;
+
     return (
-      <form onSubmit={this._handleSubmit}>
+      <form onSubmit={this.handleSubmit}>
         {this.state.errorMessage}
         <div>
           <label htmlFor="LoginPage-usernameInput">
@@ -38,11 +44,11 @@ class LoginPage extends PureComponent {
     );
   }
 
-  _handleSubmit(event) {
+  handleSubmit = event => {
     event.preventDefault();
     this.props.login(this.usernameInput.value, this.passwordInput.value)
       .then(() => {
-        this.setState({ errorMessage: undefined });
+        this.setState({ didAuthenticated: true, errorMessage: undefined });
       })
       .catch(() => {
         // TODO: Better error handling.
@@ -53,10 +59,10 @@ class LoginPage extends PureComponent {
   }
 }
 
-function mapDispatchToProps(dispatch) {
+function mapActionsToProps(actions) {
   return {
-    login: (username, password) => dispatch(login(username, password)),
+    login: actions.login,
   };
 }
 
-export default connect(undefined, mapDispatchToProps)(LoginPage);
+export const ConnectedLoginPage = connectToAppProvider(undefined, mapActionsToProps)(LoginPage);
