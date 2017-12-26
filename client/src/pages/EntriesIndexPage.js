@@ -2,6 +2,7 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
+import AuthenticatedPageLayout from 'src/components/AuthenticatedPageLayout';
 import connectToAppProvider from 'src/state/connectToAppProvider';
 import { EditableEntryContainer } from 'src/components/EditableEntry';
 import { CreateEntryFormContainer } from 'src/components/CreateEntryForm';
@@ -25,12 +26,14 @@ export default class EntriesIndexPage extends Component {
   render() {
     if (!this.props.entries) return <div>Loading...</div>;
     return (
-      <div className={css.container}>
-        <CreateEntryFormContainer />
-        {this.getEntries().map(entry => (
-          <EditableEntryContainer key={entry.id} entry={entry} />
-        ))}
-      </div>
+      <AuthenticatedPageLayout>
+        <section className={css.container} role="main">
+          <CreateEntryFormContainer />
+          {this.getEntries().map(entry => (
+            <EditableEntryContainer key={entry.id} entry={entry} />
+          ))}
+        </section>
+      </AuthenticatedPageLayout>
     );
   }
 
