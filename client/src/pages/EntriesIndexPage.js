@@ -11,6 +11,33 @@ import css from './EntriesIndexPage.scss';
 
 export default class EntriesIndexPage extends Component {
   static propTypes = {
+    entries: PropTypes.array,
+  }
+
+  static defaultProps = {
+    entries: [],
+  }
+
+  render() {
+    return (
+      <AuthenticatedPageLayout>
+        <div className={css.container}>
+          <CreateEntryFormContainer />
+          {this.getEntries().map(entry => (
+            <EditableEntryContainer key={entry.id} entry={entry} />
+          ))}
+        </div>
+      </AuthenticatedPageLayout>
+    );
+  }
+
+  getEntries() {
+    return this.props.entries.sort((entry1, entry2) => (moment(entry1.timeCreated).isBefore(entry2.timeCreated) ? 1 : -1));
+  }
+}
+
+class EntriesIndexPageLoader extends Component {
+  static propTypes = {
     fetchEntries: PropTypes.func.isRequired,
     entries: PropTypes.array,
   }
@@ -24,21 +51,7 @@ export default class EntriesIndexPage extends Component {
   }
 
   render() {
-    if (!this.props.entries) return <div>Loading...</div>;
-    return (
-      <AuthenticatedPageLayout>
-        <section className={css.container} role="main">
-          <CreateEntryFormContainer />
-          {this.getEntries().map(entry => (
-            <EditableEntryContainer key={entry.id} entry={entry} />
-          ))}
-        </section>
-      </AuthenticatedPageLayout>
-    );
-  }
-
-  getEntries() {
-    return this.props.entries.sort((entry1, entry2) => (moment(entry1.timeCreated).isBefore(entry2.timeCreated) ? 1 : -1));
+    return this.props.entries ? <EntriesIndexPage {...this.props} /> : <AuthenticatedPageLayout>Loading...</AuthenticatedPageLayout>;
   }
 }
 
@@ -54,4 +67,4 @@ function mapActionsToProps(actions) {
   };
 }
 
-export const EntriesIndexPageContainer = connectToAppProvider(mapStateToProps, mapActionsToProps)(EntriesIndexPage);
+export const EntriesIndexPageContainer = connectToAppProvider(mapStateToProps, mapActionsToProps)(EntriesIndexPageLoader);
