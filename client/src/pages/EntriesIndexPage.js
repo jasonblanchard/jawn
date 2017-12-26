@@ -10,14 +10,20 @@ import css from './EntriesIndexPage.scss';
 
 export default class EntriesIndexPage extends Component {
   static propTypes = {
+    fetchEntries: PropTypes.func.isRequired,
     entries: PropTypes.array,
   }
 
   static defaultProps = {
-    entries: [],
+    entries: undefined,
+  }
+
+  componentDidMount() {
+    this.props.fetchEntries();
   }
 
   render() {
+    if (!this.props.entries) return <div>Loading...</div>;
     return (
       <div className={css.container}>
         <CreateEntryFormContainer />
@@ -33,25 +39,6 @@ export default class EntriesIndexPage extends Component {
   }
 }
 
-class EntriesIndexPageLoader extends Component {
-  static propTypes = {
-    fetchEntries: PropTypes.func.isRequired,
-    entries: PropTypes.array,
-  }
-
-  static defaultProps = {
-    entries: undefined,
-  }
-
-  componentDidMount() {
-    this.props.fetchEntries();
-  }
-
-  render() {
-    return this.props.entries ? <EntriesIndexPage {...this.props} /> : <div>Loading...</div>;
-  }
-}
-
 function mapStateToProps(state) {
   return {
     entries: state.entries,
@@ -64,4 +51,4 @@ function mapActionsToProps(actions) {
   };
 }
 
-export const EntriesIndexPageContainer = connectToAppProvider(mapStateToProps, mapActionsToProps)(EntriesIndexPageLoader);
+export const EntriesIndexPageContainer = connectToAppProvider(mapStateToProps, mapActionsToProps)(EntriesIndexPage);
