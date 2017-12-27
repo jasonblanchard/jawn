@@ -5,6 +5,7 @@ import express from 'express';
 import expressJwt from 'express-jwt';
 import fs from 'fs';
 import get from 'lodash.get';
+import graphqlHTTP from 'express-graphql';
 import morgan from 'morgan';
 import path from 'path';
 import TokenUtils from 'app/utils/TokenUtils';
@@ -43,6 +44,11 @@ export default function(registry) {
   app.use('/api/*', (request, response, next) => {
     next(Boom.notFound());
   });
+
+  app.use('/graphql', graphqlHTTP({
+    schema: registry.graphqlSchema,
+    graphiql: true,
+  }));
 
   app.get('*', (request, response, next) => {
     const id = get(request, 'accessTokenPayload.id');

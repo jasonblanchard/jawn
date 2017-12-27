@@ -2,6 +2,7 @@ import Bottle from 'bottlejs';
 
 import bootstrapEntryController from './bootstrapEntryController';
 import bootstrapEntryService from './bootstrapEntryService';
+import bootstrapGraphqlSchema from './bootstrapGraphqlSchema';
 import bootstrapLogger from './bootstrapLogger';
 import bootstrapLoginController from './bootstrapLoginController';
 import bootstrapServer from './bootstrapServer';
@@ -13,6 +14,7 @@ export default function() {
 
   bottle.factory('entryController', bootstrapEntryController);
   bottle.factory('entryService', bootstrapEntryService);
+  bottle.factory('graphqlSchema', bootstrapGraphqlSchema);
   bottle.factory('logger', bootstrapLogger);
   bottle.factory('loginController', bootstrapLoginController);
   bottle.factory('server', bootstrapServer);
