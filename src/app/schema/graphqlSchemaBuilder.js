@@ -35,8 +35,7 @@ export default function graphqlSchemaBuilder(entryService, userService) {
     })
   });
 
-  const EntriesQueryType = {
-    name: 'EntriesQueryType',
+  const EntriesQuery = {
     type: new GraphQLList(EntryType),
     resolve(parentValue, args, request) {
       const userId = '5a400afebf5614778f41f62a';
@@ -51,8 +50,7 @@ export default function graphqlSchemaBuilder(entryService, userService) {
     }
   })
 
-  const UpdateEntryMutationQueryType = {
-    name: 'UpdateEntryMutationQueryType',
+  const UpdateEntryMutationQuery = {
     type: EntryType,
     args: {
       id: { type: GraphQLID },
@@ -65,7 +63,6 @@ export default function graphqlSchemaBuilder(entryService, userService) {
   }
 
   const CreateEntryMutationQuery = {
-    name: 'CreateEntryMutationQuery',
     type: EntryType,
     args: {
       input: { type: EntryInputType },
@@ -79,14 +76,14 @@ export default function graphqlSchemaBuilder(entryService, userService) {
   const RootQueryType = new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
-      entries: EntriesQueryType
+      entries: EntriesQuery
     }
   });
 
   const RootMutationType = new GraphQLObjectType({
     name: 'RootMutationType',
     fields: {
-      updateEntry: UpdateEntryMutationQueryType,
+      updateEntry: UpdateEntryMutationQuery,
       createEntry: CreateEntryMutationQuery,
     }
   })
