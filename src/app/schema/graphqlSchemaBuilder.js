@@ -76,14 +76,14 @@ export default function graphqlSchemaBuilder(entryService, userService) {
     }
   }
 
-  const rootQueryType = new GraphQLObjectType({
+  const RootQueryType = new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
       entries: EntriesQueryType
     }
   });
 
-  const rootMutationType = new GraphQLObjectType({
+  const RootMutationType = new GraphQLObjectType({
     name: 'RootMutationType',
     fields: {
       updateEntry: UpdateEntryMutationQueryType,
@@ -92,7 +92,7 @@ export default function graphqlSchemaBuilder(entryService, userService) {
   })
 
   return new GraphQLSchema({
-    query: rootQueryType,
-    mutation: rootMutationType,
+    query: RootQueryType,
+    mutation: RootMutationType,
   });
 }
