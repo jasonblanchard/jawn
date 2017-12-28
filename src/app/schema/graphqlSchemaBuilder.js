@@ -38,7 +38,8 @@ export default function graphqlSchemaBuilder(entryService, userService) {
   const EntriesQuery = {
     type: new GraphQLList(EntryType),
     resolve(parentValue, args, request) {
-      const userId = '5a400afebf5614778f41f62a';
+      // const userId = '5a400afebf5614778f41f62a';
+      const userId = request.accessTokenPayload.id;
       return entryService.list(userId);
     }
   };
@@ -51,13 +52,16 @@ export default function graphqlSchemaBuilder(entryService, userService) {
   })
 
   const UpdateEntryMutationQuery = {
+    name: 'UpdateEntryMutationQuery',
     type: EntryType,
     args: {
       id: { type: GraphQLID },
       input: { type: EntryInputType },
     },
     resolve(parentValue, args, request) {
-      const userId = '5a400afebf5614778f41f62a';
+      console.log('===', args);
+      // const userId = '5a400afebf5614778f41f62a';
+      const userId = request.accessTokenPayload.id;
       return entryService.update(args.id, userId, args.input);
     }
   }
@@ -68,7 +72,8 @@ export default function graphqlSchemaBuilder(entryService, userService) {
       input: { type: EntryInputType },
     },
     resolve(parentValue, args, request) {
-      const userId = '5a400afebf5614778f41f62a';
+      // const userId = '5a400afebf5614778f41f62a';
+      const userId = request.accessTokenPayload.id;
       return entryService.create(args.input, userId);
     }
   }

@@ -5,7 +5,7 @@ import express from 'express';
 import expressJwt from 'express-jwt';
 import fs from 'fs';
 import get from 'lodash.get';
-import graphqlHTTP from 'express-graphql';
+import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import morgan from 'morgan';
 import path from 'path';
 import TokenUtils from 'app/utils/TokenUtils';
@@ -41,14 +41,21 @@ export default function(registry) {
   app.post('/api/entries/:entryId', entryController.handleUpdate);
   app.delete('/api/entries/:entryId', entryController.handleDelete);
 
+  app.use('/api/graphql', graphqlExpress(request => ({
+    schema: registry.graphqlSchema,
+    context: {
+      userId: request.accessTokenPayload.id
+    }
+  })));
+
+  app.use('/api/graphiql', graphiqlExpress({
+    endpointURL: '/api/graphql',
+    passHeader: "'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhNDAwYWZlYmY1NjE0Nzc4ZjQxZjYyYSIsImlhdCI6MTUxNDE0NjYwN30.EPHDw7plbZgHMMgFsWrOgynFf9yXsBfvFLaa_KRcVyU'",
+  }));
+
   app.use('/api/*', (request, response, next) => {
     next(Boom.notFound());
   });
-
-  app.use('/graphql', graphqlHTTP({
-    schema: registry.graphqlSchema,
-    graphiql: true,
-  }));
 
   app.get('*', (request, response, next) => {
     const id = get(request, 'accessTokenPayload.id');

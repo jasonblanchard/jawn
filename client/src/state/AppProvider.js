@@ -45,11 +45,29 @@ export default class AppProvider extends Component {
 
   fetchEntries = () => {
     const accessToken = TokenUtils.getAccessToken();
-    return http.get('/api/entries')
+    // return http.get('/api/entries')
+    //   .set('Authorization', `Bearer ${accessToken}`)
+    //   .then(response => {
+    //     this.setState({
+    //       entries: response.body,
+    //     });
+    //   });
+
+    const query = `{
+      entries {
+        id
+        text
+        timeCreated
+        timeUpdated
+      }
+    }`;
+
+    return http.get('/api/graphql')
+      .query({ query })
       .set('Authorization', `Bearer ${accessToken}`)
       .then(response => {
         this.setState({
-          entries: response.body,
+          entries: response.body.data.entries,
         });
       });
   }
@@ -60,14 +78,28 @@ export default class AppProvider extends Component {
       isUpdatingEntryId: id,
     }, () => {
       const accessToken = TokenUtils.getAccessToken();
-      return http.post(`/api/entries/${id}`)
+
+      const query = `mutation updateEntry($id: ID!, $input: EntryInput) {
+        updateEntry(id: $id, input: $input) {
+          id
+          text
+        }
+      }`;
+
+      const variables = {
+        id,
+        input: fields,
+      };
+
+      return http.post('/api/graphql')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(fields)
+        // .send(fields)
+        .send({ query, variables })
         .then(response => {
           const entryIndex = this.state.entries.findIndex(entry => entry.id === id);
           const entries = [
             ...this.state.entries.slice(0, entryIndex),
-            response.body,
+            response.body.data.updateEntry,
             ...this.state.entries.slice(entryIndex + 1, this.state.entries.length - 1),
           ];
 
