@@ -1,7 +1,7 @@
-import graphqlSchemaBuilderNew from 'app/schema/graphqlSchemaBuilderNew';
+import graphqlSchemaBuilder from 'app/schema/graphqlSchemaBuilder';
 
 export default function(registry) {
-  return graphqlSchemaBuilderNew(
+  return graphqlSchemaBuilder(
     registry.entryService,
     registry.userService,
   );
