@@ -36,7 +36,7 @@ export default function buildGraphqlSchema(entryService, userService) {
   const resolvers = {
     Entry: {
       user: (parent, args, context) => {
-        return userService.findById(parent.userId);
+        return context.loaders.userLoader.load(parent.userId);
       }
     },
     User: {

@@ -1,6 +1,7 @@
 import bodyParser from 'body-parser';
 import Boom from 'boom';
 import cookieParser from 'cookie-parser';
+import DataLoader from 'dataLoader';
 import express from 'express';
 import expressJwt from 'express-jwt';
 import fs from 'fs';
@@ -9,6 +10,8 @@ import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import morgan from 'morgan';
 import path from 'path';
 import TokenUtils from 'app/utils/TokenUtils';
+
+import buildLoaderFunction from 'app/services/buildLoaderFunction';
 
 const LOG_TAG = 'app';
 const BUILD_PATH = '../../../client/build';
@@ -44,7 +47,10 @@ export default function(registry) {
   app.use('/api/graphql', graphqlExpress(request => ({
     schema: registry.graphqlSchema,
     context: {
-      userId: request.accessTokenPayload.id
+      userId: request.accessTokenPayload.id,
+      loaders: {
+        userLoader: new DataLoader(buildLoaderFunction(registry.userService))
+      }
     }
   })));
 
