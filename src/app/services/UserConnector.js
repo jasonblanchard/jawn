@@ -23,7 +23,7 @@ function mapRecordToObject(record) {
 
 // TODO: Error handling.
 export default class UserConnector {
-  constructor({ store, logger, loader }) {
+  constructor({ store, logger }) {
     this._store = store;
     this._model = store.model('User', UserSchema);
     this._logger = logger;

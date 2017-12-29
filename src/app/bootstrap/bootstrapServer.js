@@ -1,7 +1,6 @@
 import bodyParser from 'body-parser';
 import Boom from 'boom';
 import cookieParser from 'cookie-parser';
-import DataLoader from 'dataLoader';
 import express from 'express';
 import expressJwt from 'express-jwt';
 import fs from 'fs';
@@ -18,7 +17,13 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 
 export default function(registry) {
   const appSecret = process.env.APP_SECRET;
-  const { logger, entryController, loginController, userService, graphqlService } = registry;
+  const {
+    entryController,
+    graphqlService,
+    logger,
+    loginController,
+    userService,
+  } = registry;
 
   logger.debug('\n>>> BOOTSTRAPPING APP <<<<\n', LOG_TAG);
 
@@ -68,7 +73,7 @@ export default function(registry) {
           file = file.replace('__INITIAL_STATE={}', `__INITIAL_STATE=${JSON.stringify({ currentUser: user })}`);
           file = file.replace('__ENV={}', `__ENV={NODE_ENV: '${NODE_ENV}', LOG_LEVEL: '${process.env.LOG_LEVEL}'}`);
           response.set('Content-Type', 'text/html');
-          response.send(file);
+          return response.send(file);
         });
       })
       .catch((error) => {

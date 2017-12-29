@@ -1,4 +1,4 @@
-import { makeExecutableSchema} from 'graphql-tools';
+import { makeExecutableSchema } from 'graphql-tools';
 
 const typeDefs = `
   type User {
@@ -36,12 +36,12 @@ const resolvers = {
   Entry: {
     user: (parent, args, context) => {
       return context.services.userService.loadByUserId(parent.userId);
-    }
+    },
   },
   User: {
     entries: (parent, args, context) => {
       return context.services.entryService.listByUser(parent.id);
-    }
+    },
   },
   Query: {
     entries: (parent, args, context) => {
@@ -49,7 +49,7 @@ const resolvers = {
     },
     user: (parent, args, context) => {
       return context.services.userService.findById(args.id);
-    }
+    },
   },
   Mutation: {
     updateEntry: (parent, args, context) => {
@@ -57,11 +57,11 @@ const resolvers = {
     },
     createEntry: (parent, args, context) => {
       return context.services.entryService.create(args.input, context.userId);
-    }
+    },
   },
-}
+};
 
 export default makeExecutableSchema({
   typeDefs,
-  resolvers
-})
+  resolvers,
+});

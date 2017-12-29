@@ -5,18 +5,18 @@ import UserConnector from 'app/services/UserConnector';
 import schema from 'app/schema/schema';
 
 export default class GraphqlService {
-  constructor({ store, logger}) {
+  constructor({ store, logger }) {
     this._store = store;
     this._logger = logger;
   }
 
   handleRequest = request => {
     const entryService = new EntryService({
-      connector: new EntryConnector({ store: this._store, logger: this._logger })
+      connector: new EntryConnector({ store: this._store, logger: this._logger }),
     });
 
     const userService = new UserService({
-      connector: new UserConnector({ store: this._store, logger: this._logger })
+      connector: new UserConnector({ store: this._store, logger: this._logger }),
     });
 
     return {
@@ -25,9 +25,9 @@ export default class GraphqlService {
         userId: request.accessTokenPayload.id,
         services: {
           entryService,
-          userService
-        }
-      }
-    }
+          userService,
+        },
+      },
+    };
   }
 }
