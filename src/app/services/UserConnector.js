@@ -1,4 +1,5 @@
 import { Schema } from 'mongoose';
+import DataLoader from 'DataLoader';
 
 const LOG_TAG = 'UserConnector';
 
@@ -22,13 +23,18 @@ function mapRecordToObject(record) {
 
 // TODO: Error handling.
 export default class UserConnector {
-  constructor({ store, logger }) {
+  constructor({ store, logger, loader }) {
     this._store = store;
     this._model = store.model('User', UserSchema);
     this._logger = logger;
+    this._userIdLoader = new DataLoader(ids => Promise.all(ids.map(this.findById)));
   }
 
-  findById(id) {
+  loadByUserId(id) {
+    return this._userIdLoader.load(id);
+  }
+
+  findById = id => {
     this._logger.debug({ id }, LOG_TAG);
 
     if (!id) return Promise.resolve();

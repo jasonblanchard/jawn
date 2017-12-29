@@ -13,7 +13,7 @@ export default class EntryService {
   }
 
   update(id, params, userId) {
-    this._connector.update(id, params, userId);
+    return this._connector.update(id, params, userId);
   }
 
   delete(id, userId) {

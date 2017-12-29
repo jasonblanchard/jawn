@@ -1,9 +1,8 @@
+import GraphqlService from 'app/services/GraphqlService';
 import UserService from 'app/services/UserService';
 import UserConnector from 'app/services/UserConnector';
 
 export default function(registry) {
-  const { store, logger } = registry;
-  return new UserService({
-    connector: new UserConnector({ store, logger })
-  });
+  const { logger, store } = registry;
+  return new GraphqlService({ store, logger });
 }

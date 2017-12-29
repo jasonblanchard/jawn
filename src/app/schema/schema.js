@@ -35,7 +35,7 @@ const typeDefs = `
 const resolvers = {
   Entry: {
     user: (parent, args, context) => {
-      return context.services.userService.findById(parent.userId);
+      return context.services.userService.loadByUserId(parent.userId);
     }
   },
   User: {
@@ -53,10 +53,10 @@ const resolvers = {
   },
   Mutation: {
     updateEntry: (parent, args, context) => {
-      return {};
+      return context.services.entryService.update(args.id, args.input, context.userId);
     },
     createEntry: (parent, args, context) => {
-      return {};
+      return context.services.entryService.create(args.input, context.userId);
     }
   },
 }
