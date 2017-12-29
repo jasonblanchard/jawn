@@ -39,9 +39,9 @@ export default class EntryController {
       this._logger.debug({ entries }, LOG_TAG);
       response.json(entries);
     })
-    .catch(entryServiceError => {
-      next(entryServiceError);
-    });
+      .catch(entryServiceError => {
+        next(entryServiceError);
+      });
   }
 
   handleUpdate(request, response, next) {
