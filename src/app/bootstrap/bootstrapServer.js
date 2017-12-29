@@ -11,7 +11,11 @@ import morgan from 'morgan';
 import path from 'path';
 import TokenUtils from 'app/utils/TokenUtils';
 
-import buildLoaderFunction from 'app/services/buildLoaderFunction';
+import EntryService from 'app/services/EntryService';
+import EntryConnector from 'app/services/EntryConnector';
+import UserService from 'app/services/UserService';
+import UserConnector from 'app/services/UserConnector';
+import schema from 'app/schema/schema';
 
 const LOG_TAG = 'app';
 const BUILD_PATH = '../../../client/build';
@@ -44,15 +48,27 @@ export default function(registry) {
   app.post('/api/entries/:entryId', entryController.handleUpdate);
   app.delete('/api/entries/:entryId', entryController.handleDelete);
 
-  app.use('/api/graphql', graphqlExpress(request => ({
-    schema: registry.graphqlSchema,
-    context: {
-      userId: request.accessTokenPayload.id,
-      loaders: {
-        userLoader: new DataLoader(buildLoaderFunction(registry.userService))
+  app.use('/api/graphql', graphqlExpress(request => {
+
+    const entryService = new EntryService({
+      connector: new EntryConnector({ store: registry.store, logger: registry.logger })
+    });
+
+    const userService = new UserService({
+      connector: new UserConnector({ store: registry.store, logger: registry.logger })
+    });
+
+    return {
+      schema,
+      context: {
+        userId: request.accessTokenPayload.id,
+        services: {
+          entryService,
+          userService
+        }
       }
     }
-  })));
+  }));
 
   app.use('/api/graphiql', graphiqlExpress({
     endpointURL: '/api/graphql',
