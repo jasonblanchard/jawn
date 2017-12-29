@@ -6,16 +6,14 @@ import express from 'express';
 import expressJwt from 'express-jwt';
 import fs from 'fs';
 import get from 'lodash.get';
-import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
+import { graphiqlExpress, graphqlExpress } from 'apollo-server-express';
 import morgan from 'morgan';
 import path from 'path';
 import TokenUtils from 'app/utils/TokenUtils';
 
-import EntryService from 'app/services/EntryService';
-import EntryConnector from 'app/services/EntryConnector';
+import GraphqlService from 'app/services/GraphqlService';
 import UserService from 'app/services/UserService';
 import UserConnector from 'app/services/UserConnector';
-import schema from 'app/schema/schema';
 
 const LOG_TAG = 'app';
 const BUILD_PATH = '../../../client/build';
@@ -24,7 +22,11 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 
 export default function(registry) {
   const appSecret = process.env.APP_SECRET;
-  const { logger, entryController, loginController, userService } = registry;
+  const { logger, entryController, loginController } = registry;
+
+  const userService = new UserService({
+    connector: new UserConnector({ store: registry.store, logger: registry.logger })
+  });
 
   logger.debug('\n>>> BOOTSTRAPPING APP <<<<\n', LOG_TAG);
 
@@ -48,27 +50,8 @@ export default function(registry) {
   app.post('/api/entries/:entryId', entryController.handleUpdate);
   app.delete('/api/entries/:entryId', entryController.handleDelete);
 
-  app.use('/api/graphql', graphqlExpress(request => {
-
-    const entryService = new EntryService({
-      connector: new EntryConnector({ store: registry.store, logger: registry.logger })
-    });
-
-    const userService = new UserService({
-      connector: new UserConnector({ store: registry.store, logger: registry.logger })
-    });
-
-    return {
-      schema,
-      context: {
-        userId: request.accessTokenPayload.id,
-        services: {
-          entryService,
-          userService
-        }
-      }
-    }
-  }));
+  const graphqlService = new GraphqlService({ store: registry.store, logger: registry.logger }); // TODO: Move to registry
+  app.use('/api/graphql', graphqlExpress(request => graphqlService.handleRequest(request)));
 
   app.use('/api/graphiql', graphiqlExpress({
     endpointURL: '/api/graphql',
