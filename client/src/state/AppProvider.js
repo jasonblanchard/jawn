@@ -4,6 +4,8 @@ import http from 'superagent';
 
 import TokenUtils from 'src/utils/TokenUtils';
 
+const QUERY_PATH = '/api/graphql';
+
 export default class AppProvider extends Component {
   static propTypes = {
     initialState: PropTypes.object,
@@ -45,14 +47,6 @@ export default class AppProvider extends Component {
 
   fetchEntries = () => {
     const accessToken = TokenUtils.getAccessToken();
-    // return http.get('/api/entries')
-    //   .set('Authorization', `Bearer ${accessToken}`)
-    //   .then(response => {
-    //     this.setState({
-    //       entries: response.body,
-    //     });
-    //   });
-
     const query = `{
       entries {
         id
@@ -62,7 +56,7 @@ export default class AppProvider extends Component {
       }
     }`;
 
-    return http.get('/api/graphql')
+    return http.get(QUERY_PATH)
       .query({ query })
       .set('Authorization', `Bearer ${accessToken}`)
       .then(response => {
@@ -91,9 +85,8 @@ export default class AppProvider extends Component {
         input: fields,
       };
 
-      return http.post('/api/graphql')
+      return http.post(QUERY_PATH)
         .set('Authorization', `Bearer ${accessToken}`)
-        // .send(fields)
         .send({ query, variables })
         .then(response => {
           const entryIndex = this.state.entries.findIndex(entry => entry.id === id);
@@ -131,13 +124,24 @@ export default class AppProvider extends Component {
       isCreatingEntry: true,
     }, () => {
       const accessToken = TokenUtils.getAccessToken();
-      return http.post('/api/entries')
+
+      const query = `mutation createEntry($input: EntryInput) {
+        createEntry(input: $input) {
+          text
+        }
+      }`;
+
+      const variables = {
+        input: fields,
+      };
+
+      return http.post(QUERY_PATH)
         .set('Authorization', `Bearer ${accessToken}`)
-        .send(fields)
+        .send({ query, variables })
         .then(response => {
           const entries = [
             ...this.state.entries,
-            response.body,
+            response.body.data.createEntry,
           ];
 
           this.setState({
@@ -164,8 +168,20 @@ export default class AppProvider extends Component {
       isDeletingEntryId: entryId,
     }, () => {
       const accessToken = TokenUtils.getAccessToken();
-      http.delete(`/api/entries/${entryId}`)
+
+      const query = `mutation deleteEntry($id: ID!) {
+        deleteEntry(id: $id) {
+          success
+        }
+      }`;
+
+      const variables = {
+        id: entryId,
+      };
+
+      http.post(QUERY_PATH)
         .set('Authorization', `Bearer ${accessToken}`)
+        .send({ query, variables })
         .then(() => {
           const entries = this.state.entries.filter(entry => entry.id !== entryId);
           this.setState({
