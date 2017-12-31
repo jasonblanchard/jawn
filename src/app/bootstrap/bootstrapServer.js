@@ -18,7 +18,6 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 export default function(registry) {
   const appSecret = process.env.APP_SECRET;
   const {
-    entryController,
     graphqlService,
     logger,
     loginController,
@@ -42,10 +41,6 @@ export default function(registry) {
   }));
 
   app.post('/api/login', loginController.handlePost);
-  app.get('/api/entries', entryController.handleIndex);
-  app.post('/api/entries', entryController.handleCreate);
-  app.post('/api/entries/:entryId', entryController.handleUpdate);
-  app.delete('/api/entries/:entryId', entryController.handleDelete);
 
   app.use('/api/graphql', graphqlExpress(request => graphqlService.handleRequest(request)));
 

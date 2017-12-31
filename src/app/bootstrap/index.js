@@ -1,7 +1,5 @@
 import Bottle from 'bottlejs';
 
-import bootstrapEntryController from './bootstrapEntryController';
-import bootstrapEntryService from './bootstrapEntryService';
 import bootstrapGraphqlService from './bootstrapGraphqlService';
 import bootstrapLogger from './bootstrapLogger';
 import bootstrapLoginController from './bootstrapLoginController';
@@ -12,8 +10,6 @@ import bootstrapUserService from './bootstrapUserService';
 export default function() {
   const bottle = new Bottle();
 
-  bottle.factory('entryController', bootstrapEntryController);
-  bottle.factory('entryService', bootstrapEntryService);
   bottle.factory('graphqlService', bootstrapGraphqlService);
   bottle.factory('logger', bootstrapLogger);
   bottle.factory('loginController', bootstrapLoginController);
