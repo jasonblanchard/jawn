@@ -35,7 +35,7 @@ const typeDefs = `
 const resolvers = {
   Entry: {
     user: (parent, args, context) => {
-      return context.services.userService.loadByUserId(parent.userId);
+      return context.services.userService.findById(parent.userId);
     },
   },
   User: {

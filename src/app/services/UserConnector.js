@@ -27,20 +27,36 @@ export default class UserConnector {
     this._store = store;
     this._model = store.model('User', UserSchema);
     this._logger = logger;
-    this._userIdLoader = new DataLoader(ids => Promise.all(ids.map(this.findById)));
+    this._userIdLoader = new DataLoader(ids => this._batchLoadById(ids));
   }
 
-  loadByUserId(id) {
-    return this._userIdLoader.load(id);
+  _batchLoadById(ids) {
+    this._logger.debug({ ids }, LOG_TAG);
+
+    return this._model.find({
+      _id: {
+        $in: ids,
+      },
+    })
+      .then(records => {
+        return records.map(mapRecordToObject);
+      })
+      .then(entities => {
+        this._logger.debug({ entities }, LOG_TAG);
+
+        const entitiesById = entities.reduce((accum, entity) => {
+          accum[entity.id] = entity;
+          return accum;
+        }, {});
+
+        // Ensure that the return value is same length as `ids` and is in the same order https://github.com/facebook/dataloader#batch-function
+        return ids.map(id => entitiesById[id]);
+      });
   }
 
   findById = id => {
-    this._logger.debug({ id }, LOG_TAG);
-
     if (!id) return Promise.resolve();
-
-    return this._model.findOne({ _id: id })
-      .then(mapRecordToObject);
+    return this._userIdLoader.load(id);
   }
 
   findByUsername(username) {

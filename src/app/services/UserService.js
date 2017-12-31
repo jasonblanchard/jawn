@@ -4,10 +4,6 @@ export default class UserService {
     this._connector = connector;
   }
 
-  loadByUserId(id) {
-    return this._connector.loadByUserId(id);
-  }
-
   findById(id) {
     return this._connector.findById(id);
   }
