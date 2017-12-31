@@ -37,7 +37,9 @@ export default function(registry) {
     secret: appSecret,
     requestProperty: 'accessTokenPayload',
     getToken: request => TokenUtils.parseAuthorizationHeader(request.headers.authorization),
-    credentialsRequired: false, // TODO: Replace with `unless` values when using client-side router.
+    credentialsRequired: true,
+  }).unless({
+    path: ['/', '/login', '/api/login', '/api/graphiql'],
   }));
 
   app.post('/api/login', loginController.handlePost);
