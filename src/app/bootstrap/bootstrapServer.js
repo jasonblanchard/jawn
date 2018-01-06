@@ -3,6 +3,7 @@ import Boom from 'boom';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import expressJwt from 'express-jwt';
+import favicon from 'serve-favicon';
 import fs from 'fs';
 import get from 'lodash.get';
 import { graphiqlExpress, graphqlExpress } from 'apollo-server-express';
@@ -28,6 +29,8 @@ export default function(registry) {
 
   const app = express();
 
+  // TODO: Get this from somewhere else.
+  app.use(favicon(path.join(__dirname, 'favicon.ico')));
   app.use(bodyParser.json());
   app.use(cookieParser());
   app.use('/static', express.static(path.join(__dirname, BUILD_PATH + '/static')));
