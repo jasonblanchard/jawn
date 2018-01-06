@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import gql from 'graphql-tag';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
@@ -9,6 +10,17 @@ export default class Entry extends Component {
   static propTypes = {
     className: PropTypes.string,
     entry: PropTypes.object.isRequired,
+  }
+
+  static fragments = {
+    entry: gql`
+      fragment EntryComponent on Entry {
+        id
+        text
+        timeCreated
+        timeUpdated
+      }
+    `,
   }
 
   render() {

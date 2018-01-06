@@ -40,7 +40,7 @@ export default function(registry) {
     secret: appSecret,
     requestProperty: 'accessTokenPayload',
     getToken: request => TokenUtils.parseAuthorizationHeader(request.headers.authorization),
-    credentialsRequired: true,
+    credentialsRequired: false, // TODO: Figure this out
   }).unless({
     path: ['/', '/login', '/api/login', '/api/graphiql'],
   }));

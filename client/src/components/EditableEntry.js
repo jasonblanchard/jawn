@@ -1,3 +1,4 @@
+import gql from 'graphql-tag';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
@@ -16,6 +17,15 @@ export default class EditableEntry extends Component {
 
   static defaultProps = {
     onClickDeleteEntry: () => {},
+  }
+
+  static fragments = {
+    entry: gql`
+      fragment EditableEntry on Entry {
+        ...EntryComponent
+      }
+      ${Entry.fragments.entry}
+    `,
   }
 
   state = {
