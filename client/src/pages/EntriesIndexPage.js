@@ -10,18 +10,6 @@ import { CreateEntryFormContainer } from 'src/components/CreateEntryForm';
 
 import css from './EntriesIndexPage.scss';
 
-const QUERY = gql`query EntriesIndexPage($userId: ID!){
-    entries {
-      ...EditableEntry
-    }
-    user(id: $userId) {
-      ...AuthenticatedPageLayout
-    }
-  }
-  ${EditableEntry.fragments.entry}
-  ${AuthenticatedPageLayout.fragments.user}
-`;
-
 class EntriesIndexPage extends Component {
   static propTypes = {
     entries: PropTypes.array,
@@ -56,6 +44,18 @@ class EntriesIndexPage extends Component {
     return [...entries].sort((entry1, entry2) => (moment(entry1.timeCreated).isBefore(entry2.timeCreated) ? 1 : -1));
   }
 }
+
+const QUERY = gql`query EntriesIndexPage($userId: ID!){
+    entries {
+      ...EditableEntry
+    }
+    user(id: $userId) {
+      ...AuthenticatedPageLayout
+    }
+  }
+  ${EditableEntry.fragments.entry}
+  ${AuthenticatedPageLayout.fragments.user}
+`;
 
 export default graphql(QUERY, {
   props: ({ data }) => ({
