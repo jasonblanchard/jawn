@@ -1,12 +1,14 @@
-import PropTypes from 'prop-types';
 import { Component } from 'react';
+import { graphql, compose } from 'react-apollo';
+import gql from 'graphql-tag';
 import http from 'superagent';
+import PropTypes from 'prop-types';
 
 import TokenUtils from 'src/utils/TokenUtils';
 
 const QUERY_PATH = '/api/graphql';
 
-export default class AppProvider extends Component {
+class AppProvider extends Component {
   static propTypes = {
     initialState: PropTypes.object,
     children: PropTypes.node.isRequired,
@@ -66,38 +68,14 @@ export default class AppProvider extends Component {
       });
   }
 
-  updateEntry = (id, fields) => {
+  updateEntry = (id, input) => {
     this.setState({
       updatingEntryFailedId: undefined,
       isUpdatingEntryId: id,
     }, () => {
-      const accessToken = TokenUtils.getAccessToken();
-
-      const query = `mutation updateEntry($id: ID!, $input: EntryInput) {
-        updateEntry(id: $id, input: $input) {
-          id
-          text
-        }
-      }`;
-
-      const variables = {
-        id,
-        input: fields,
-      };
-
-      return http.post(QUERY_PATH)
-        .set('Authorization', `Bearer ${accessToken}`)
-        .send({ query, variables })
-        .then(response => {
-          const entryIndex = this.state.entries.findIndex(entry => entry.id === id);
-          const entries = [
-            ...this.state.entries.slice(0, entryIndex),
-            response.body.data.updateEntry,
-            ...this.state.entries.slice(entryIndex + 1, this.state.entries.length - 1),
-          ];
-
+      return this.props.updateEntry(id, input)
+        .then(() => {
           this.setState({
-            entries,
             isUpdatingEntryId: undefined,
           }, () => {
             this.setState({
@@ -167,25 +145,9 @@ export default class AppProvider extends Component {
     this.setState({
       isDeletingEntryId: entryId,
     }, () => {
-      const accessToken = TokenUtils.getAccessToken();
-
-      const query = `mutation deleteEntry($id: ID!) {
-        deleteEntry(id: $id) {
-          success
-        }
-      }`;
-
-      const variables = {
-        id: entryId,
-      };
-
-      http.post(QUERY_PATH)
-        .set('Authorization', `Bearer ${accessToken}`)
-        .send({ query, variables })
+      return this.props.deleteEntry(entryId)
         .then(() => {
-          const entries = this.state.entries.filter(entry => entry.id !== entryId);
           this.setState({
-            entries,
             isDeletingEntryId: undefined,
           });
         })
@@ -197,3 +159,50 @@ export default class AppProvider extends Component {
     });
   }
 }
+
+const updateEntryQuery = gql`
+  mutation updateEntry($id: ID!, $input: EntryInput){
+    updateEntry(id: $id, input: $input) {
+      id
+      text
+      timeUpdated
+    }
+  }
+`;
+
+const updateEntryQueryEnhander = graphql(updateEntryQuery, {
+  props: ({ mutate }) => ({
+    updateEntry: (id, input) => mutate({ variables: { id, input } }),
+  }),
+});
+
+const deletEntryQuery = gql`
+  mutation deleteEntry($id: ID!) {
+    deleteEntry(id: $id) {
+      success
+    }
+  }
+`;
+
+const deleteEntryQueryEnhancer = graphql(deletEntryQuery, {
+  props: ({ mutate }) => ({
+    deleteEntry: (id) => mutate({
+      variables: { id },
+      update: (proxy, { data: { createTodo } }) => {
+        // Read the data from our cache for this query.
+        const data = proxy.readQuery({ query: TodoAppQuery });
+
+        // Add our todo from the mutation to the end.
+        data.todos.push(createTodo);
+
+        // Write our data back to the cache.
+        proxy.writeQuery({ query: TodoAppQuery, data });
+      },
+    }),
+  }),
+});
+
+export default compose(
+  updateEntryQueryEnhander,
+  deleteEntryQueryEnhancer,
+)(AppProvider);

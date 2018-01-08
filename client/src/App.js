@@ -42,11 +42,11 @@ export default class App extends Component {
 
   render() {
     return (
-      <AppProvider initialState={this.props.initialState}>
-        <ApolloProvider client={client}>
+      <ApolloProvider client={client}>
+        <AppProvider initialState={this.props.initialState}>
           <Routes />
-        </ApolloProvider>
-      </AppProvider>
+        </AppProvider>
+      </ApolloProvider>
     );
   }
 }
