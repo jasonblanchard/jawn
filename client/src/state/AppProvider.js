@@ -179,26 +179,15 @@ const updateEntryQueryEnhander = graphql(updateEntryQuery, {
 const deletEntryQuery = gql`
   mutation deleteEntry($id: ID!) {
     deleteEntry(id: $id) {
-      success
+      id
+      isDeleted
     }
   }
 `;
 
 const deleteEntryQueryEnhancer = graphql(deletEntryQuery, {
   props: ({ mutate }) => ({
-    deleteEntry: (id) => mutate({
-      variables: { id },
-      update: (proxy, { data: { createTodo } }) => {
-        // Read the data from our cache for this query.
-        const data = proxy.readQuery({ query: TodoAppQuery });
-
-        // Add our todo from the mutation to the end.
-        data.todos.push(createTodo);
-
-        // Write our data back to the cache.
-        proxy.writeQuery({ query: TodoAppQuery, data });
-      },
-    }),
+    deleteEntry: (id) => mutate({ variables: { id } }),
   }),
 });
 

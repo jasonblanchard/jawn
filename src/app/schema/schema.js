@@ -3,14 +3,15 @@ import { makeExecutableSchema } from 'graphql-tools';
 const typeDefs = `
   type User {
     id: ID!
-    username: String!
-    email: String!
-    timeCreated: String!
+    email: String
     entries: [Entry]
+    timeCreated: String
+    username: String
   }
 
   type Entry {
     id: ID!,
+    isDeleted: Boolean
     text: String
     timeCreated: String!
     timeUpdated: String
@@ -21,10 +22,6 @@ const typeDefs = `
     text: String!
   }
 
-  type MutationResult {
-    success: Boolean
-  }
-
   type Query {
     entries: [Entry]
     user(id: ID!): User
@@ -33,7 +30,7 @@ const typeDefs = `
   type Mutation {
     updateEntry(id: ID!, input: EntryInput): Entry
     createEntry(input: EntryInput): Entry
-    deleteEntry(id: ID!): MutationResult
+    deleteEntry(id: ID!): Entry
   }
 `;
 
@@ -64,7 +61,7 @@ const resolvers = {
       return context.services.entryService.create(args.input, context.userId);
     },
     deleteEntry: (parent, args, context) => {
-      return context.services.entryService.delete(args.id, context.userId).then(() => ({ success: true }));
+      return context.services.entryService.delete(args.id, context.userId);
     },
   },
 };

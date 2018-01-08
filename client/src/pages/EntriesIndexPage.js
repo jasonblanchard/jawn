@@ -41,12 +41,13 @@ class EntriesIndexPage extends Component {
   }
 
   getEntries(entries) {
-    return [...entries].sort((entry1, entry2) => (moment(entry1.timeCreated).isBefore(entry2.timeCreated) ? 1 : -1));
+    return [...entries].filter(entry => !entry.isDeleted).sort((entry1, entry2) => (moment(entry1.timeCreated).isBefore(entry2.timeCreated) ? 1 : -1));
   }
 }
 
 const QUERY = gql`query EntriesIndexPage($userId: ID!){
     entries {
+      isDeleted
       ...EditableEntry
     }
     user(id: $userId) {

@@ -56,6 +56,10 @@ export default class EntryConnector {
 
   delete(id, userId) {
     // TODO: If not found, raise an error;
-    return this._model.remove({ _id: id, userId });
+    return this._model.remove({ _id: id, userId })
+      .then(() => ({
+        id,
+        isDeleted: true,
+      }));
   }
 }
