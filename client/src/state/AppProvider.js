@@ -10,8 +10,11 @@ const QUERY_PATH = '/api/graphql';
 
 class AppProvider extends Component {
   static propTypes = {
-    initialState: PropTypes.object,
     children: PropTypes.node.isRequired,
+    createEntry: PropTypes.func,
+    deleteEntry: PropTypes.func,
+    initialState: PropTypes.object,
+    updateEntry: PropTypes.func,
   }
 
   static defaultProps = {
@@ -96,34 +99,14 @@ class AppProvider extends Component {
     });
   }
 
-  createEntry = fields => {
+  createEntry = input => {
     this.setState({
       didCreateEntryFail: undefined,
       isCreatingEntry: true,
     }, () => {
-      const accessToken = TokenUtils.getAccessToken();
-
-      const query = `mutation createEntry($input: EntryInput) {
-        createEntry(input: $input) {
-          text
-        }
-      }`;
-
-      const variables = {
-        input: fields,
-      };
-
-      return http.post(QUERY_PATH)
-        .set('Authorization', `Bearer ${accessToken}`)
-        .send({ query, variables })
-        .then(response => {
-          const entries = [
-            ...this.state.entries,
-            response.body.data.createEntry,
-          ];
-
+      this.props.createEntry(input)
+        .then(() => {
           this.setState({
-            entries,
             isCreatingEntry: undefined,
             didCreateEntry: true,
           }, () => {
@@ -160,7 +143,7 @@ class AppProvider extends Component {
   }
 }
 
-const updateEntryQuery = gql`
+const UpdateEntryQuery = gql`
   mutation updateEntry($id: ID!, $input: EntryInput){
     updateEntry(id: $id, input: $input) {
       id
@@ -170,13 +153,13 @@ const updateEntryQuery = gql`
   }
 `;
 
-const updateEntryQueryEnhander = graphql(updateEntryQuery, {
+const updateEntryQueryEnhander = graphql(UpdateEntryQuery, {
   props: ({ mutate }) => ({
     updateEntry: (id, input) => mutate({ variables: { id, input } }),
   }),
 });
 
-const deletEntryQuery = gql`
+const DeletEntryQuery = gql`
   mutation deleteEntry($id: ID!) {
     deleteEntry(id: $id) {
       id
@@ -185,13 +168,56 @@ const deletEntryQuery = gql`
   }
 `;
 
-const deleteEntryQueryEnhancer = graphql(deletEntryQuery, {
+const deleteEntryQueryEnhancer = graphql(DeletEntryQuery, {
   props: ({ mutate }) => ({
     deleteEntry: (id) => mutate({ variables: { id } }),
+  }),
+});
+
+const CreateEntryQuery = gql`
+  mutation createEntry($input: EntryInput) {
+    createEntry(input: $input) {
+      id
+      isDeleted
+      text
+      timeUpdated
+      timeCreated
+    }
+  }
+`;
+
+// TODO: This is somehow tied to EntriesIndexPage... is there a better way to update the cache?
+const EntriesQuery = gql`
+  query {
+    entries {
+      id
+      isDeleted
+      text
+      timeUpdated
+      timeCreated
+    }
+  }
+`;
+
+const createEntryQueryEnhancer = graphql(CreateEntryQuery, {
+  props: ({ mutate }) => ({
+    createEntry: input => mutate({
+      variables: { input },
+      update: (proxy, { data: { createEntry } }) => {
+        const { entries } = proxy.readQuery({ query: EntriesQuery });
+        proxy.writeQuery({
+          query: EntriesQuery,
+          data: {
+            entries: [...entries, createEntry],
+          },
+        });
+      },
+    }),
   }),
 });
 
 export default compose(
   updateEntryQueryEnhander,
   deleteEntryQueryEnhancer,
+  createEntryQueryEnhancer,
 )(AppProvider);

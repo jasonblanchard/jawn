@@ -10,6 +10,7 @@ module.exports = {
       "browser": true
     },
     "rules": {
+      "arrow-body-style": 0,
       "arrow-parens": 0,
       "class-methods-use-this": 0,
       "import/extensions": 0,
