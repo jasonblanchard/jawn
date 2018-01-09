@@ -4,10 +4,6 @@ import gql from 'graphql-tag';
 import http from 'superagent';
 import PropTypes from 'prop-types';
 
-import TokenUtils from 'src/utils/TokenUtils';
-
-const QUERY_PATH = '/api/graphql';
-
 class AppProvider extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
@@ -50,25 +46,10 @@ class AppProvider extends Component {
       .send({ username, password })
   )
 
-  fetchEntries = () => {
-    const accessToken = TokenUtils.getAccessToken();
-    const query = `{
-      entries {
-        id
-        text
-        timeCreated
-        timeUpdated
-      }
-    }`;
-
-    return http.get(QUERY_PATH)
-      .query({ query })
-      .set('Authorization', `Bearer ${accessToken}`)
-      .then(response => {
-        this.setState({
-          entries: response.body.data.entries,
-        });
-      });
+  updateState = nextState => {
+    return new Promise(resolve => {
+      this.setState(nextState, resolve);
+    });
   }
 
   updateEntry = (id, input) => {

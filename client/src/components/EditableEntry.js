@@ -64,8 +64,8 @@ export default class EditableEntry extends Component {
       return (
         <div>
           Are you sure?
-          <button type="button" onClick={this.handleClickConfirmDelete}>yes</button>
-          <button type="button" onClick={this.handleClickCancelDelete}>nah</button>
+          <button key="confirm" type="button" onClick={this.handleClickConfirmDelete}>yes</button>
+          <button key="cancel" type="button" onClick={this.handleClickCancelDelete}>nah</button>
         </div>
       );
     }
