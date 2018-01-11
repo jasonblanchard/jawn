@@ -4,9 +4,10 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
+import { CreateEntryFormContainer } from 'src/components/CreateEntryForm';
 import AuthenticatedPageLayout from 'src/components/AuthenticatedPageLayout';
 import EditableEntry, { EditableEntryContainer } from 'src/components/EditableEntry';
-import { CreateEntryFormContainer } from 'src/components/CreateEntryForm';
+import TokenUtils from 'src/utils/TokenUtils';
 
 import css from './EntriesIndexPage.scss';
 
@@ -64,8 +65,8 @@ export default graphql(QUERY, {
     loading: data.loading && data.networkStatus === 'loading',
     user: data.user,
   }),
-  options: {
-    variables: { userId: '5a400afebf5614778f41f62a' }, // TODO: Parse from cookie
+  options: () => ({
+    variables: { userId: TokenUtils.decodeUserId(TokenUtils.getAccessToken()) },
     fetchPolicy: 'cache-and-network',
-  },
+  }),
 })(EntriesIndexPage);
