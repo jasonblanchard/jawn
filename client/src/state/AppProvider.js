@@ -140,26 +140,10 @@ const updateEntryQueryEnhander = graphql(UpdateEntryQuery, {
   }),
 });
 
-const DeletEntryQuery = gql`
-  mutation deleteEntry($id: ID!) {
-    deleteEntry(id: $id) {
-      id
-      isDeleted
-    }
-  }
-`;
-
-const deleteEntryQueryEnhancer = graphql(DeletEntryQuery, {
-  props: ({ mutate }) => ({
-    deleteEntry: (id) => mutate({ variables: { id } }),
-  }),
-});
-
 const CreateEntryQuery = gql`
   mutation createEntry($input: EntryInput) {
     createEntry(input: $input) {
       id
-      isDeleted
       text
       timeUpdated
       timeCreated
@@ -172,7 +156,6 @@ const EntriesQuery = gql`
   query {
     entries {
       id
-      isDeleted
       text
       timeUpdated
       timeCreated
@@ -190,6 +173,31 @@ const createEntryQueryEnhancer = graphql(CreateEntryQuery, {
           query: EntriesQuery,
           data: {
             entries: [...entries, createEntry],
+          },
+        });
+      },
+    }),
+  }),
+});
+
+const DeletEntryQuery = gql`
+  mutation deleteEntry($id: ID!) {
+    deleteEntry(id: $id) {
+      id
+    }
+  }
+`;
+
+const deleteEntryQueryEnhancer = graphql(DeletEntryQuery, {
+  props: ({ mutate }) => ({
+    deleteEntry: (id) => mutate({
+      variables: { id },
+      update: (proxy, { data: { deleteEntry } }) => {
+        const { entries } = proxy.readQuery({ query: EntriesQuery });
+        proxy.writeQuery({
+          query: EntriesQuery,
+          data: {
+            entries: entries.filter(entry => entry.id !== deleteEntry.id),
           },
         });
       },

@@ -11,8 +11,7 @@ const typeDefs = `
 
   type Entry {
     id: ID!,
-    isDeleted: Boolean
-    text: String
+    text: String!
     timeCreated: String!
     timeUpdated: String
     user: User
