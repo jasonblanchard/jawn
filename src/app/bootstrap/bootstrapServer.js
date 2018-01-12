@@ -1,3 +1,4 @@
+import { graphqlExpress } from 'apollo-server-express';
 import bodyParser from 'body-parser';
 import Boom from 'boom';
 import cookieParser from 'cookie-parser';
@@ -6,7 +7,6 @@ import expressJwt from 'express-jwt';
 import favicon from 'serve-favicon';
 import fs from 'fs';
 import get from 'lodash.get';
-import { graphiqlExpress, graphqlExpress } from 'apollo-server-express';
 import morgan from 'morgan';
 import path from 'path';
 import TokenUtils from 'app/utils/TokenUtils';
@@ -39,20 +39,22 @@ export default function(registry) {
   app.use(expressJwt({
     secret: appSecret,
     requestProperty: 'accessTokenPayload',
-    getToken: request => TokenUtils.parseAuthorizationHeader(request.headers.authorization),
-    credentialsRequired: false, // TODO: Figure this out
+    getToken: request => {
+      return TokenUtils.parseAuthorizationHeader(request.headers.authorization);
+    },
+    credentialsRequired: true,
   }).unless({
-    path: ['/', '/login', '/api/login', '/api/graphiql'],
+    path: ['/api/login'],
+    custom: request => {
+      // Require token for all /api/* routes. Skip it for all other routes which just serve satic assets.
+      // TODO: Consider doing all auth checks/redirects server-side
+      return !request.originalUrl.match(/^\/api\//);
+    },
   }));
 
   app.post('/api/login', loginController.handlePost);
 
   app.use('/api/graphql', graphqlExpress(request => graphqlService.handleRequest(request)));
-
-  app.use('/api/graphiql', graphiqlExpress({
-    endpointURL: '/api/graphql',
-    passHeader: "'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhNDAwYWZlYmY1NjE0Nzc4ZjQxZjYyYSIsImlhdCI6MTUxNDE0NjYwN30.EPHDw7plbZgHMMgFsWrOgynFf9yXsBfvFLaa_KRcVyU'",
-  }));
 
   app.use('/api/*', (request, response, next) => {
     next(Boom.notFound());

@@ -16,7 +16,7 @@ export default class Routes extends Component {
         <div>
           <AuthenticatedRoute exact path="/" render={() => <EntriesIndexPage />} />
           <Route path="/login" render={() => <ConnectedLoginPage />} />
-          <Route path="/settings" render={() => <SettingsPage />} />
+          <AuthenticatedRoute path="/settings" render={() => <SettingsPage />} />
         </div>
       </Router>
     );
