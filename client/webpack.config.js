@@ -1,5 +1,5 @@
 const path = require('path');
-const sassLintPlugin = require('sasslint-webpack-plugin');
+const SassLintPlugin = require('sasslint-webpack-plugin');
 
 function relativePath(_path) {
   return path.join(__dirname, _path);
@@ -11,14 +11,14 @@ module.exports = {
   entry: './src/index.js',
   output: {
     path: relativePath('build/static'),
-    filename: 'app.js'
+    filename: 'app.js',
   },
   devtool: 'cheap-module-source-map',
   resolve: {
     modules: [relativePath('src'), 'node_modules'],
     alias: {
-      src: relativePath('src')
-    }
+      src: relativePath('src'),
+    },
   },
   module: {
     rules: [
@@ -32,8 +32,8 @@ module.exports = {
         test: /\.js$/,
         include: relativePath('src'),
         use: {
-          loader: 'babel-loader'
-        }
+          loader: 'babel-loader',
+        },
       },
       {
         test: /\.(css|scss)$/,
@@ -44,22 +44,22 @@ module.exports = {
             loader: 'css-loader',
             options: {
               sourceMap: true,
-              localIdentName: '[name]-[local]--[hash:base64:5]'
-            }
+              localIdentName: '[name]-[local]--[hash:base64:5]',
+            },
           },
           {
             loader: 'sass-loader',
             options: {
-              sourceMap: true
-            }
-          }
-        ]
-      }
-    ]
+              sourceMap: true,
+            },
+          },
+        ],
+      },
+    ],
   },
   plugins: [
-    new sassLintPlugin({
+    new SassLintPlugin({
       glob: 'src/**/*.s?(a|c)ss',
-    })
-  ]
-}
+    }),
+  ],
+};
