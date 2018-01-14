@@ -1,5 +1,5 @@
 import { Schema } from 'mongoose';
-import DataLoader from 'DataLoader';
+import DataLoader from 'dataloader';
 
 const LOG_TAG = 'UserConnector';
 
