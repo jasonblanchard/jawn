@@ -1,0 +1,22 @@
+version: "3"
+services:
+  app:
+    build: .
+    networks:
+      - frontend
+      - backend
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - backend
+  nginx:
+    build: ops/nginx
+    ports:
+        - "80:80"
+    networks:
+      - frontend
+networks:
+  frontend:
+  backend:
