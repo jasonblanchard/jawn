@@ -5,6 +5,8 @@ services:
     networks:
       - frontend
       - backend
+    environment:
+      - MONGO_HOST=mongo
   mongo:
     image: mongo
     ports:

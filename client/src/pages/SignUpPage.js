@@ -45,7 +45,6 @@ export default class SignUpPage extends Component {
   handleSubmit = event => {
     event.preventDefault();
     const { emailInput, usernameInput, passwordInput } = this;
-    console.log(emailInput.value, usernameInput.value, passwordInput.value);
     this.props.signUp({ email: emailInput.value, username: usernameInput.value, password: passwordInput.value });
   }
 }
