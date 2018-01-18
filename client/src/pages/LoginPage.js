@@ -1,5 +1,6 @@
 import {
   Redirect,
+  Link,
 } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
@@ -25,22 +26,25 @@ export default class LoginPage extends PureComponent {
     if (this.state.didAuthenticated) return <Redirect to="/" />;
 
     return (
-      <form onSubmit={this.handleSubmit}>
-        {this.state.errorMessage}
-        <div>
-          <label htmlFor="LoginPage-usernameInput">
-            username
-          </label>
-          <input id="LoginPage-usernameInput" ref={c => { this.usernameInput = c; }} />
-        </div>
-        <div>
-          <label htmlFor="LoginPage-passwordInput">
-            password
-          </label>
-          <input id="LoginPage-passwordInput" type="password" ref={c => { this.passwordInput = c; }} />
-        </div>
-        <button type="submit">Login</button>
-      </form>
+      <div role="main">
+        <form onSubmit={this.handleSubmit}>
+          {this.state.errorMessage}
+          <div>
+            <label htmlFor="LoginPage-usernameInput">
+              username
+            </label>
+            <input id="LoginPage-usernameInput" ref={c => { this.usernameInput = c; }} />
+          </div>
+          <div>
+            <label htmlFor="LoginPage-passwordInput">
+              password
+            </label>
+            <input id="LoginPage-passwordInput" type="password" ref={c => { this.passwordInput = c; }} />
+          </div>
+          <button type="submit">Login</button>
+        </form>
+        <Link to="/sign-up">Sign Up</Link>
+      </div>
     );
   }
 

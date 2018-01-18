@@ -1,5 +1,6 @@
 import { Schema } from 'mongoose';
 import DataLoader from 'dataloader';
+import moment from 'moment';
 
 const LOG_TAG = 'UserConnector';
 
@@ -72,5 +73,13 @@ export default class UserConnector {
         if (!user) return undefined; // TODO: Raise error
         return Object.assign({}, mapRecordToObject(user), { password: user.password });
       });
+  }
+
+  create(params) {
+    const fields = Object.assign({}, params, { timeCreated: moment().format() });
+    this._logger.debug({ username: params.username }, LOG_TAG);
+
+    const user = new this._model(fields);
+    return user.save().then(mapRecordToObject);
   }
 }

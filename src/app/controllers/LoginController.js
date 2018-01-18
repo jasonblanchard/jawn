@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 const LOG_TAG = 'LoginController';
+const SALT_ROUNDS = 10;
 
 export default class LoginController {
   constructor(store, userService, logger, appSecret) {
@@ -10,11 +11,9 @@ export default class LoginController {
     this._userService = userService;
     this._logger = logger;
     this._appSecret = appSecret;
-
-    this.handlePost = this.handlePost.bind(this);
   }
 
-  handlePost(request, response, next) {
+  handleLogin = (request, response, next) => {
     if (!request.body.username || !request.body.password) return next(Boom.badRequest('Username or password not provided'));
 
     const { username, password } = request.body;
@@ -46,5 +45,35 @@ export default class LoginController {
       .catch(error => {
         next(error);
       });
+  }
+
+  handleSignUp = (request, response, next) => {
+    const { email, username, password } = request.body;
+    if (!email || !username || !password) return next(Boom.badRequest('Username or password not provided'));
+
+    this._userService.findForAuth(username)
+      .then(user => {
+        this._logger.debug({ user }, LOG_TAG);
+        if (user) return next(Boom.conflict('Username is taken'));
+        return this.hashPassword(password, SALT_ROUNDS);
+      })
+      .then(hashedPassword => {
+        return this._userService.create({ email, username, password: hashedPassword });
+      })
+      .then(() => {
+        response.status(204).send();
+      })
+      .catch(error => {
+        next(error);
+      });
+  }
+
+  hashPassword = (password, saltRounds) => {
+    return new Promise((resolve, reject) => {
+      bcrypt.hash(password, saltRounds, (error, hash) => {
+        if (error) return reject(error);
+        return resolve(hash);
+      });
+    });
   }
 }

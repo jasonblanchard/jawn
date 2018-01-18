@@ -44,7 +44,7 @@ export default function(registry) {
     },
     credentialsRequired: true,
   }).unless({
-    path: ['/api/login'],
+    path: ['/api/login', '/api/sign-up'],
     custom: request => {
       // Require token for all /api/* routes. Skip it for all other routes which just serve satic assets.
       // TODO: Consider doing all auth checks/redirects server-side
@@ -52,7 +52,8 @@ export default function(registry) {
     },
   }));
 
-  app.post('/api/login', loginController.handlePost);
+  app.post('/api/login', loginController.handleLogin);
+  app.post('/api/sign-up', loginController.handleSignUp);
 
   app.use('/api/graphql', graphqlExpress(request => graphqlService.handleRequest(request)));
 

@@ -33,6 +33,7 @@ class AppProvider extends Component {
         updateEntry: this.updateEntry,
         createEntry: this.createEntry,
         deleteEntry: this.deleteEntry,
+        signUp: this.signUp,
       },
     };
   }
@@ -44,6 +45,34 @@ class AppProvider extends Component {
   login = (username, password) => (
     http.post('/api/login')
       .send({ username, password })
+  )
+
+  signUp = ({ email, username, password }) => (
+    this.updateState({
+      didSignUpFail: undefined,
+      isSigningUp: true,
+    })
+      .then(() => {
+        return http.post('/api/sign-up').send({ email, username, password });
+      })
+      .then(() => {
+        return this.updateState({
+          didSignUp: true,
+          isSigningUp: false,
+        });
+      })
+      .then(() => {
+        return this.updateState({
+          didSignUp: undefined,
+        });
+      })
+      .catch(() => {
+        this.updateState({
+          didSignUp: undefined,
+          didSignUpFail: true,
+          isSigningUp: undefined,
+        });
+      })
   )
 
   updateState = nextState => {

@@ -15,4 +15,8 @@ export default class UserService {
   findForAuth(username) {
     return this._connector.findForAuth(username);
   }
+
+  create(params, userId) {
+    return this._connector.create(params);
+  }
 }
