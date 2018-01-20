@@ -13,6 +13,8 @@ services:
       - "27017:27017"
     networks:
       - backend
+    volumes:
+        - "dbdata:/data/db"
   nginx:
     build: ops/nginx
     ports:
@@ -22,3 +24,5 @@ services:
 networks:
   frontend:
   backend:
+volumes:
+  dbdata:
