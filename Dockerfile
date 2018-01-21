@@ -11,7 +11,10 @@ WORKDIR /src/app
 ADD . /src/app
 
 EXPOSE 8080
+USER node
 
 ENV PORT 8080
+ENV NODE_PATH=./build
 
-CMD ["npm", "start"]
+# Use this instead of `npm run start` for better process management within container.
+CMD ["node", "build/app/index.js"]
