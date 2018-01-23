@@ -12,7 +12,7 @@ import path from 'path';
 import TokenUtils from 'app/utils/TokenUtils';
 
 const LOG_TAG = 'app';
-const BUILD_PATH = '../../../client/build';
+const BUILD_PATH = '../client/build';
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
@@ -29,8 +29,7 @@ export default function(registry) {
 
   const app = express();
 
-  // TODO: Get this from somewhere else.
-  app.use(favicon(path.join(__dirname, 'favicon.ico')));
+  app.use(favicon(path.join(__dirname, BUILD_PATH + '/favicon.ico')));
   app.use(bodyParser.json());
   app.use(cookieParser());
   app.use('/static', express.static(path.join(__dirname, BUILD_PATH + '/static')));
