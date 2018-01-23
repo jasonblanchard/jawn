@@ -2,11 +2,18 @@ version: "3"
 services:
   app:
     build: .
+    image: jasonblanchard/jawn-app
+    ports:
+        - "80:80"
     networks:
       - frontend
       - backend
     environment:
       - MONGO_HOST=mongo
+    depends_on:
+      - mongo
+    deploy:
+      replicas: 1
   mongo:
     image: mongo
     ports:
@@ -15,12 +22,9 @@ services:
       - backend
     volumes:
         - "dbdata:/data/db"
-  nginx:
-    build: ops/nginx
-    ports:
-        - "80:80"
-    networks:
-      - frontend
+    deploy:
+      placement:
+        constraints: [node.role == manager]
 networks:
   frontend:
   backend:
