@@ -1,5 +1,5 @@
-const path = require('path');
-const SassLintPlugin = require('sasslint-webpack-plugin');
+import path from 'path';
+import SassLintPlugin from 'sasslint-webpack-plugin';
 
 function relativePath(_path) {
   return path.join(__dirname, _path);
