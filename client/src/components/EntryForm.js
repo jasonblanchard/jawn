@@ -1,18 +1,21 @@
+import classNames from 'classnames';
+import isBlank from 'underscore.string/isBlank';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import isBlank from 'underscore.string/isBlank';
+import TextareaAutosize from 'react-autosize-textarea';
 
 import css from './EntryForm.scss';
 
 export default class EntryForm extends Component {
   static propTypes = {
     children: PropTypes.node,
+    className: PropTypes.string,
     clear: PropTypes.bool,
     focusOnMount: PropTypes.bool,
     initialValues: PropTypes.object,
     isDisabled: PropTypes.bool,
-    onSubmit: PropTypes.func.isRequired,
     onCancel: PropTypes.func,
+    onSubmit: PropTypes.func.isRequired,
   }
 
   state = {
@@ -28,13 +31,14 @@ export default class EntryForm extends Component {
   }
 
   render() {
+    const className = classNames(css.container, this.props.className);
     return (
-      <form onSubmit={this.handleSubmit}>
-        <textarea
+      <form className={className} onSubmit={this.handleSubmit}>
+        <TextareaAutosize
+          autoFocus={this.props.focusOnMount}
           className={css.textInput}
           id="EntryForm-textInput"
           aria-label="Entry text"
-          ref={element => { this.textInput = element; }}
           name="text"
           value={this.state.text || ''}
           onChange={this.handleChangeTextInput}
@@ -46,10 +50,6 @@ export default class EntryForm extends Component {
         </footer>
       </form>
     );
-  }
-
-  componentDidMount() {
-    if (this.props.focusOnMount) this.textInput.focus();
   }
 
   handleChangeTextInput = event => {

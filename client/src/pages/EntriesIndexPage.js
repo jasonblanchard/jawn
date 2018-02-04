@@ -27,7 +27,7 @@ class EntriesIndexPage extends Component {
     return (
       <AuthenticatedPageLayout loading={this.props.loading} user={this.props.user}>
         <div className={css.container}>
-          <CreateEntryFormContainer />
+          <CreateEntryFormContainer className={css.form} />
           {this.renderEntries(this.props.entries, this.props.loading)}
         </div>
       </AuthenticatedPageLayout>
