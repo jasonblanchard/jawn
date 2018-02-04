@@ -23,11 +23,21 @@ class EntriesIndexPage extends Component {
     loading: true,
   }
 
+  state = {
+    isMasked: true, // TODO: Move to action and localStorage or server
+  }
+
   render() {
     return (
       <AuthenticatedPageLayout loading={this.props.loading} user={this.props.user}>
+        <div>
+          <input id="EntriesIndexPage-toggleMaskInput" type="checkbox" onChange={this.handleChangeToggleMaskInput} checked={this.state.isMasked} />
+          <label htmlFor="EntriesIndexPage-toggleMaskInput">
+            Toggle Mask
+          </label>
+        </div>
         <div className={css.container}>
-          <CreateEntryFormContainer className={css.form} />
+          <CreateEntryFormContainer className={css.form} focusOnMount />
           {this.renderEntries(this.props.entries, this.props.loading)}
         </div>
       </AuthenticatedPageLayout>
@@ -37,8 +47,12 @@ class EntriesIndexPage extends Component {
   renderEntries(entries, loading) {
     if (loading) return <div>Loading...</div>;
     return this.getEntries(entries).map(entry => (
-      <EditableEntryContainer key={entry.id} entry={entry} />
+      <EditableEntryContainer key={entry.id} entry={entry} isMasked={this.state.isMasked} />
     ));
+  }
+
+  handleChangeToggleMaskInput = event => {
+    this.setState({ isMasked: event.target.checked });
   }
 
   getEntries(entries) {
