@@ -28,17 +28,20 @@ class EntriesIndexPage extends Component {
   }
 
   render() {
+    const { user, loading, entries } = this.props;
+    const { isMasked } = this.state;
     return (
-      <AuthenticatedPageLayout loading={this.props.loading} user={this.props.user}>
+      <AuthenticatedPageLayout loading={loading} user={user}>
         <div>
-          <input id="EntriesIndexPage-toggleMaskInput" type="checkbox" onChange={this.handleChangeToggleMaskInput} checked={this.state.isMasked} />
+          <input id="EntriesIndexPage-toggleMaskInput" type="checkbox" onChange={this.handleChangeToggleMaskInput} checked={isMasked} />
           <label htmlFor="EntriesIndexPage-toggleMaskInput">
             Toggle Mask
           </label>
         </div>
         <div className={css.container}>
           <CreateEntryFormContainer className={css.form} focusOnMount />
-          {this.renderEntries(this.props.entries, this.props.loading)}
+          {this.renderEntries(entries, loading)}
+          <a href={`data:text/plain;charset=utf-8,${encodeURIComponent(JSON.stringify(entries))}`} download={`jawn-entries-${moment().format()}.json`}>download</a>
         </div>
       </AuthenticatedPageLayout>
     );
