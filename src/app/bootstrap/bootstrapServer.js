@@ -13,9 +13,9 @@ import TokenUtils from 'app/utils/TokenUtils';
 
 const LOG_TAG = 'app';
 const BUILD_PATH = '../client/build';
+const ASSET_PATHS = JSON.parse(fs.readFileSync(path.join(__dirname, BUILD_PATH, '/static/assets.json'), 'utf8'));
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
-
 export default function(registry) {
   const appSecret = process.env.APP_SECRET;
   const {
@@ -34,7 +34,7 @@ export default function(registry) {
   app.use(cookieParser());
   app.use('/static', express.static(path.join(__dirname, BUILD_PATH + '/static')));
   app.use(morgan(NODE_ENV === 'development' ? 'dev' : 'combined'));
-  // TODO: Include audience and issuer values?
+  // TODO: Include audience nd issuer values?
   app.use(expressJwt({
     secret: appSecret,
     requestProperty: 'accessTokenPayload',
@@ -69,11 +69,14 @@ export default function(registry) {
         const token = request.cookies.token;
         user = Object.assign({}, user, { token });
 
+        // TODO: Replace with a proper templating system
         fs.readFile(path.join(__dirname, BUILD_PATH, 'index.html'), 'utf8', (error, file) => {
           if (error) return next(error);
           if (!file) return next();
+          file = ASSET_PATHS.main.css ? file.replace('__STYLE_PATH__', `/static/${ASSET_PATHS.main.css}`) : file.replace('<link rel="stylesheet" type="text/css" href="__STYLE_PATH__">', '');
           file = file.replace('__INITIAL_STATE={}', `__INITIAL_STATE=${JSON.stringify({ currentUser: user })}`);
           file = file.replace('__ENV={}', `__ENV={NODE_ENV: '${NODE_ENV}', LOG_LEVEL: '${process.env.LOG_LEVEL}'}`);
+          file = file.replace('__APP_PATH__', `/static/${ASSET_PATHS.main.js}`);
           response.set('Content-Type', 'text/html');
           return response.send(file);
         });

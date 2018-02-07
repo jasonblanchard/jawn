@@ -1,65 +1,92 @@
+import { getIfUtils, removeEmpty } from 'webpack-config-utils';
+import AssetsPlugin from 'assets-webpack-plugin';
+import CleanWebpackPlugin from 'clean-webpack-plugin';
+import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import path from 'path';
 import SassLintPlugin from 'sasslint-webpack-plugin';
+import UglifyJsPlugin from 'uglifyjs-webpack-plugin';
 
 function relativePath(_path) {
   return path.join(__dirname, _path);
 }
 
-// TODO: Configure production build with https://github.com/kentcdodds/webpack-config-utils
+const styleLoader = { loader: 'style-loader' };
 
-module.exports = {
-  entry: './src/index.js',
-  output: {
-    path: relativePath('build/static'),
-    filename: 'app.js',
+const cssLoader = {
+  loader: 'css-loader',
+  options: {
+    sourceMap: true,
+    localIdentName: '[name]-[local]--[hash:base64:5]',
   },
-  devtool: 'cheap-module-source-map',
-  resolve: {
-    modules: [relativePath('src'), 'node_modules'],
-    alias: {
-      src: relativePath('src'),
+};
+
+const sassLoader = {
+  loader: 'sass-loader',
+  options: {
+    sourceMap: true,
+  },
+};
+
+module.exports = (env = {}) => {
+  const { ifProduction, ifNotProduction } = getIfUtils(env);
+  console.log(ifProduction(), ifNotProduction()); // eslint-disable-line no-console
+
+  return {
+    entry: './src/index.js',
+    output: {
+      path: relativePath('build/static'),
+      pathinfo: ifNotProduction(),
+      filename: ifProduction('[name].[hash].bundle.js', 'app.js'),
     },
-  },
-  module: {
-    rules: [
-      {
-        enforce: 'pre',
-        test: /\.js$/,
-        include: relativePath('src'),
-        loader: 'eslint-loader',
+    devtool: ifNotProduction('cheap-module-source-map'),
+    resolve: {
+      modules: [relativePath('src'), 'node_modules'],
+      alias: {
+        src: relativePath('src'),
       },
-      {
-        test: /\.js$/,
-        include: relativePath('src'),
-        use: {
-          loader: 'babel-loader',
+    },
+    module: {
+      rules: [
+        {
+          enforce: 'pre',
+          test: /\.js$/,
+          include: relativePath('src'),
+          loader: 'eslint-loader',
         },
-      },
-      {
-        test: /\.(css|scss)$/,
-        include: relativePath('src'),
-        use: [
-          { loader: 'style-loader' },
-          {
-            loader: 'css-loader',
-            options: {
-              sourceMap: true,
-              localIdentName: '[name]-[local]--[hash:base64:5]',
-            },
+        {
+          test: /\.js$/,
+          include: relativePath('src'),
+          use: {
+            loader: 'babel-loader',
           },
-          {
-            loader: 'sass-loader',
-            options: {
-              sourceMap: true,
-            },
-          },
-        ],
-      },
-    ],
-  },
-  plugins: [
-    new SassLintPlugin({
-      glob: 'src/**/*.s?(a|c)ss',
-    }),
-  ],
+        },
+        {
+          test: /\.(css|scss)$/,
+          include: relativePath('src'),
+          use: ifProduction(ExtractTextPlugin.extract({
+            use: [
+              cssLoader,
+              sassLoader,
+            ],
+          }), [
+            styleLoader,
+            cssLoader,
+            sassLoader,
+          ]),
+        },
+      ],
+    },
+    plugins: removeEmpty([
+      new AssetsPlugin({
+        filename: 'assets.json',
+        path: relativePath('build/static'),
+      }),
+      new CleanWebpackPlugin([relativePath('build/static')]),
+      new SassLintPlugin({
+        glob: 'src/**/*.s?(a|c)ss',
+      }),
+      ifProduction(new UglifyJsPlugin()),
+      ifProduction(new ExtractTextPlugin('styles.css')),
+    ]),
+  };
 };

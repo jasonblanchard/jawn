@@ -11,11 +11,11 @@ export default function() {
     // This is only needed for first connect, not for runtime reconnects.
     // See: https://github.com/Automattic/mongoose/issues/5169
     if (err.message && err.message.match(/failed to connect to server .* on first connect/)) {
-      console.log(new Date(), String(err));
+      console.log(new Date(), String(err)); // eslint-disable-line no-console
 
       // Wait for a bit, then try to connect again
       setTimeout(() => {
-        console.log('Retrying first connect...');
+        console.log('Retrying first connect...'); // eslint-disable-line no-console
         db.openUri(dbURL).catch(() => {});
         // Why the empty catch?
         // Well, errors thrown by db.open() will also be passed to .on('error'),
@@ -24,12 +24,12 @@ export default function() {
       }, 20 * 1000);
     } else {
       // Some other error occurred.  Log it.
-      console.error(new Date(), String(err));
+      console.error(new Date(), String(err)); // eslint-disable-line no-console
     }
   });
 
   db.once('open', () => {
-    console.log('Connection to db established.');
+    console.log('Connection to db established.'); // eslint-disable-line no-console
   });
 
   return db;

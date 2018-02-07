@@ -1,6 +1,6 @@
-const webpack = require('webpack');
-const path = require('path');
-const nodeExternals = require('webpack-node-externals');
+import webpack from 'webpack';
+import path from 'path';
+import nodeExternals from 'webpack-node-externals';
 
 function relativePath(_path) {
   return path.join(__dirname, _path);
@@ -50,6 +50,6 @@ module.exports = {
   ],
   node: {
     __dirname: false,
-    __filename: false
+    __filename: false,
   },
 };

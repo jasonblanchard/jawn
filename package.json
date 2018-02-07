@@ -49,9 +49,10 @@
   },
   "scripts": {
     "build-all": "cd ./client && npm run build && cd .. && npm run build",
+    "build-all-production": "cd ./client && npm run build -- --env.production && cd .. && npm run build -- --env.production",
     "build": "webpack",
     "lint": "eslint src/",
-    "watch": "concurrently --names \"client,webpack,server\" --prefix-colors \"green,cyan,yellow\" \"cd client && npm run watch\" \"npm run build -- --watch\" \"nodemon --watch build build/server.js\"",
+    "watch": "rm -f client/build/static/assets.json && concurrently --names \"client,server,node\" --prefix-colors \"green,cyan,yellow\" \"cd client && npm run watch\" \"npm run build -- --watch\" \"wait-on client/build/static/assets.json && nodemon --watch build build/server.js\"",
     "start": "node build/server.js"
   }
 }
