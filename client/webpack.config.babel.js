@@ -29,7 +29,6 @@ const sassLoader = {
 
 module.exports = (env = {}) => {
   const { ifProduction, ifNotProduction } = getIfUtils(env);
-  console.log(ifProduction(), ifNotProduction()); // eslint-disable-line no-console
 
   return {
     entry: './src/index.js',
