@@ -24,7 +24,7 @@ class EntriesIndexPage extends Component {
   }
 
   state = {
-    isMasked: true, // TODO: Move to action and localStorage or server
+    isMasked: false, // TODO: Move to action and localStorage or server
   }
 
   render() {
