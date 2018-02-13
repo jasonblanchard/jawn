@@ -12,7 +12,11 @@ services:
     depends_on:
       - mongo
     deploy:
-      replicas: 1
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: '0.50'
+      replicas: 2
   mongo:
     image: mongo
     ports:
@@ -22,6 +26,10 @@ services:
     volumes:
         - "dbdata:/data/db"
     deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: '0.50'
       placement:
         constraints: [node.role == manager]
 networks:
