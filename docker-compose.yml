@@ -31,7 +31,8 @@ services:
           cpus: '0.50'
           memory: '0.50'
       placement:
-        constraints: [node.role == manager]
+        constraints:
+          - node.labels.type == db
 networks:
   backend:
 volumes:
