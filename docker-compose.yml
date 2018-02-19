@@ -1,0 +1,39 @@
+version: "3"
+services:
+  app:
+    build: .
+    image: jasonblanchard/jawn-app
+    ports:
+        - "80:80"
+    networks:
+      - backend
+    environment:
+      - MONGO_HOST=mongo
+    depends_on:
+      - mongo
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: '0.50'
+      replicas: 2
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - backend
+    volumes:
+        - "dbdata:/data/db"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: '0.50'
+      placement:
+        constraints:
+          - node.labels.type == db
+networks:
+  backend:
+volumes:
+  dbdata:

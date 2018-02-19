@@ -1,54 +1,22 @@
-import { Schema } from 'mongoose';
-
-const LOG_TAG = 'UserService';
-
-const UserSchema = new Schema({
-  username: String,
-  email: String,
-  password: String,
-  timeCreated: String,
-});
-
-function mapRecordToObject(record) {
-  if (!record) return null;
-
-  return {
-    id: record.id,
-    username: record.username,
-    email: record.email,
-    timeCreated: record.timeCreated,
-  };
-}
-
 // TODO: Error handling.
 export default class UserService {
-  constructor(store, logger) {
-    this._store = store;
-    this._model = store.model('User', UserSchema);
-    this._logger = logger;
+  constructor({ connector }) {
+    this._connector = connector;
   }
 
   findById(id) {
-    this._logger.debug({ id }, LOG_TAG);
-
-    if (!id) return Promise.resolve();
-
-    return this._model.findOne({ _id: id })
-      .then(mapRecordToObject);
+    return this._connector.findById(id);
   }
 
   findByUsername(username) {
-    this._logger.debug({ username }, LOG_TAG);
-    return this._model.findOne({ username })
-      .then(mapRecordToObject);
+    return this._connector.findByUsername(username);
   }
 
   findForAuth(username) {
-    this._logger.debug({ username }, LOG_TAG);
-    return this._model.findOne({ username })
-      .then(user => {
-        if (!user) return undefined; // TODO: Raise error
-        return Object.assign({}, mapRecordToObject(user), { password: user.password });
-      });
+    return this._connector.findForAuth(username);
+  }
+
+  create(params) {
+    return this._connector.create(params);
   }
 }

@@ -1,0 +1,15 @@
+:local(.header) {
+  align-items: center;
+  box-sizing: border-box;
+  display: flex;
+  height: 30px;
+  justify-content: space-between;
+  padding: 5px;
+  position: fixed;
+  width: 100%;
+  z-index: 1;
+}
+
+:local(.content) {
+  padding-top: 30px;
+}
