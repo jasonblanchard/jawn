@@ -69,7 +69,8 @@ export default class EntryForm extends Component {
     }
 
     if (keyCode === 27) {
-      this.props.onCancel();
+      // Losing data by mistake, so turning off for now
+      // this.props.onCancel();
     }
   }
 
