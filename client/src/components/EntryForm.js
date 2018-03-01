@@ -14,7 +14,7 @@ export default class EntryForm extends Component {
     focusOnMount: PropTypes.bool,
     initialValues: PropTypes.object,
     isDisabled: PropTypes.bool,
-    onCancel: PropTypes.func,
+    // onCancel: PropTypes.func,
     onSubmit: PropTypes.func.isRequired,
   }
 
