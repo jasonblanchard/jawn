@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 export default function() {
   mongoose.Promise = Promise;
-  const dbURL = `mongodb://${process.env.MONGO_HOST}:27017/jawn`;
+  const dbURL = process.env.MONGO_USERNAME ? `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}:27017/jawn` : `mongodb://${process.env.MONGO_HOST}:27017/jawn`;
   const db = mongoose.createConnection(dbURL);
 
   // https://github.com/Automattic/mongoose/issues/5169#issuecomment-314983113

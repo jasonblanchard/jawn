@@ -7,8 +7,8 @@ services:
         - "80:80"
     networks:
       - backend
-    environment:
-      - MONGO_HOST=mongo
+    env_file:
+      - ./ops/web-variables.env
     depends_on:
       - mongo
     deploy:
@@ -19,6 +19,7 @@ services:
       replicas: 2
   mongo:
     image: mongo:3.7.1
+    command: --auth
     networks:
       - backend
     volumes:
