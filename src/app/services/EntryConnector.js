@@ -1,4 +1,4 @@
-import { Schema } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import moment from 'moment';
 
 const LOG_TAG = 'EntryConnector';
@@ -28,10 +28,26 @@ export default class EntryConnector {
     this._logger = logger;
   }
 
-  listByUser(userId) {
-    return this._model.find({ userId }).then(records => {
+  listByUser(userId, options) {
+    this._logger.debug({ options }, LOG_TAG);
+
+    const query = {
+      userId,
+    };
+
+    if (options.since) {
+      const sinceObjectId = mongoose.Types.ObjectId.createFromTime(new Date(options.since).getTime() / 1000);
+      query._id = { $gt: sinceObjectId };
+    }
+
+    if (options.before) {
+      const beforeObjectId = mongoose.Types.ObjectId.createFromTime(new Date(options.before).getTime() / 1000);
+      query._id = { ...query._id, ...{ $lt: beforeObjectId } };
+    }
+
+    return this._model.find(query).then(records => {
       const entries = records.map(mapRecordToObject);
-      this._logger.debug({ entries }, LOG_TAG);
+      // this._logger.debug({ entries }, LOG_TAG);
 
       return entries;
     });

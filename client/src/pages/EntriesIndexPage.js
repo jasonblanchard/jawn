@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import { CreateEntryFormContainer } from 'src/components/CreateEntryForm';
+import { getCurrentYearStartDate } from 'src/utils/TimeUtils';
 import AuthenticatedPageLayout from 'src/components/AuthenticatedPageLayout';
 import EditableEntry, { EditableEntryContainer } from 'src/components/EditableEntry';
 import TokenUtils from 'src/utils/TokenUtils';
@@ -63,8 +64,8 @@ class EntriesIndexPage extends Component {
   }
 }
 
-const QUERY = gql`query EntriesIndexPage($userId: ID!){
-    entries {
+const QUERY = gql`query EntriesIndexPage($userId: ID!, $since: String!) {
+    entries(since: $since) {
       ...EditableEntry
     }
     user(id: $userId) {
@@ -82,7 +83,7 @@ export default graphql(QUERY, {
     user: data.user,
   }),
   options: () => ({
-    variables: { userId: TokenUtils.decodeUserId(TokenUtils.getAccessToken()) },
+    variables: { userId: TokenUtils.decodeUserId(TokenUtils.getAccessToken()), since: getCurrentYearStartDate() }, // TODO: Is this the right place for the timestamp?
     fetchPolicy: 'cache-and-network',
   }),
 })(EntriesIndexPage);

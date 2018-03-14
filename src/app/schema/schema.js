@@ -22,7 +22,7 @@ const typeDefs = `
   }
 
   type Query {
-    entries: [Entry]
+    entries(since: String, before: String): [Entry]
     user(id: ID!): User
   }
 
@@ -46,7 +46,8 @@ const resolvers = {
   },
   Query: {
     entries: (parent, args, context) => {
-      return context.services.entryService.listByUser(context.userId);
+      const { since, before } = args;
+      return context.services.entryService.listByUser(context.userId, { since, before });
     },
     user: (parent, args, context) => {
       return context.services.userService.findById(args.id);

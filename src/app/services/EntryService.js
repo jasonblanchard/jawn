@@ -4,8 +4,8 @@ export default class EntryService {
     this._connector = connector;
   }
 
-  listByUser(userId) {
-    return this._connector.listByUser(userId);
+  listByUser(userId, options) {
+    return this._connector.listByUser(userId, options);
   }
 
   create(params, userId) {

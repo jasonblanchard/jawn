@@ -4,6 +4,8 @@ import gql from 'graphql-tag';
 import http from 'superagent';
 import PropTypes from 'prop-types';
 
+import { getCurrentYearStartDate } from 'src/utils/TimeUtils';
+
 class AppProvider extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
@@ -182,8 +184,8 @@ const CreateEntryQuery = gql`
 
 // TODO: This is somehow tied to EntriesIndexPage... is there a better way to update the cache?
 const EntriesQuery = gql`
-  query {
-    entries {
+  query EntriesQuery($since: String!) {
+    entries(since: $since) {
       id
       text
       timeUpdated
@@ -197,9 +199,13 @@ const createEntryQueryEnhancer = graphql(CreateEntryQuery, {
     createEntry: input => mutate({
       variables: { input },
       update: (proxy, { data: { createEntry } }) => {
-        const { entries } = proxy.readQuery({ query: EntriesQuery });
+        const { entries } = proxy.readQuery({
+          query: EntriesQuery,
+          variables: { since: getCurrentYearStartDate() }, // Dear lord, this is ugly.
+        });
         proxy.writeQuery({
           query: EntriesQuery,
+          variables: { since: getCurrentYearStartDate() },
           data: {
             entries: [...entries, createEntry],
           },
@@ -222,9 +228,13 @@ const deleteEntryQueryEnhancer = graphql(DeletEntryQuery, {
     deleteEntry: (id) => mutate({
       variables: { id },
       update: (proxy, { data: { deleteEntry } }) => {
-        const { entries } = proxy.readQuery({ query: EntriesQuery });
+        const { entries } = proxy.readQuery({
+          query: EntriesQuery,
+          variables: { since: getCurrentYearStartDate() }, // Ugh.
+        });
         proxy.writeQuery({
           query: EntriesQuery,
+          variables: { since: getCurrentYearStartDate() },
           data: {
             entries: entries.filter(entry => entry.id !== deleteEntry.id),
           },
