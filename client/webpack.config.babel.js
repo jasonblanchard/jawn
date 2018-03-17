@@ -1,6 +1,7 @@
 import { getIfUtils, removeEmpty } from 'webpack-config-utils';
 import AssetsPlugin from 'assets-webpack-plugin';
 import CleanWebpackPlugin from 'clean-webpack-plugin';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import path from 'path';
 import SassLintPlugin from 'sasslint-webpack-plugin';
@@ -80,6 +81,9 @@ module.exports = (env = {}) => {
         filename: 'assets.json',
         path: relativePath('build/static'),
       }),
+      new CopyWebpackPlugin([
+        { from: 'src/styles/fonts', to: 'fonts' },
+      ]),
       new CleanWebpackPlugin([relativePath('build/static')]),
       new SassLintPlugin({
         glob: 'src/**/*.s?(a|c)ss',

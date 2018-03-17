@@ -28,7 +28,7 @@ export default class AuthenticatedPageLayout extends Component {
     return (
       <div className={classNames(this.props.className)}>
         <header className={css.header}>
-          <h1><Link to="/">top navbar</Link></h1>
+          <h1 className={css.siteName}><Link to="/">jawn</Link></h1>
           {restChildren.length > 0 ? firstChild : null}
           <nav>
             {this.props.loading || !this.props.user ? <span>loading...</span> : <Link to="/settings">{this.props.user.username}</Link>}
