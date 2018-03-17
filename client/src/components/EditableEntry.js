@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
@@ -45,6 +46,10 @@ export default class EditableEntry extends Component {
     const { isSelected } = this.state;
     return (
       <div className={css.container} onDoubleClick={this.select}>
+        <div className={css.date}>
+          {moment(this.props.entry.timeCreated).format('MMMM Do YYYY, h:mm a')}
+          {this.props.entry.timeUpdated ? ` • updated ${moment(this.props.entry.timeUpdated).format('MMMM Do YYYY, h:mm a')}` : null}
+        </div>
         {isSelected ? null : <button className={css.selectButton} onClick={this.select}>edit</button>}
         {isSelected ? this.renderEditEntryForm() : <Entry className={css.entry} {...this.props} />}
       </div>
