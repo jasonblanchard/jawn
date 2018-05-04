@@ -22,8 +22,8 @@ export default class EditableEntry extends Component {
 
   static fragments = {
     entry: gql`
-      fragment EditableEntry on Entry {
-        ...EntryComponent
+      fragment EditableEntry_entry on Entry {
+        ...EntryComponent_entry
       }
       ${Entry.fragments.entry}
     `,

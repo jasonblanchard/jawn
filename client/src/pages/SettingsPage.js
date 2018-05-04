@@ -8,7 +8,7 @@ import TokenUtils from 'src/utils/TokenUtils';
 
 const QUERY = gql`query SettingsPageQuery($userId: ID!){
     user(id: $userId) {
-      ...AuthenticatedPageLayout
+      ...AuthenticatedPageLayout_user
     }
   }
   ${AuthenticatedPageLayout.fragments.user}

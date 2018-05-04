@@ -64,12 +64,12 @@ class EntriesIndexPage extends Component {
   }
 }
 
-const QUERY = gql`query EntriesIndexPage($userId: ID!, $since: String!) {
+const QUERY = gql`query entriesIndexPageQuery($userId: ID!, $since: String!) {
     entries(since: $since) {
-      ...EditableEntry
+      ...EditableEntry_entry
     }
     user(id: $userId) {
-      ...AuthenticatedPageLayout
+      ...AuthenticatedPageLayout_user
     }
   }
   ${EditableEntry.fragments.entry}

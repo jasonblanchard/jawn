@@ -15,7 +15,7 @@ export default class Entry extends Component {
 
   static fragments = {
     entry: gql`
-      fragment EntryComponent on Entry {
+      fragment EntryComponent_entry on Entry {
         id
         text
         timeCreated

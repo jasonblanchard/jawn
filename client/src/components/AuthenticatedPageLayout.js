@@ -16,7 +16,7 @@ export default class AuthenticatedPageLayout extends Component {
 
   static fragments = {
     user: gql`
-      fragment AuthenticatedPageLayout on User {
+      fragment AuthenticatedPageLayout_user on User {
         username
       }
     `,
