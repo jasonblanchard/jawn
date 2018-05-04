@@ -76,6 +76,7 @@ const QUERY = gql`query EntriesIndexPage($userId: ID!, $since: String!) {
   ${AuthenticatedPageLayout.fragments.user}
 `;
 
+// TODO: Consider replacing with bare apollo client and dispatching an action on render instead.
 export default graphql(QUERY, {
   props: ({ data }) => ({
     entries: data.entries,

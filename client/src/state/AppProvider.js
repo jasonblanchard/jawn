@@ -50,7 +50,7 @@ class AppProvider extends Component {
     console.dir(action); // eslint-disable-line no-console
 
     switch (action.type) {
-      case 'CREATE_ENTRY':
+      case 'CREATE_ENTRY': // TODO: Move actions to constants and consider replacing with more event-ey names over command-ey names.
         this.createEntry(action.input);
         break;
       case 'UPDATE_ENTRY':
