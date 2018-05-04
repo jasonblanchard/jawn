@@ -27,6 +27,7 @@ module.exports = {
         "allowChildren": false,
       }],
       "max-len": 0,
+      "object-curly-newline": 0,
       "react/forbid-prop-types": 0,
       "react/jsx-filename-extension": 0,
       "react/no-multi-comp": 0,

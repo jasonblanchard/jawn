@@ -22,6 +22,7 @@ class AppProvider extends Component {
   static childContextTypes = {
     state: PropTypes.object,
     actions: PropTypes.object,
+    dispatch: PropTypes.func,
   }
 
   state = this.props.initialState
@@ -37,6 +38,7 @@ class AppProvider extends Component {
         deleteEntry: this.deleteEntry,
         signUp: this.signUp,
       },
+      dispatch: this.dispatch,
     };
   }
 
@@ -44,9 +46,55 @@ class AppProvider extends Component {
     return this.props.children;
   }
 
+  dispatch = action => {
+    console.dir(action); // eslint-disable-line no-console
+
+    switch (action.type) {
+      case 'CREATE_ENTRY':
+        this.createEntry(action.input);
+        break;
+      case 'UPDATE_ENTRY':
+        this.updateEntry(action.id, action.input);
+        break;
+      case 'DELETE_ENTRY':
+        this.deleteEntry(action.id);
+        break;
+      case 'LOGIN':
+        this.login(action.username, action.password);
+        break;
+      case 'SIGN_UP':
+        this.signUp(action.email, action.username, action.password);
+        break;
+      default:
+    }
+  }
+
   login = (username, password) => (
-    http.post('/api/login')
-      .send({ username, password })
+    this.updateState({
+      didLoginFail: undefined,
+      isLoggingIn: true,
+    })
+      .then(() => {
+        return http.post('/api/login').send({ username, password });
+      })
+      .then(() => {
+        return this.updateState({
+          didLogIn: true,
+          isLoggingIn: false,
+        });
+      })
+      .then(() => {
+        return this.updateState({
+          didLogIn: undefined,
+        });
+      })
+      .catch(() => {
+        this.updateState({
+          didLogIn: undefined,
+          didLogInFail: true,
+          isLoggingIn: undefined,
+        });
+      })
   )
 
   signUp = ({ email, username, password }) => (

@@ -36,10 +36,10 @@ function mapStateToProps(state) {
   };
 }
 
-function mapActionsToProps(actions) {
+function mapDispatchToProps(dispatch) {
   return {
-    createEntry: actions.createEntry,
+    createEntry: input => dispatch({ type: 'CREATE_ENTRY', input }),
   };
 }
 
-export const CreateEntryFormContainer = connectToAppProvider(mapStateToProps, mapActionsToProps)(CreateEntryForm);
+export const CreateEntryFormContainer = connectToAppProvider(mapStateToProps, mapDispatchToProps)(CreateEntryForm);

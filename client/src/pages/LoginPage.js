@@ -9,21 +9,25 @@ import connectToAppProvider from 'src/state/connectToAppProvider';
 
 export default class LoginPage extends PureComponent {
   static propTypes = {
+    didLogIn: PropTypes.bool,
+    didLoginFail: PropTypes.bool,
+    isLoggingIn: PropTypes.bool,
     login: PropTypes.func,
   }
 
-  static defaultProps = {
-    login: () => (Promise.resolve()),
+  state = {
+    errorMessage: undefined,
   }
 
-  state = {
-    didAuthenticated: false,
-    errorMessage: undefined,
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.didLoginFail) {
+      this.setState({ errorMessage: "Didn't work, try again" });
+    }
   }
 
   render() {
     // TODO: Grab redirect path from query param.
-    if (this.state.didAuthenticated) return <Redirect to="/" />;
+    if (this.props.didLogIn) return <Redirect to="/" />;
 
     return (
       <div role="main">
@@ -41,7 +45,7 @@ export default class LoginPage extends PureComponent {
             </label>
             <input id="LoginPage-passwordInput" type="password" ref={c => { this.passwordInput = c; }} />
           </div>
-          <button type="submit">Login</button>
+          <button type="submit" disabled={this.props.isLoggingIn}>Login</button>
         </form>
         <Link to="/sign-up">Sign Up</Link>
       </div>
@@ -50,23 +54,22 @@ export default class LoginPage extends PureComponent {
 
   handleSubmit = event => {
     event.preventDefault();
-    this.props.login(this.usernameInput.value, this.passwordInput.value)
-      .then(() => {
-        this.setState({ didAuthenticated: true, errorMessage: undefined });
-      })
-      .catch(() => {
-        // TODO: Better error handling.
-        this.setState({
-          errorMessage: "Didn't work, try again",
-        });
-      });
+    this.props.login(this.usernameInput.value, this.passwordInput.value);
   }
 }
 
-function mapActionsToProps(actions) {
+function mapStateToProps(state) {
   return {
-    login: actions.login,
+    didLogIn: state.didLogIn,
+    didLoginFail: state.didLogInFail,
+    isLoggingIn: state.isLoggingIn,
   };
 }
 
-export const ConnectedLoginPage = connectToAppProvider(undefined, mapActionsToProps)(LoginPage);
+function mapDispatchToProps(dispatch) {
+  return {
+    login: (username, password) => dispatch({ type: 'LOGIN', username, password }),
+  };
+}
+
+export const ConnectedLoginPage = connectToAppProvider(mapStateToProps, mapDispatchToProps)(LoginPage);

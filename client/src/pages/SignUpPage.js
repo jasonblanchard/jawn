@@ -56,10 +56,10 @@ function mapStateToProps(state) {
   };
 }
 
-function mapActionsToProps(actions) {
+function mapDispatchToProps(dispatch) {
   return {
-    signUp: actions.signUp,
+    signUp: (email, username, password) => dispatch({ type: 'SIGN_UP', email, username, password }),
   };
 }
 
-export const ConnectedSignUpPage = connectToAppProvider(mapStateToProps, mapActionsToProps)(SignUpPage);
+export const ConnectedSignUpPage = connectToAppProvider(mapStateToProps, mapDispatchToProps)(SignUpPage);

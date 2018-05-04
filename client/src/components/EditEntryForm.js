@@ -34,10 +34,10 @@ function mapStateToProps(state) {
   };
 }
 
-function mapActionsToProps(actions) {
+function mapDispatchToProps(dispatch) {
   return {
-    updateEntry: actions.updateEntry,
+    updateEntry: (id, input) => dispatch({ type: 'UPDATE_ENTRY', id, input }),
   };
 }
 
-export const EditEntryFormContainer = connectToAppProvider(mapStateToProps, mapActionsToProps)(EditEntryForm);
+export const EditEntryFormContainer = connectToAppProvider(mapStateToProps, mapDispatchToProps)(EditEntryForm);

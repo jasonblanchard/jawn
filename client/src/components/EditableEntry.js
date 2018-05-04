@@ -114,10 +114,10 @@ function mapStateToProps(state) {
   };
 }
 
-function mapActionsToProps(actions) {
+function mapDispatchToProps(dispatch) {
   return {
-    onClickDeleteEntry: actions.deleteEntry,
+    onClickDeleteEntry: id => dispatch({ type: 'DELETE_ENTRY', id }),
   };
 }
 
-export const EditableEntryContainer = connectToAppProvider(mapStateToProps, mapActionsToProps)(EditableEntry);
+export const EditableEntryContainer = connectToAppProvider(mapStateToProps, mapDispatchToProps)(EditableEntry);
