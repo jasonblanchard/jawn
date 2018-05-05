@@ -1,4 +1,4 @@
-import { graphql } from 'react-apollo';
+import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import moment from 'moment';
 import PropTypes from 'prop-types';
@@ -23,6 +23,18 @@ class EntriesIndexPage extends Component {
     entries: [],
     loading: true,
   }
+
+  static query = gql`query entriesIndexPageQuery($userId: ID!, $since: String!) {
+      entries(since: $since) {
+        ...EditableEntry_entry
+      }
+      user(id: $userId) {
+        ...AuthenticatedPageLayout_user
+      }
+    }
+    ${EditableEntry.fragments.entry}
+    ${AuthenticatedPageLayout.fragments.user}
+  `;
 
   state = {
     isMasked: false, // TODO: Move to action and localStorage or server
@@ -64,27 +76,18 @@ class EntriesIndexPage extends Component {
   }
 }
 
-const QUERY = gql`query entriesIndexPageQuery($userId: ID!, $since: String!) {
-    entries(since: $since) {
-      ...EditableEntry_entry
-    }
-    user(id: $userId) {
-      ...AuthenticatedPageLayout_user
-    }
+export default class ConnectedEntriesIndexPage extends Component {
+  render() {
+    return (
+      <Query query={EntriesIndexPage.query} variables={{ userId: TokenUtils.decodeUserId(TokenUtils.getAccessToken()), since: getCurrentYearStartDate() }}>
+        {({ data, loading }) => (
+          <EntriesIndexPage
+            entries={data.entries}
+            loading={loading}
+            user={data.user}
+          />
+        )}
+      </Query>
+    );
   }
-  ${EditableEntry.fragments.entry}
-  ${AuthenticatedPageLayout.fragments.user}
-`;
-
-// TODO: Consider replacing with bare apollo client and dispatching an action on render instead.
-export default graphql(QUERY, {
-  props: ({ data }) => ({
-    entries: data.entries,
-    loading: data.loading && data.networkStatus === 'loading',
-    user: data.user,
-  }),
-  options: () => ({
-    variables: { userId: TokenUtils.decodeUserId(TokenUtils.getAccessToken()), since: getCurrentYearStartDate() }, // TODO: Is this the right place for the timestamp?
-    fetchPolicy: 'cache-and-network',
-  }),
-})(EntriesIndexPage);
+}
