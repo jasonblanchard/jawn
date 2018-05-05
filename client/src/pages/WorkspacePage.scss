@@ -1,0 +1,27 @@
+:local(.container) {
+  display: grid;
+  grid-template-columns: 15% 85%;
+  height: 100vh;
+}
+
+:local(.nav) {
+  background: #e4e4e4;
+  border-right: 1px solid #b7b7b7;
+}
+
+:local(.navBarLink) {
+  align-items: center;
+  display: flex;
+  min-height: 30px;
+  border-bottom: 1px solid #b7b7b7;
+  color: #4c4c4c;
+
+  &:hover {
+    background: white;
+    text-decoration: none;
+  }
+
+  &.isActive {
+    background: white;
+  }
+}

@@ -4,7 +4,7 @@ import CleanWebpackPlugin from 'clean-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import path from 'path';
-import SassLintPlugin from 'sasslint-webpack-plugin';
+// import SassLintPlugin from 'sasslint-webpack-plugin';
 
 function relativePath(_path) {
   return path.join(__dirname, _path);
@@ -75,9 +75,9 @@ module.exports = () => {
         { from: 'src/styles/fonts', to: 'fonts' },
       ]),
       ifProduction(new CleanWebpackPlugin([relativePath('build/static')])),
-      new SassLintPlugin({
-        glob: 'src/**/*.s?(a|c)ss',
-      }),
+      // new SassLintPlugin({
+      //   glob: 'src/**/*.s?(a|c)ss',
+      // }),
       ifProduction(new MiniCssExtractPlugin({
         filename: '[name].[contenthash:8].css',
       })),
