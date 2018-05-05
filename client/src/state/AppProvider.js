@@ -175,13 +175,15 @@ class AppProvider extends Component {
       isCreatingEntry: true,
     }, () => {
       this.props.createEntry(input)
-        .then(() => {
+        .then(({ data }) => {
           this.setState({
             isCreatingEntry: undefined,
             didCreateEntry: true,
+            didCreateEntryId: data.createEntry.id,
           }, () => {
             this.setState({
               didCreateEntry: undefined,
+              didCreateEntryId: undefined,
             });
           });
         })

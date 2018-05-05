@@ -1,3 +1,4 @@
+import AutosizedTextarea from 'react-autosize-textarea';
 import classNames from 'classnames';
 import isBlank from 'underscore.string/isBlank';
 import PropTypes from 'prop-types';
@@ -38,7 +39,7 @@ export default class EntryForm extends Component {
     const className = classNames(css.container, this.props.className);
     return (
       <form className={className} onSubmit={this.handleSubmit}>
-        <textarea
+        <AutosizedTextarea
           autoFocus={this.props.focusOnMount}
           className={css.textInput}
           id="EntryForm-textInput"

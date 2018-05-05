@@ -7,9 +7,9 @@ import React, { Component } from 'react';
 import moment from 'moment';
 
 import { AutoSaveStatusContainer } from 'src/components/AutoSaveStatus';
-import { CreateEntryFormContainer } from 'src/components/CreateEntryForm';
 import { EditEntryFormContainer } from 'src/components/EditEntryForm';
 import { getCurrentYearStartDate } from 'src/utils/TimeUtils';
+import connectToAppProvider from 'src/state/connectToAppProvider';
 import AuthenticatedPageLayout from 'src/components/AuthenticatedPageLayout';
 import TokenUtils from 'src/utils/TokenUtils';
 
@@ -17,8 +17,11 @@ import css from './WorkspacePage.scss';
 
 class WorkspacePage extends Component {
   static propTypes = {
+    createEntry: PropTypes.func,
+    didCreateEntryId: PropTypes.string,
     entries: PropTypes.array,
     loading: PropTypes.bool,
+    redirect: PropTypes.func,
     selectedEntryId: PropTypes.string,
     user: PropTypes.object,
   }
@@ -41,14 +44,22 @@ class WorkspacePage extends Component {
     ${AuthenticatedPageLayout.fragments.user}
   `;
 
+  componentWillReceiveProps(nextProps) {
+    const { redirect, didCreateEntryId } = nextProps;
+
+    if (didCreateEntryId) {
+      redirect(`/workspace/${didCreateEntryId}`);
+    }
+  }
+
   render() {
-    const { loading, user } = this.props;
+    const { loading, user, createEntry } = this.props;
 
     return (
       <AuthenticatedPageLayout user={user} loading={loading}>
         <div className={css.container}>
           <div className={css.nav}>
-            <Link to="/workspace" className={css.navBarLink}>Create</Link>
+            <button onClick={createEntry}>create new entry</button>
             {this.renderEntries()}
           </div>
           <div className={css.main}>
@@ -60,11 +71,15 @@ class WorkspacePage extends Component {
   }
 
   renderForm() {
-    const { selectedEntryId, entries, loading } = this.props;
+    const { selectedEntryId, entries, loading, createEntry } = this.props;
     if (loading) return <div>Loading...</div>;
 
     if (!selectedEntryId) {
-      return <CreateEntryFormContainer focusOnMount />;
+      return (
+        <div>
+          <button onClick={createEntry}>create new entry</button>
+        </div>
+      );
     }
 
     const entry = this.getEntry(selectedEntryId, entries);
@@ -83,7 +98,7 @@ class WorkspacePage extends Component {
   }
 
   renderEntry(entry) {
-    const preview = entry.text.split('\n')[0];
+    const preview = entry.text.split('\n')[0] || '(untitled)';
 
     return (
       <Link key={entry.id} className={classNames(css.navBarLink, { isActive: entry.id === this.props.selectedEntryId })} to={`/workspace/${entry.id}`}>{preview}</Link>
@@ -115,3 +130,17 @@ export default class ConnectedWorkspacePage extends Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    didCreateEntryId: state.didCreateEntryId,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    createEntry: () => dispatch({ type: 'CREATE_ENTRY' }),
+  };
+}
+
+export const WorkspacePageContainer = connectToAppProvider(mapStateToProps, mapDispatchToProps)(ConnectedWorkspacePage);

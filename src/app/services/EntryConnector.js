@@ -13,7 +13,7 @@ const EntrySchema = new Schema({
 function mapRecordToObject(record) {
   return {
     id: record.id,
-    text: record.text,
+    text: record.text || '',
     timeCreated: record.timeCreated,
     timeUpdated: record.timeUpdated,
     userId: record.userId,
