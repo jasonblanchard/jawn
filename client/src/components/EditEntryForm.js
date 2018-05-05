@@ -8,8 +8,9 @@ import EntryForm from './EntryForm';
 export default class EditEntryForm extends Component {
   static propTypes = {
     entry: PropTypes.object,
-    updateEntry: PropTypes.func.isRequired,
     isUpdatingEntryId: PropTypes.string,
+    onChangeEntry: PropTypes.func,
+    updateEntry: PropTypes.func.isRequired,
   }
 
   render() {
@@ -18,10 +19,14 @@ export default class EditEntryForm extends Component {
         initialValues={{ text: this.props.entry.text }}
         onSubmit={this.handleSubmit}
         isDisabled={this.props.isUpdatingEntryId === this.props.entry.id}
-        onDebouncedChange={this.handleSubmit} // TODO: Should this save a draft? Or overwrite the whole thing?
+        onChange={this.handleChange}
         {...this.props}
       />
     );
+  }
+
+  handleChange = ({ text }) => {
+    this.props.onChangeEntry(this.props.entry.id, { text });
   }
 
   handleSubmit = ({ text }) => {
@@ -38,6 +43,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     updateEntry: (id, input) => dispatch({ type: 'UPDATE_ENTRY', id, input }),
+    onChangeEntry: (id, input) => dispatch({ type: 'DID_CHANGE_EDIT_ENTRY_FORM', id, input }),
   };
 }
 

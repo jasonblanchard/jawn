@@ -8,6 +8,11 @@
 
 :local(.main) {
   grid-area: main;
+  height: 100vh;
+}
+
+:local(.formContainer) {
+  height: 100%;
 }
 
 :local(.nav) {
@@ -39,9 +44,5 @@
     grid-template-areas:
       "main"
       "nav"
-  }
-
-  :local(.main) {
-    height: 100vh;
   }
 }

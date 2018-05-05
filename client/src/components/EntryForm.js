@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import debounce from 'lodash.debounce';
 import isBlank from 'underscore.string/isBlank';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
@@ -15,21 +14,12 @@ export default class EntryForm extends Component {
     initialValues: PropTypes.object,
     isDisabled: PropTypes.bool,
     // onCancel: PropTypes.func,
-    onDebouncedChange: PropTypes.func,
+    onChange: PropTypes.func,
     onSubmit: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
-    onDebouncedChange: () => {},
-  }
-
-  constructor(props) {
-    super(props);
-
-    // TODO: Parameterize timings
-    // TODO: Replace with observable?
-    // TODO: Should this even be here? Consider replacing with an onChange prop and moving this logic up.
-    this.handleDebouncedOnChange = debounce(() => this.props.onDebouncedChange({ text: this.state.text }), 1000, { maxWait: 2000 });
+    onChange: () => {},
   }
 
   state = {
@@ -68,7 +58,11 @@ export default class EntryForm extends Component {
 
   handleChangeTextInput = event => {
     const { name, value } = event.target;
-    this.setState({ [name]: value }, this.handleDebouncedOnChange);
+    this.setState({ [name]: value }, this.handleChange);
+  }
+
+  handleChange = () => {
+    this.props.onChange({ text: this.state.text });
   }
 
   handleSubmit = event => {

@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { graphql, compose } from 'react-apollo';
+import debounce from 'lodash.debounce';
 import gql from 'graphql-tag';
 import http from 'superagent';
 import PropTypes from 'prop-types';
@@ -21,7 +22,6 @@ class AppProvider extends Component {
 
   static childContextTypes = {
     state: PropTypes.object,
-    actions: PropTypes.object,
     dispatch: PropTypes.func,
   }
 
@@ -30,14 +30,6 @@ class AppProvider extends Component {
   getChildContext() {
     return {
       state: this.state,
-      actions: {
-        login: this.login,
-        fetchEntries: this.fetchEntries,
-        updateEntry: this.updateEntry,
-        createEntry: this.createEntry,
-        deleteEntry: this.deleteEntry,
-        signUp: this.signUp,
-      },
       dispatch: this.dispatch,
     };
   }
@@ -65,8 +57,24 @@ class AppProvider extends Component {
       case 'SIGN_UP':
         this.signUp(action.email, action.username, action.password);
         break;
+      case 'DID_CHANGE_EDIT_ENTRY_FORM':
+        this.didChangeEditEntryForm(action.id, action.input);
+        break;
       default:
     }
+  }
+
+  debouncedUpdateEntry = debounce((id, input) => this.updateEntry(id, input), 1000, { maxWait: 2000 })
+
+  didChangeEditEntryForm(id, input) {
+    if (this.state.debouncedUpdatingEntryId === id) {
+      this.debouncedUpdateEntry(id, input);
+      return;
+    }
+    this.updateState({ debouncedUpdatingEntryId: id })
+      .then(() => {
+        this.debouncedUpdateEntry(id, input);
+      });
   }
 
   login = (username, password) => (
@@ -140,6 +148,7 @@ class AppProvider extends Component {
         .then(() => {
           this.setState({
             isUpdatingEntryId: undefined,
+            debouncedUpdatingEntryId: undefined,
           }, () => {
             this.setState({
               didUpdateEntryId: id,
@@ -154,6 +163,7 @@ class AppProvider extends Component {
           this.setState({
             updatingEntryFailedId: id,
             isUpdatingEntryId: undefined,
+            debouncedUpdatingEntryId: undefined,
           });
         });
     });

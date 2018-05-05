@@ -6,6 +6,7 @@ import gql from 'graphql-tag';
 import React, { Component } from 'react';
 import moment from 'moment';
 
+import { AutoSaveStatusContainer } from 'src/components/AutoSaveStatus';
 import { CreateEntryFormContainer } from 'src/components/CreateEntryForm';
 import { EditEntryFormContainer } from 'src/components/EditEntryForm';
 import { getCurrentYearStartDate } from 'src/utils/TimeUtils';
@@ -67,7 +68,12 @@ class WorkspacePage extends Component {
     }
 
     const entry = this.getEntry(selectedEntryId, entries);
-    return <EditEntryFormContainer key={entry.id} focusOnMount onCancel={this.deselect} entry={entry} />;
+    return (
+      <div className={css.formContainer}>
+        <AutoSaveStatusContainer />
+        <EditEntryFormContainer key={entry.id} focusOnMount onCancel={this.deselect} entry={entry} />
+      </div>
+    );
   }
 
   renderEntries() {
