@@ -19,4 +19,10 @@
       background-color: #d4d01f;
     }
   }
+
+  &.didFail {
+    &::before {
+      background-color: #dc3131;
+    }
+  }
 }
