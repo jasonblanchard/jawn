@@ -26,6 +26,7 @@ module.exports = {
         },
         "allowChildren": false,
       }],
+      "jsx-a11y/no-autofocus": 0,
       "max-len": 0,
       "object-curly-newline": 0,
       "react/forbid-prop-types": 0,
