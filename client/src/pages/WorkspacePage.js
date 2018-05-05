@@ -6,8 +6,9 @@ import gql from 'graphql-tag';
 import React, { Component } from 'react';
 import moment from 'moment';
 
-import { getCurrentYearStartDate } from 'src/utils/TimeUtils';
 import { CreateEntryFormContainer } from 'src/components/CreateEntryForm';
+import { EditEntryFormContainer } from 'src/components/EditEntryForm';
+import { getCurrentYearStartDate } from 'src/utils/TimeUtils';
 import AuthenticatedPageLayout from 'src/components/AuthenticatedPageLayout';
 import TokenUtils from 'src/utils/TokenUtils';
 
@@ -58,10 +59,15 @@ class WorkspacePage extends Component {
   }
 
   renderForm() {
-    if (!this.props.selectedEntryId) {
+    const { selectedEntryId, entries, loading } = this.props;
+    if (loading) return <div>Loading...</div>;
+
+    if (!selectedEntryId) {
       return <CreateEntryFormContainer focusOnMount />;
     }
-    return 'edit';
+
+    const entry = this.getEntry(selectedEntryId, entries);
+    return <EditEntryFormContainer key={entry.id} focusOnMount onCancel={this.deselect} entry={entry} />;
   }
 
   renderEntries() {
@@ -80,6 +86,10 @@ class WorkspacePage extends Component {
 
   getEntries(entries) {
     return [...entries].sort((entry1, entry2) => (moment(entry1.timeCreated).isBefore(entry2.timeCreated) ? 1 : -1));
+  }
+
+  getEntry(id, entries) {
+    return entries.find(entry => entry.id === id);
   }
 }
 
