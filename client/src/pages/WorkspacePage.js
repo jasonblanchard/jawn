@@ -59,7 +59,9 @@ class WorkspacePage extends Component {
       <AuthenticatedPageLayout user={user} loading={loading}>
         <div className={css.container}>
           <div className={css.nav}>
-            <button onClick={createEntry}>create new entry</button>
+            <div className={css.navCreateButtonContainer}>
+              <button onClick={createEntry}>create new entry</button>
+            </div>
             {this.renderEntries()}
           </div>
           <div className={css.main}>
@@ -85,7 +87,7 @@ class WorkspacePage extends Component {
     const entry = this.getEntry(selectedEntryId, entries);
     return (
       <div className={css.formContainer}>
-        <AutoSaveStatusContainer />
+        <AutoSaveStatusContainer timeCreated={entry.timeCreated} timeUpdated={entry.timeUpdated} />
         <EditEntryFormContainer key={entry.id} focusOnMount onCancel={this.deselect} entry={entry} />
       </div>
     );

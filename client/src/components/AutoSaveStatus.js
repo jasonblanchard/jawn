@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
@@ -10,14 +11,22 @@ export default class AutoSaveStatus extends Component {
   static propTypes = {
     didFail: PropTypes.bool,
     isSaving: PropTypes.bool,
+    timeCreated: PropTypes.string,
+    timeUpdated: PropTypes.string,
   }
 
   render() {
-    const { isSaving, didFail } = this.props;
+    const { isSaving, didFail, timeCreated, timeUpdated } = this.props;
 
     return (
-      <div className={classNames(css.container, { isSaving, didFail })}>
-        {this.getText()}
+      <div className={css.container}>
+        <span>
+          {moment(timeCreated).format('MMMM Do YYYY, h:mm a')}
+          {timeUpdated ? ` • ${moment(timeUpdated).format('MMMM Do YYYY, h:mm a')}` : null}
+        </span>
+        <span className={classNames(css.saveStatus, { isSaving, didFail })}>
+          {this.getText()}
+        </span>
       </div>
     );
   }

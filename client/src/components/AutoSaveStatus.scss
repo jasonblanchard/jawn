@@ -1,8 +1,13 @@
 :local(.container) {
   align-items: center;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   height: 20px;
+}
+
+:local(.saveStatus) {
+  align-items: center;
+  display: flex;
 
   &::before {
     background-color: #30dc37;
