@@ -18,6 +18,7 @@ export default class EditEntryForm extends Component {
         initialValues={{ text: this.props.entry.text }}
         onSubmit={this.handleSubmit}
         isDisabled={this.props.isUpdatingEntryId === this.props.entry.id}
+        onDebouncedChange={this.handleSubmit} // TODO: Should this save a draft? Or overwrite the whole thing?
         {...this.props}
       />
     );
