@@ -1,13 +1,12 @@
 :local(.container) {
   display: flex;
   flex-direction: column;
-  height: 90%;
+  height: 100%;
 }
 
 :local(.textInput) {
   flex: 1;
   resize: vertical;
-  width: 100%;
 }
 
 :local(.footer) {

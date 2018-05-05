@@ -2,11 +2,18 @@
   display: grid;
   grid-template-columns: 15% 85%;
   height: 100vh;
+  grid-template-areas:
+    "nav main"
+}
+
+:local(.main) {
+  grid-area: main;
 }
 
 :local(.nav) {
   background: #e4e4e4;
   border-right: 1px solid #b7b7b7;
+  grid-area: nav;
 }
 
 :local(.navBarLink) {
@@ -23,5 +30,18 @@
 
   &.isActive {
     background: white;
+  }
+}
+
+@media (max-width: 768px) {
+  :local(.container) {
+    grid-template-columns: 100%;
+    grid-template-areas:
+      "main"
+      "nav"
+  }
+
+  :local(.main) {
+    height: 100vh;
   }
 }
