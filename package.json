@@ -30,7 +30,8 @@
     "mongoose": "^5.0.17",
     "morgan": "^1.8.1",
     "serve-favicon": "^2.5.0",
-    "wait-on": "^2.1.0"
+    "wait-on": "^2.1.0",
+    "webpack-cli": "^2.1.2"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
@@ -48,12 +49,13 @@
     "nodemon": "^1.17.3",
     "transform-runtime": "0.0.0",
     "uglify-es": "^3.3.10",
-    "webpack": "^3.11.0",
+    "webpack": "^4.7.0",
+    "webpack-config-utils": "^2.3.0",
     "webpack-node-externals": "^1.7.2"
   },
   "scripts": {
     "build-all": "cd ./client && npm run build && cd .. && npm run build",
-    "build-all-production": "cd ./client && npm run build -- --env.production && cd .. && npm run build -- --env.production",
+    "build-all-production": "cd ./client && npm run build --production && cd .. && npm run build --production",
     "build": "webpack",
     "lint": "eslint src/",
     "watch-all": "rm -f client/build/static/assets.json && concurrently --names \"client,server,node\" --prefix-colors \"green,cyan,yellow\" \"cd client && npm run watch\" \"npm run build -- --watch\" \"wait-on client/build/static/assets.json && nodemon --watch build build/server.js\"",

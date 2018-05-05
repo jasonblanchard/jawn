@@ -2,34 +2,17 @@ import { getIfUtils, removeEmpty } from 'webpack-config-utils';
 import AssetsPlugin from 'assets-webpack-plugin';
 import CleanWebpackPlugin from 'clean-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import path from 'path';
 import SassLintPlugin from 'sasslint-webpack-plugin';
-import UglifyJsPlugin from 'uglifyjs-webpack-plugin';
 
 function relativePath(_path) {
   return path.join(__dirname, _path);
 }
 
-const styleLoader = { loader: 'style-loader' };
-
-const cssLoader = {
-  loader: 'css-loader',
-  options: {
-    sourceMap: true,
-    localIdentName: '[name]-[local]--[hash:base64:5]',
-  },
-};
-
-const sassLoader = {
-  loader: 'sass-loader',
-  options: {
-    sourceMap: true,
-  },
-};
-
-module.exports = (env = {}) => {
-  const { ifProduction, ifNotProduction } = getIfUtils(env);
+module.exports = () => {
+  const { ifProduction, ifNotProduction } = getIfUtils(process.env.NODE_ENV || 'development');
+  console.log(`\n>>> Building client in mode ${ifProduction('production', 'development')} <<<\n`); // eslint-disable-line no-console
 
   return {
     entry: './src/index.js',
@@ -63,15 +46,21 @@ module.exports = (env = {}) => {
         {
           test: /\.(css|scss)$/,
           include: relativePath('src'),
-          use: ifProduction(ExtractTextPlugin.extract({
-            use: [
-              cssLoader,
-              sassLoader,
-            ],
-          }), [
-            styleLoader,
-            cssLoader,
-            sassLoader,
+          use: removeEmpty([
+            ifProduction(MiniCssExtractPlugin.loader, 'style-loader'),
+            {
+              loader: 'css-loader',
+              options: {
+                sourceMap: true,
+                localIdentName: '[name]-[local]--[hash:base64:5]',
+              },
+            },
+            {
+              loader: 'sass-loader',
+              options: {
+                sourceMap: true,
+              },
+            },
           ]),
         },
       ],
@@ -88,8 +77,9 @@ module.exports = (env = {}) => {
       new SassLintPlugin({
         glob: 'src/**/*.s?(a|c)ss',
       }),
-      ifProduction(new UglifyJsPlugin()),
-      ifProduction(new ExtractTextPlugin('styles.css')),
+      ifProduction(new MiniCssExtractPlugin({
+        filename: '[name].[contenthash:8].css',
+      })),
     ]),
   };
 };
