@@ -25,8 +25,9 @@ export default class AuthenticatedPageLayout extends Component {
   render() {
     const children = Children.toArray(this.props.children);
     const [firstChild, ...restChildren] = children;
+    const isMasked = false;
     return (
-      <div className={classNames(this.props.className)}>
+      <div className={classNames(this.props.className, css.container, { isMasked })}>
         <header className={css.header}>
           <h1 className={css.siteName}><Link to="/">jawn</Link></h1>
           {restChildren.length > 0 ? firstChild : null}
