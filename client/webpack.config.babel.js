@@ -15,6 +15,7 @@ module.exports = () => {
   console.log(`\n>>> Building client in mode ${ifProduction('production', 'development')} <<<\n`); // eslint-disable-line no-console
 
   return {
+    mode: ifProduction('production', 'development'),
     entry: './src/index.js',
     output: {
       path: relativePath('build/static'),
@@ -73,7 +74,7 @@ module.exports = () => {
       new CopyWebpackPlugin([
         { from: 'src/styles/fonts', to: 'fonts' },
       ]),
-      new CleanWebpackPlugin([relativePath('build/static')]),
+      ifProduction(new CleanWebpackPlugin([relativePath('build/static')])),
       new SassLintPlugin({
         glob: 'src/**/*.s?(a|c)ss',
       }),
