@@ -11,6 +11,7 @@ import { getCurrentYearStartDate } from 'src/utils/TimeUtils';
 import AuthenticatedPageLayout from 'src/components/AuthenticatedPageLayout';
 import AutoSaveStatus, { AutoSaveStatusConnector } from 'src/components/AutoSaveStatus';
 import connectToAppProvider from 'src/state/connectToAppProvider';
+import DeleteEntryPanel, { DeleteEntryPanelConnector } from 'src/components/DeleteEntryPanel';
 import EditEntryForm, { EditEntryFormConnector } from 'src/components/EditEntryForm';
 import TokenUtils from 'src/utils/TokenUtils';
 
@@ -20,6 +21,7 @@ class WorkspacePage extends Component {
   static propTypes = {
     createEntry: PropTypes.func,
     didCreateEntryId: PropTypes.string,
+    didDeleteEntry: PropTypes.bool,
     entries: PropTypes.array,
     loading: PropTypes.bool,
     redirect: PropTypes.func,
@@ -46,10 +48,14 @@ class WorkspacePage extends Component {
   `;
 
   componentWillReceiveProps(nextProps) {
-    const { redirect, didCreateEntryId } = nextProps;
+    const { redirect } = this.props;
 
-    if (didCreateEntryId) {
-      redirect(`/workspace/${didCreateEntryId}`);
+    if (!this.props.didCreateEntryId && nextProps.didCreateEntryId) {
+      redirect(`/workspace/${nextProps.didCreateEntryId}`);
+    }
+
+    if (!this.props.didDeleteEntry && nextProps.didDeleteEntry) {
+      redirect('/workspace');
     }
   }
 
@@ -88,6 +94,8 @@ class WorkspacePage extends Component {
     }
 
     const entry = this.getEntry(selectedEntryId, entries);
+    if (!entry) return undefined;
+
     return (
       <div className={css.formContainer}>
         <AutoSaveStatusConnector>
@@ -97,7 +105,13 @@ class WorkspacePage extends Component {
         </AutoSaveStatusConnector>
         <EditEntryFormConnector>
           {(connectorProps) => (
-            <EditEntryForm key={entry.id} focusOnMount onCancel={this.deselect} entry={entry} {...connectorProps} />
+            <EditEntryForm key={entry.id} focusOnMount onCancel={this.deselect} entry={entry} {...connectorProps}>
+              <DeleteEntryPanelConnector>
+                {({ deleteEntry }) => (
+                  <DeleteEntryPanel entryId={entry.id} handleClickConfirm={deleteEntry} />
+                )}
+              </DeleteEntryPanelConnector>
+            </EditEntryForm>
           )}
         </EditEntryFormConnector>
       </div>
@@ -159,6 +173,7 @@ export default class ConnectedWorkspacePage extends Component {
 function mapStateToProps(state) {
   return {
     didCreateEntryId: state.didCreateEntryId,
+    didDeleteEntry: state.didDeleteEntry,
   };
 }
 

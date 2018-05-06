@@ -197,21 +197,30 @@ class AppProvider extends Component {
   }
 
   deleteEntry = entryId => {
-    this.setState({
+    this.updateState({
+      didDeleteEntryFail: undefined,
       isDeletingEntryId: entryId,
-    }, () => {
-      return this.props.deleteEntry(entryId)
-        .then(() => {
-          this.setState({
-            isDeletingEntryId: undefined,
-          });
-        })
-        .catch(() => {
-          this.setState({
-            isDeletingEntryId: undefined,
-          });
+    })
+      .then(() => {
+        return this.props.deleteEntry(entryId);
+      })
+      .then(() => {
+        return this.updateState({
+          didDeleteEntry: true,
+          isDeletingEntryId: undefined,
         });
-    });
+      })
+      .then(() => {
+        return this.updateState({
+          didDeleteEntry: undefined,
+        });
+      })
+      .catch(() => {
+        this.setState({
+          didDeleteEntryFail: true,
+          isDeletingEntryId: undefined,
+        });
+      });
   }
 }
 
