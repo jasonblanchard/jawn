@@ -1,3 +1,4 @@
+import { HotKeys } from 'react-hotkeys';
 import { Link } from 'react-router-dom';
 import { Query } from 'react-apollo';
 import classNames from 'classnames';
@@ -57,17 +58,19 @@ class WorkspacePage extends Component {
 
     return (
       <AuthenticatedPageLayout user={user} loading={loading}>
-        <div className={css.container}>
-          <div className={css.nav}>
-            <div className={css.navCreateButtonContainer}>
-              <button onClick={createEntry}>create new entry</button>
+        <HotKeys keyMap={this.getHotKeyMap()} handlers={this.getHotKeyHandlers()}>
+          <div className={css.container}>
+            <div className={css.nav}>
+              <div className={css.navCreateButtonContainer}>
+                <button onClick={createEntry}>create new entry</button>
+              </div>
+              {this.renderEntries()}
             </div>
-            {this.renderEntries()}
+            <div className={css.main}>
+              {this.renderForm()}
+            </div>
           </div>
-          <div className={css.main}>
-            {this.renderForm()}
-          </div>
-        </div>
+        </HotKeys>
       </AuthenticatedPageLayout>
     );
   }
@@ -121,6 +124,18 @@ class WorkspacePage extends Component {
 
   getEntry(id, entries) {
     return entries.find(entry => entry.id === id);
+  }
+
+  getHotKeyMap() {
+    return {
+      createEntry: 'shift+option+meta+n',
+    };
+  }
+
+  getHotKeyHandlers() {
+    return {
+      createEntry: this.props.createEntry,
+    };
   }
 }
 
