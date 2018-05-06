@@ -6,11 +6,11 @@ import gql from 'graphql-tag';
 import React, { Component } from 'react';
 import moment from 'moment';
 
-import { AutoSaveStatusContainer } from 'src/components/AutoSaveStatus';
-import { EditEntryFormContainer } from 'src/components/EditEntryForm';
 import { getCurrentYearStartDate } from 'src/utils/TimeUtils';
-import connectToAppProvider from 'src/state/connectToAppProvider';
 import AuthenticatedPageLayout from 'src/components/AuthenticatedPageLayout';
+import AutoSaveStatus, { AutoSaveStatusConnector } from 'src/components/AutoSaveStatus';
+import connectToAppProvider from 'src/state/connectToAppProvider';
+import EditEntryForm, { EditEntryFormConnector } from 'src/components/EditEntryForm';
 import TokenUtils from 'src/utils/TokenUtils';
 
 import css from './WorkspacePage.scss';
@@ -87,8 +87,16 @@ class WorkspacePage extends Component {
     const entry = this.getEntry(selectedEntryId, entries);
     return (
       <div className={css.formContainer}>
-        <AutoSaveStatusContainer timeCreated={entry.timeCreated} timeUpdated={entry.timeUpdated} />
-        <EditEntryFormContainer key={entry.id} focusOnMount onCancel={this.deselect} entry={entry} />
+        <AutoSaveStatusConnector>
+          {({ isSaving, didFail }) => (
+            <AutoSaveStatus timeCreated={entry.timeCreated} timeUpdated={entry.timeUpdated} isSaving={isSaving} didFail={didFail} />
+          )}
+        </AutoSaveStatusConnector>
+        <EditEntryFormConnector>
+          {(connectorProps) => (
+            <EditEntryForm key={entry.id} focusOnMount onCancel={this.deselect} entry={entry} {...connectorProps} />
+          )}
+        </EditEntryFormConnector>
       </div>
     );
   }

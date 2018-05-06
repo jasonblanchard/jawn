@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import connectToAppProvider from 'src/state/connectToAppProvider';
+import Connector from 'src/state/Connector';
 
 import css from './AutoSaveStatus.scss';
 
@@ -46,4 +47,4 @@ function mapStateToProps(state) {
   };
 }
 
-export const AutoSaveStatusContainer = connectToAppProvider(mapStateToProps)(AutoSaveStatus);
+export const AutoSaveStatusConnector = connectToAppProvider(mapStateToProps)(Connector);

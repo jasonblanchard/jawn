@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import connectToAppProvider from 'src/state/connectToAppProvider';
+import Connector from 'src/state/Connector';
 
 import EntryForm from './EntryForm';
 
@@ -10,7 +11,12 @@ export default class EditEntryForm extends Component {
     entry: PropTypes.object,
     isUpdatingEntryId: PropTypes.string,
     onChangeEntry: PropTypes.func,
-    updateEntry: PropTypes.func.isRequired,
+    updateEntry: PropTypes.func,
+  }
+
+  static defaultProps = {
+    onChangeEntry: () => {},
+    updateEntry: () => {},
   }
 
   render() {
@@ -47,4 +53,6 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export const EditEntryFormContainer = connectToAppProvider(mapStateToProps, mapDispatchToProps)(EditEntryForm);
+export const EditEntryFormContainer = connectToAppProvider(mapStateToProps, mapDispatchToProps)(EditEntryForm); // TODO Deprecate
+
+export const EditEntryFormConnector = connectToAppProvider(mapStateToProps, mapDispatchToProps)(Connector);
