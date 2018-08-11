@@ -6,19 +6,19 @@ const isModifiedEvent = event => !!(event.metaKey || event.altKey || event.ctrlK
 export default class Link extends Component {
   static propTypes = {
     children: PropTypes.node,
-    handleClick: PropTypes.func,
+    onClick: PropTypes.func,
     href: PropTypes.string.isRequired,
     target: PropTypes.string,
   }
 
   static defaultProps = {
-    handleClick: () => {},
+    onClick: () => {},
   }
 
   render() {
-    const { handleClick, href, children, ...rest } = this.props;
+    const { onClick, href, children, ...rest } = this.props;
     return (
-      <a href={href} onClick={this.handleClick} {...rest}>{children}</a>
+      <a href={href} {...rest} onClick={this.handleClick}>{children}</a>
     );
   }
 
@@ -29,7 +29,7 @@ export default class Link extends Component {
       !isModifiedEvent(event) // ignore clicks with modifier keys
     ) {
       event.preventDefault();
-      this.props.handleClick(this.props.href);
+      this.props.onClick(this.props.href);
     }
   }
 }
