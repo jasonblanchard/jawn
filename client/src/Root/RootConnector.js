@@ -4,7 +4,7 @@ import getInState from 'state/selectors/getInState';
 
 function mapStateToProps(state) {
   return {
-    routeId: getInState(state, 'location.routeId'),
+    routeId: getInState(state, 'routeId'),
   };
 }
 
