@@ -8,6 +8,8 @@ export default class Connector extends Component {
 
   render() {
     const { children, ...rest } = this.props;
-    return this.props.children(rest);
+    return (
+      children(rest)
+    );
   }
 }

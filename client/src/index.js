@@ -1,8 +1,24 @@
+import { Provider } from 'react-redux';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import App from './App';
+import Root from 'Root';
+import RootConnector from 'Root/RootConnector';
+import bootstrapStore from './state/bootstrapStore';
 
-const initialState = {};
+const store = bootstrapStore({
+  location: {
+    routeId: 'workspace',
+  },
+});
 
-ReactDOM.render(<App initialState={initialState} />, document.getElementById('app'));
+ReactDOM.render(
+  <Provider store={store}>
+    <RootConnector>
+      {stateProps => (
+        <Root {...stateProps} />
+      )}
+    </RootConnector>
+  </Provider>,
+  document.getElementById('app'),
+);
