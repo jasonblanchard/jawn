@@ -16,20 +16,13 @@ export default function(state, action) {
     case 'LOGIN_SUCCEEDED':
       return loop(
         { ...state, loginStarted: undefined, loginSucceeded: true },
-        Cmd.action({ type: 'LOGIN_CLEANUP' }),
+        Cmd.action({ type: 'CHANGE_LOCATION', path: '/workspace' }),
       );
     case 'LOGIN_FAILED':
       return {
         ...state,
         loginFailed: true,
         loginStarted: undefined,
-      };
-    case 'LOGIN_CLEANUP':
-      return {
-        ...state,
-        loginFailed: undefined,
-        loginStarted: undefined,
-        loginSucceeded: undefined,
       };
     default:
       return state;
