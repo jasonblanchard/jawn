@@ -1,10 +1,10 @@
 import { createStore, compose } from 'redux';
-import { install, reduceReducers } from 'redux-loop';
+import { install as installReduxLoop, reduceReducers } from 'redux-loop';
 import reducers from 'state/reducers';
 
 /* eslint-disable no-underscore-dangle */
 const enhancer = compose(
-  install(),
+  installReduxLoop(),
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
 );
 
