@@ -34,6 +34,7 @@
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "redux": "^4.0.0",
+    "redux-form": "^7.4.2",
     "redux-loop": "^4.3.3",
     "superagent": "^3.8.3",
     "underscore.string": "^3.3.4"

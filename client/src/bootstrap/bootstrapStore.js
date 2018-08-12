@@ -1,5 +1,7 @@
 import { createStore, compose } from 'redux';
-import { install as installReduxLoop, reduceReducers } from 'redux-loop';
+import { install as installReduxLoop, reduceReducers, combineReducers } from 'redux-loop';
+import { reducer as formReducer } from 'redux-form';
+
 import reducers from 'state/reducers';
 
 /* eslint-disable no-underscore-dangle */
@@ -10,7 +12,9 @@ const enhancer = compose(
 
 export default function bootstrapStore(registry) {
   function reducer(state, action) {
-    return reduceReducers(...reducers)(state, action, registry);
+    // TODO: Better way to compose these?
+    const newState = combineReducers({ form: formReducer })(state, action);
+    return reduceReducers(...reducers)(newState, action, registry);
   }
 
   return createStore(

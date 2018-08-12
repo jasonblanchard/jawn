@@ -17,7 +17,7 @@ export default class BasePageLayout extends Component {
           <LinkConnector>
             {({ handleClick }) => (
               <nav>
-                <Link onClick={handleClick} href="/workspace">Workspace</Link> | <Link onClick={handleClick} href="/about">About</Link>
+                <Link onClick={handleClick} href="/workspace">Workspace</Link> | <Link onClick={handleClick} href="/about">About</Link> | <Link onClick={handleClick} href="/login">Login</Link>
               </nav>
             )}
           </LinkConnector>
