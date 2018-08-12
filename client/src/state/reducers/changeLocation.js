@@ -1,8 +1,6 @@
 import { loop, Cmd } from 'redux-loop';
 
-function updateLocation(method, path, registry) {
-  registry.history[method](path);
-}
+import updateLocation from 'state/effects/updateLocation';
 
 export default function(state, action, registry) {
   switch (action.type) {
