@@ -7,6 +7,7 @@ export default {
   workspace: {
     key: 'home',
     matches: path => Boolean(path.match(/^\/workspace$/)),
+    onEnterAction: { type: 'LOAD_WORKSPACE_PAGE' },
     render: () => {
       return <WorkspacePage />;
     },

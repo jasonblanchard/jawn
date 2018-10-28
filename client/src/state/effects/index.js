@@ -1,4 +1,5 @@
 import http from 'superagent';
+import routes from 'config/routes';
 
 export default {
   changeLocation: (context, args) => {
@@ -17,5 +18,10 @@ export default {
         const { body: responseBody, status, headers } = error.response;
         dispatch({ ...onFailureAction, ...{ body: responseBody, status, headers } });
       });
+  },
+  dispatchPageOnEnter: (context, args, dispatch) => {
+    const { coeffects: { routeId } } = context;
+    const route = routes[routeId];
+    if (route && route.onEnterAction) dispatch(route.onEnterAction);
   },
 };
