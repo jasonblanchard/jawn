@@ -5,6 +5,8 @@ import reduceReducers from 'reduce-reducers';
 
 import reducers from 'state/reducers';
 import effectHandlers from 'state/effects';
+import coeffectHandlers from 'state/coeffects';
+import interceptors from 'state/interceptors';
 
 /* eslint-disable no-underscore-dangle */
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -23,8 +25,10 @@ export default function bootstrapStore(registry) {
     reducer,
     {},
     composeEnhancers(applyMiddleware(reduxFrame({
+      interceptors,
       effectHandlers,
       coeffectHandlers: {
+        ...coeffectHandlers,
         registry: registryCoeffectHandler,
       },
     }))),

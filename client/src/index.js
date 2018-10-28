@@ -1,3 +1,4 @@
+import { frame } from 'redux-frame';
 import { Provider } from 'react-redux';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -7,9 +8,19 @@ import Root from 'Root';
 import RootConnector from 'Root/RootConnector';
 
 const registry = bootstrap();
-const { store, history } = registry;
+const { store } = registry;
 
-store.dispatch({ type: 'RESOLVE_LOCATION', location: history.location });
+store.dispatch({
+  type: frame('RESOLVE_LOCATION'),
+  interceptors: [
+    ['effect', { effectId: 'debug' }],
+    ['injectCoeffects', { coeffectId: 'registry' }],
+    ['injectCoeffects', { coeffectId: 'location' }],
+    'locationToRouteId',
+    ['path', { from: 'routeId', to: 'action.routeId' }],
+    ['effect', { effectId: 'dispatch' }],
+  ],
+});
 
 ReactDOM.render(
   <Provider store={store}>
