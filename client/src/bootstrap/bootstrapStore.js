@@ -1,25 +1,32 @@
-import { createStore, compose } from 'redux';
-import { install as installReduxLoop, reduceReducers, combineReducers } from 'redux-loop';
+import { createStore, compose, applyMiddleware } from 'redux';
 import { reducer as formReducer } from 'redux-form';
+import { reduxFrame } from 'redux-frame';
+import reduceReducers from 'reduce-reducers';
 
 import reducers from 'state/reducers';
+import effectHandlers from 'state/effects';
 
 /* eslint-disable no-underscore-dangle */
-const enhancer = compose(
-  installReduxLoop(),
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-);
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 export default function bootstrapStore(registry) {
   function reducer(state, action) {
-    // TODO: Better way to compose these?
-    const newState = combineReducers({ form: formReducer })(state, action);
-    return reduceReducers(...reducers)(newState, action, registry);
+    return {
+      ...reduceReducers(...reducers)(state, action),
+      form: formReducer(state.form, action),
+    };
   }
+
+  const registryCoeffectHandler = () => registry;
 
   return createStore(
     reducer,
     {},
-    enhancer,
+    composeEnhancers(applyMiddleware(reduxFrame({
+      effectHandlers,
+      coeffectHandlers: {
+        registry: registryCoeffectHandler,
+      },
+    }))),
   );
 }
