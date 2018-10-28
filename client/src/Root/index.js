@@ -9,6 +9,6 @@ export default class Root extends Component {
 
   render() {
     const route = routes[this.props.routeId];
-    return route ? route.render() : <div>The Root</div>;
+    return route ? route.render() : <div>404: Route not Found</div>;
   }
 }
