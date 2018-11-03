@@ -7,18 +7,20 @@ export default {
     const { method, path } = args;
     registry.history[method || 'push'](path);
   },
+
   http: (context, args, dispatch) => {
     const { method, path, body, onSuccessAction, onFailureAction } = args;
-    http[method](path).send(body)
+    http[method](path).set('Authorization', `Bearer ${context.coeffects.accessToken}`).send(body)
       .then(response => {
         const { body: responseBody, status, headers } = response;
         dispatch({ ...onSuccessAction, ...{ body: responseBody, status, headers } });
       })
       .catch(error => {
-        const { body: responseBody, status, headers } = error.response;
-        dispatch({ ...onFailureAction, ...{ body: responseBody, status, headers } });
+        console.error(error); // eslint-disable-line no-console
+        dispatch({ ...onFailureAction, ...{ error: error.message, response: error.response } });
       });
   },
+
   dispatchPageOnEnter: (context, args, dispatch) => {
     const { coeffects: { routeId } } = context;
     const route = routes[routeId];
