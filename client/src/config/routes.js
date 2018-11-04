@@ -48,7 +48,8 @@ export default {
               interceptors: [
                 ['effect', { effectId: 'debug' }],
                 'normalizeBody',
-                ['path', { from: 'normalizedBody', to: 'action.entities' }],
+                ['path', { from: 'normalizedBody.entities', to: 'action.entities' }],
+                ['path', { from: 'normalizedBody.results', to: 'action.entityIds' }],
                 ['effect', { effectId: 'dispatch' }],
               ],
             },

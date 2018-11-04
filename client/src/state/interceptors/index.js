@@ -21,11 +21,10 @@ export default {
       const { body: { data } } = action;
       const normalizedBody = Object.keys(data).reduce((allEntities, key) => {
         const schema = schemas[key];
-        // TODO: Return results, too?
-        const { entities } = normalize(data[key], schema);
+        const { entities, result } = normalize(data[key], schema);
         // TODO: Deep merge?
-        return { ...allEntities, ...entities };
-      }, {});
+        return { entities: { ...allEntities.entities, ...entities }, results: { ...allEntities.results, ...{ [key]: result } } };
+      }, { entities: {}, results: {} });
       return mergeWithCoeffects(context, { normalizedBody });
     },
   },
