@@ -9,4 +9,8 @@ export default {
   accessToken: () => {
     return TokenUtils.getAccessToken();
   },
+
+  currentUserId: () => {
+    return TokenUtils.decodeUserId(TokenUtils.getAccessToken());
+  },
 };

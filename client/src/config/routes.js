@@ -5,25 +5,6 @@ import AboutPage from 'pages/AboutPage';
 import LoginPage from 'pages/LoginPage';
 import WorkspacePage from 'pages/WorkspacePage';
 
-// TODO: Move this somewhere
-const query = `query workspacePageQuery($userId: ID!, $since: String!) {
-  entries(since: $since) {
-    id
-    text
-    timeCreated
-    timeUpdated
-  }
-  user(id: $userId) {
-    username
-    id
-  }
-}`;
-
-const variables = {
-  since: '2018-01-01T05:00:00.000Z',
-  userId: '5a5ff714d9f377f85efd0f5a',
-};
-
 export default {
   workspace: {
     key: 'home',
@@ -34,15 +15,13 @@ export default {
         ['effect', { effectId: 'debug' }],
         ['effect', { effectId: 'dispatch' }],
         ['injectCoeffects', { coeffectId: 'accessToken' }],
+        ['graphqalVariables', { since: '2018-01-01T05:00:00.000Z' }],
+        ['injectCoeffects', { coeffectId: 'currentUserId' }],
+        ['path', { from: 'currentUserId', to: 'graphqalVariables.userId' }],
         ['effect', {
-          effectId: 'http',
+          effectId: 'graphql',
           args: {
-            method: 'post',
-            path: '/api/graphql',
-            body: {
-              query,
-              variables,
-            },
+            query: WorkspacePage.query,
             onSuccessAction: {
               type: frame('LOAD_WORKSPACE_PAGE_COMPLETE'),
               interceptors: [

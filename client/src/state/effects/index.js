@@ -21,6 +21,20 @@ export default {
       });
   },
 
+  graphql: (context, args, dispatch) => {
+    const { query, onSuccessAction, onFailureAction } = args;
+    const { coeffects: { graphqalVariables: variables } } = context;
+    http.post('/api/graphql').set('Authorization', `Bearer ${context.coeffects.accessToken}`).send({ query, variables })
+      .then(response => {
+        const { body: responseBody, status, headers } = response;
+        dispatch({ ...onSuccessAction, ...{ body: responseBody, status, headers } });
+      })
+      .catch(error => {
+        console.error(error); // eslint-disable-line no-console
+        dispatch({ ...onFailureAction, ...{ error: error.message, response: error.response } });
+      });
+  },
+
   dispatchPageOnEnter: (context, args, dispatch) => {
     const { coeffects: { routeId } } = context;
     const route = routes[routeId];

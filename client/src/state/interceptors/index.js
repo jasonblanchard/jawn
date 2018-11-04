@@ -28,4 +28,11 @@ export default {
       return mergeWithCoeffects(context, { normalizedBody });
     },
   },
+
+  graphqalVariables: variables => {
+    return {
+      id: 'graphqalVariables',
+      before: context => mergeWithCoeffects(context, { graphqalVariables: variables }),
+    };
+  },
 };
