@@ -1,5 +1,14 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import styled from 'styled-components';
+
+const Anchor = styled.a`
+  color: inherit;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
 
 const isModifiedEvent = event => !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
 
@@ -18,7 +27,7 @@ export default class Link extends Component {
   render() {
     const { onClick, href, children, ...rest } = this.props;
     return (
-      <a href={href} {...rest} onClick={this.handleClick}>{children}</a>
+      <Anchor href={href} {...rest} onClick={this.handleClick}>{children}</Anchor>
     );
   }
 
