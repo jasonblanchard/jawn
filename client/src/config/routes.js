@@ -33,7 +33,11 @@ export default {
               ],
             },
             onFailureAction: {
-              type: 'LOAD_WORKSPACE_PAGE_FAILED',
+              type: frame('LOAD_WORKSPACE_PAGE_FAILED'),
+              interceptors: [
+                ['injectCoeffects', { coeffectId: 'registry' }],
+                ['effect', { effectId: 'changeLocation', args: { path: '/login' } }],
+              ],
             },
           },
         }],
@@ -69,7 +73,11 @@ export default {
               ],
             },
             onFailureAction: {
-              type: 'LOAD_SETTINGS_PAGE_FAILED',
+              type: frame('LOAD_SETTINGS_PAGE_FAILED'),
+              interceptors: [
+                ['injectCoeffects', { coeffectId: 'registry' }],
+                ['effect', { effectId: 'changeLocation', args: { path: '/login' } }],
+              ],
             },
           },
         }],

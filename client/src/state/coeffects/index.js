@@ -11,6 +11,8 @@ export default {
   },
 
   currentUserId: () => {
-    return TokenUtils.decodeUserId(TokenUtils.getAccessToken());
+    const accessToken = TokenUtils.getAccessToken();
+    if (!accessToken) return undefined;
+    return TokenUtils.decodeUserId(accessToken);
   },
 };
