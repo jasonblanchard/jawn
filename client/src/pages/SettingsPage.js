@@ -1,18 +1,11 @@
-import React, { Component } from 'react';
 import gql from 'graphql-tag';
+import React, { Component } from 'react';
 
 import AuthenticatedPageLayout from 'layouts/AuthenticatedPageLayout';
 import AuthenticatedPageLayoutConnector from 'layouts/AuthenticatedPageLayout/connector';
-import EntriesConnector from './EntriesConnector';
 
-export default class WorkspacePage extends Component {
-  static query = gql`query workspacePageQuery($userId: ID!, $since: String!) {
-      entries(since: $since) {
-        id
-        text
-        timeCreated
-        timeUpdated
-      }
+export default class SettingsPage extends Component {
+  static query = gql`query settingsPageQuery($userId: ID!) {
       user(id: $userId) {
         id
         ...AuthenticatedPageLayout_user
@@ -26,12 +19,7 @@ export default class WorkspacePage extends Component {
       <AuthenticatedPageLayoutConnector>
         {({ user }) => (
           <AuthenticatedPageLayout user={user}>
-            <div>WorkspacePage</div>
-            <EntriesConnector>
-              {({ entries }) => {
-                return entries.map(entry => <p key={entry.id}>{entry.text}</p>);
-              }}
-            </EntriesConnector>
+            <div>SettingsPage</div>
           </AuthenticatedPageLayout>
         )}
       </AuthenticatedPageLayoutConnector>

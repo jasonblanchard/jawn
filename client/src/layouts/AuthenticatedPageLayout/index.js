@@ -35,6 +35,11 @@ const HeaderLink = styled(Link)`
 export default class BasePageLayout extends Component {
   static propTypes = {
     children: PropTypes.node,
+    user: PropTypes.object,
+  }
+
+  static defaultProps = {
+    user: {},
   }
 
   static fragments = {
@@ -46,6 +51,8 @@ export default class BasePageLayout extends Component {
   }
 
   render() {
+    const { user } = this.props;
+
     return (
       <div>
         <Header>
@@ -59,7 +66,7 @@ export default class BasePageLayout extends Component {
           <LinkConnector>
             {({ handleClick }) => (
               <nav>
-                <HeaderLink onClick={handleClick} href="/about">About</HeaderLink> | <HeaderLink onClick={handleClick} href="/login">Login</HeaderLink>
+                <HeaderLink onClick={handleClick} href="/settings">{user.username}</HeaderLink> | <HeaderLink onClick={handleClick} href="/login">Login</HeaderLink>
               </nav>
             )}
           </LinkConnector>

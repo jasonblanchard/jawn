@@ -1,7 +1,7 @@
 import React from 'react';
 import { frame } from 'redux-frame';
 
-import AboutPage from 'pages/AboutPage';
+import SettingsPage from 'pages/SettingsPage';
 import LoginPage from 'pages/LoginPage';
 import WorkspacePage from 'pages/WorkspacePage';
 
@@ -43,15 +43,44 @@ export default {
       return <WorkspacePage />;
     },
   },
-  about: {
-    key: 'about',
-    matches: path => Boolean(path.match(/^\/about$/)),
+  settings: {
+    key: 'settings',
+    matches: path => Boolean(path.match(/^\/settings$/)),
+    onEnterAction: {
+      type: frame('LOAD_SETTINGS_PAGE'),
+      interceptors: [
+        ['effect', { effectId: 'debug' }],
+        ['effect', { effectId: 'dispatch' }],
+        ['injectCoeffects', { coeffectId: 'accessToken' }],
+        ['injectCoeffects', { coeffectId: 'currentUserId' }],
+        ['path', { from: 'currentUserId', to: 'graphqalVariables.userId' }],
+        ['effect', {
+          effectId: 'graphql',
+          args: {
+            query: SettingsPage.query,
+            onSuccessAction: {
+              type: frame('LOAD_SETTINGS_PAGE_COMPLETE'),
+              interceptors: [
+                ['effect', { effectId: 'debug' }],
+                'normalizeBody',
+                ['path', { from: 'normalizedBody.entities', to: 'action.entities' }],
+                ['path', { from: 'normalizedBody.results', to: 'action.entityIds' }],
+                ['effect', { effectId: 'dispatch' }],
+              ],
+            },
+            onFailureAction: {
+              type: 'LOAD_SETTINGS_PAGE_FAILED',
+            },
+          },
+        }],
+      ],
+    },
     render: () => {
-      return <AboutPage />;
+      return <SettingsPage />;
     },
   },
   login: {
-    key: 'about',
+    key: 'login',
     matches: path => Boolean(path.match(/^\/login/)),
     render: () => {
       return <LoginPage />;
