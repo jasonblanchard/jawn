@@ -3,12 +3,12 @@ import { frame } from 'redux-frame';
 
 import SettingsPage from 'pages/SettingsPage';
 import LoginPage from 'pages/LoginPage';
-import WorkspacePage from 'pages/WorkspacePage';
+import WorkspacePage, { query as WorkspacePageQuery } from 'pages/WorkspacePage';
 
 export default {
   workspace: {
     key: 'home',
-    matches: path => Boolean(path.match(/^\/workspace$/)),
+    matches: path => Boolean(path.match(/^\/workspace\/.+$/)), // TODO: Use better route matcher, get params out
     onEnterAction: {
       type: frame('LOAD_WORKSPACE_PAGE'),
       interceptors: [
@@ -21,7 +21,7 @@ export default {
         ['effect', {
           effectId: 'graphql',
           args: {
-            query: WorkspacePage.query,
+            query: WorkspacePageQuery,
             onSuccessAction: {
               type: frame('LOAD_WORKSPACE_PAGE_COMPLETE'),
               interceptors: [

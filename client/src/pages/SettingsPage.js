@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 import React, { Component } from 'react';
 
 import AuthenticatedPageLayout from 'layouts/AuthenticatedPageLayout';
-import AuthenticatedPageLayoutConnector from 'layouts/AuthenticatedPageLayout/connector';
+import AuthenticatedPageLayoutConnector, { fragments as AuthenticatedPageLayoutFragments } from 'layouts/AuthenticatedPageLayout/connector';
 
 export default class SettingsPage extends Component {
   static query = gql`query settingsPageQuery($userId: ID!) {
@@ -11,7 +11,7 @@ export default class SettingsPage extends Component {
         ...AuthenticatedPageLayout_user
       }
     }
-    ${AuthenticatedPageLayout.fragments.user}
+    ${AuthenticatedPageLayoutFragments.user}
   `;
 
   render() {

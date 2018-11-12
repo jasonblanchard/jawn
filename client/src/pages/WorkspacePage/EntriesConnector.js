@@ -4,7 +4,7 @@ import selectors from 'state/selectors';
 
 function mapStateToProps(state) {
   return {
-    entries: selectors.getEntries(state),
+    entryPreviews: selectors.getEntryPreviews(state),
   };
 }
 

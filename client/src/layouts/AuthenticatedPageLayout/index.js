@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import gql from 'graphql-tag';
 import styled from 'styled-components';
 
 import Link from 'components/Link';
@@ -40,14 +39,6 @@ export default class BasePageLayout extends Component {
 
   static defaultProps = {
     user: {},
-  }
-
-  static fragments = {
-    user: gql`
-      fragment AuthenticatedPageLayout_user on User {
-        username
-      }
-    `,
   }
 
   render() {
