@@ -4,10 +4,9 @@ import React from 'react';
 import styled from 'styled-components';
 
 import AuthenticatedPageLayout from 'layouts/AuthenticatedPageLayout';
-import AuthenticatedPageLayoutConnector, { fragments as AuthenticatedPageLayoutFragments } from 'layouts/AuthenticatedPageLayout/connector';
-import EntriesConnector from 'pages/WorkspacePage/EntriesConnector';
+import { fragments as AuthenticatedPageLayoutFragments } from 'layouts/AuthenticatedPageLayout/connector';
 import Link from 'components/Link';
-import LinkConnector from 'components/Link/LinkConnector';
+
 import withConnectors from 'state/withConnectors';
 
 
@@ -67,7 +66,7 @@ EntryPreviewList.propTypes = {
   connectors: PropTypes.object,
 };
 
-const WorkspacePage = ({ connectors }) => (
+export const WorkspacePage = ({ connectors }) => (
   <connectors.AuthenticatedPageLayoutConnector>
     {({ user }) => (
       <AuthenticatedPageLayout user={user}>
@@ -86,8 +85,4 @@ WorkspacePage.propTypes = {
   connectors: PropTypes.object,
 };
 
-export default withConnectors({
-  AuthenticatedPageLayoutConnector,
-  LinkConnector,
-  EntriesConnector,
-})(WorkspacePage);
+export default withConnectors()(WorkspacePage);

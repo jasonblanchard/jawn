@@ -8,6 +8,7 @@ import Root from 'Root';
 import RootConnector from 'Root/RootConnector';
 import actions from 'state/actions';
 import theme from 'styles/theme';
+import ConnectorProvider from 'state/ConnectorProvider';
 
 const registry = bootstrap();
 const { store } = registry;
@@ -15,14 +16,16 @@ const { store } = registry;
 store.dispatch(actions.resolveLocation());
 
 ReactDOM.render(
-  <ThemeProvider theme={theme}>
-    <Provider store={store}>
-      <RootConnector>
-        {stateProps => (
-          <Root {...stateProps} />
-        )}
-      </RootConnector>
-    </Provider>
-  </ThemeProvider>,
+  <ConnectorProvider>
+    <ThemeProvider theme={theme}>
+      <Provider store={store}>
+        <RootConnector>
+          {stateProps => (
+            <Root {...stateProps} />
+          )}
+        </RootConnector>
+      </Provider>
+    </ThemeProvider>
+  </ConnectorProvider>,
   document.getElementById('app'),
 );

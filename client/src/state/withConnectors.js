@@ -1,14 +1,17 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-// TODO: Refactor to use proper HoC patterns.
-export default function withConnectors(connectorMap = {}) {
-  return WrappedComponent => {
-    class Connect extends Component {
-      render() {
-        return <WrappedComponent {...this.props} connectors={connectorMap} />;
-      }
+const withConnectors = connectors => Consumer => (
+  class WrappedAppConsumer extends Component {
+    static contextTypes = {
+      connectors: PropTypes.object,
     }
 
-    return Connect;
-  };
-}
+    render() {
+      const { connectors: globalConnectors = {} } = this.context;
+      return <Consumer {...this.props} connectors={{ ...connectors, ...globalConnectors }} />;
+    }
+  }
+);
+
+export default withConnectors;
