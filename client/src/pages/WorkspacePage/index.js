@@ -1,20 +1,20 @@
 import gql from 'graphql-tag';
+import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 
 import AuthenticatedPageLayout from 'layouts/AuthenticatedPageLayout';
 import AuthenticatedPageLayoutConnector, { fragments as AuthenticatedPageLayoutFragments } from 'layouts/AuthenticatedPageLayout/connector';
+import EntriesConnector from 'pages/WorkspacePage/EntriesConnector';
 import Link from 'components/Link';
 import LinkConnector from 'components/Link/LinkConnector';
+import withConnectors from 'state/withConnectors';
 
-import EntriesConnector from './EntriesConnector';
 
 export const query = gql`query workspacePageQuery($userId: ID!, $since: String!) {
     entries(since: $since) {
       id
       text
-      timeCreated
-      timeUpdated
     }
     user(id: $userId) {
       id
@@ -40,37 +40,54 @@ const NavLink = styled(Link)`
   display: block;
 `;
 
-const EntryPreview = entryPreview => (
-  <LinkConnector>
+const EntryPreview = ({ entryPreview, connectors }) => (
+  <connectors.LinkConnector>
     {({ handleClick }) => (
-      <NavLink key={entryPreview.id} onClick={handleClick} href={`/workspace/${entryPreview.id}`}>{entryPreview.text}</NavLink>
+      <NavLink onClick={handleClick} href={`/workspace/${entryPreview.id}`}>{entryPreview.text}</NavLink>
     )}
-  </LinkConnector>
+  </connectors.LinkConnector>
 );
 
-const EntryPreviewList = () => (
-  <EntriesConnector>
+EntryPreview.propTypes = {
+  entryPreview: PropTypes.object,
+  connectors: PropTypes.object,
+};
+
+const EntryPreviewList = ({ connectors }) => (
+  <connectors.EntriesConnector>
     {({ entryPreviews }) => (
       <Nav>
-        {entryPreviews.map(EntryPreview)}
+        {entryPreviews.map(entryPreview => <EntryPreview key={entryPreview.id} entryPreview={entryPreview} connectors={connectors} />)}
       </Nav>
     )}
-  </EntriesConnector>
+  </connectors.EntriesConnector>
 );
 
-const WorkspacePage = () => (
-  <AuthenticatedPageLayoutConnector>
+EntryPreviewList.propTypes = {
+  connectors: PropTypes.object,
+};
+
+const WorkspacePage = ({ connectors }) => (
+  <connectors.AuthenticatedPageLayoutConnector>
     {({ user }) => (
       <AuthenticatedPageLayout user={user}>
         <Container>
-          <EntryPreviewList />
+          <EntryPreviewList connectors={connectors} />
           <Main>
             MAIN CONTENT AREA
           </Main>
         </Container>
       </AuthenticatedPageLayout>
     )}
-  </AuthenticatedPageLayoutConnector>
+  </connectors.AuthenticatedPageLayoutConnector>
 );
 
-export default WorkspacePage;
+WorkspacePage.propTypes = {
+  connectors: PropTypes.object,
+};
+
+export default withConnectors({
+  AuthenticatedPageLayoutConnector,
+  LinkConnector,
+  EntriesConnector,
+})(WorkspacePage);
