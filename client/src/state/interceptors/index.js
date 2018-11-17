@@ -35,4 +35,11 @@ export default {
       before: context => mergeWithCoeffects(context, { graphqalVariables: variables }),
     };
   },
+
+  action: variables => {
+    return {
+      id: 'action',
+      before: context => mergeWithCoeffects(context, { action: variables.action }),
+    };
+  },
 };

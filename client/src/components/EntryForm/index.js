@@ -7,10 +7,11 @@ import withConnectors from 'state/withConnectors';
 const EntryForm = ({ connectors }) => {
   return (
     <connectors.EntryFormConnector>
-      {() => {
+      {({ handleSubmit }) => {
         return (
-          <form>
+          <form onSubmit={handleSubmit}>
             <Field id="text" label="text" name="text" component="textarea" />
+            <button>save</button>
           </form>
         );
       }}

@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
 
+import actions from 'state/actions';
 import Connector from 'state/Connector';
 import selectors from 'state/selectors';
 
@@ -15,6 +16,9 @@ const form = reduxForm({
   enableReinitialize: true,
   onChange: (state, dispatch) => {
     dispatch({ type: 'ENTRY_FORM_CHANGED' });
+  },
+  onSubmit: (values, dispatch) => {
+    dispatch(actions.entryFormSubmitted(values));
   },
 })(Connector);
 
