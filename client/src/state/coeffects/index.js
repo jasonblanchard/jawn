@@ -1,9 +1,16 @@
 import TokenUtils from 'src/utils/TokenUtils';
 
+import routes from 'config/routes';
+
 export default {
   location: context => {
     const { coeffects: { registry } } = context;
     return registry.history.location;
+  },
+
+  params: context => {
+    const route = routes[context.coeffects.routeId];
+    return route.params(context.coeffects.location.pathname);
   },
 
   accessToken: () => {

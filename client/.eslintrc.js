@@ -7,7 +7,8 @@ module.exports = {
         "react",
     ],
     "env": {
-      "browser": true
+      "browser": true,
+      "jest": true,
     },
     "rules": {
       "arrow-body-style": 0,
@@ -30,6 +31,7 @@ module.exports = {
       "jsx-a11y/no-autofocus": 0,
       "max-len": 0,
       "no-case-declarations": 0,
+      "no-unused-vars": ["error", { "ignoreRestSiblings": true }],
       "object-curly-newline": 0,
       "react/forbid-prop-types": 0,
       "react/jsx-filename-extension": 0,

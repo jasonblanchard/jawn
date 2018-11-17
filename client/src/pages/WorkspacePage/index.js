@@ -6,14 +6,16 @@ import styled from 'styled-components';
 import AuthenticatedPageLayout from 'layouts/AuthenticatedPageLayout';
 import { fragments as AuthenticatedPageLayoutFragments } from 'layouts/AuthenticatedPageLayout/connector';
 import Link from 'components/Link';
+import EntryEditor from 'components/EntryEditor';
+import { fragments as EntryEditorFragments } from 'components/EntryEditor/EntryEditorConnector';
 
 import withConnectors from 'state/withConnectors';
-
 
 export const query = gql`query workspacePageQuery($userId: ID!, $since: String!) {
     entries(since: $since) {
       id
       text
+      ...EntryEditor_entry
     }
     user(id: $userId) {
       id
@@ -21,6 +23,7 @@ export const query = gql`query workspacePageQuery($userId: ID!, $since: String!)
     }
   }
   ${AuthenticatedPageLayoutFragments.user}
+  ${EntryEditorFragments.entry}
 `;
 
 const Container = styled.section`
@@ -66,20 +69,22 @@ EntryPreviewList.propTypes = {
   connectors: PropTypes.object,
 };
 
-export const WorkspacePage = ({ connectors }) => (
-  <connectors.AuthenticatedPageLayoutConnector>
-    {({ user }) => (
-      <AuthenticatedPageLayout user={user}>
-        <Container>
-          <EntryPreviewList connectors={connectors} />
-          <Main>
-            MAIN CONTENT AREA
-          </Main>
-        </Container>
-      </AuthenticatedPageLayout>
-    )}
-  </connectors.AuthenticatedPageLayoutConnector>
-);
+export const WorkspacePage = ({ connectors }) => {
+  return (
+    <connectors.AuthenticatedPageLayoutConnector>
+      {({ user }) => (
+        <AuthenticatedPageLayout user={user}>
+          <Container>
+            <EntryPreviewList connectors={connectors} />
+            <Main>
+              <EntryEditor />
+            </Main>
+          </Container>
+        </AuthenticatedPageLayout>
+      )}
+    </connectors.AuthenticatedPageLayoutConnector>
+  );
+};
 
 WorkspacePage.propTypes = {
   connectors: PropTypes.object,

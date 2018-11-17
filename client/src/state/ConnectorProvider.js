@@ -1,9 +1,11 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import LinkConnector from 'components/Link/LinkConnector';
-import EntriesConnector from 'pages/WorkspacePage/EntriesConnector';
 import AuthenticatedPageLayoutConnector from 'layouts/AuthenticatedPageLayout/connector';
+import EntriesConnector from 'pages/WorkspacePage/EntriesConnector';
+import EntryEditorConnector from 'components/EntryEditor/EntryEditorConnector';
+import EntryFormConnector from 'components/EntryForm/EntryFormConnector';
+import LinkConnector from 'components/Link/LinkConnector';
 
 class ConnectorProvider extends Component {
   static propTypes = {
@@ -19,6 +21,8 @@ class ConnectorProvider extends Component {
       connectors: {
         AuthenticatedPageLayoutConnector,
         EntriesConnector,
+        EntryEditorConnector,
+        EntryFormConnector,
         LinkConnector,
       },
     };

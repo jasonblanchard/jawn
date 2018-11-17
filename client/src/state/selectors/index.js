@@ -14,17 +14,28 @@ const getEntries = createSelector(
   },
 );
 
+const getSelectedEntry = createSelector(
+  state => state.params.entryId,
+  state => state.entities,
+  (entryId, entities) => {
+    if (!entities) return undefined;
+    return denormalize(entryId, schema.entry, entities);
+  },
+);
+
 export default {
   getEntries,
 
-  // NOTE: This selector isn't pure since it's reaching into the access token cookie, but we really want that to be the source of truth to make sure it stops working when the cookie is destroyed.
-  getAuthenticatedUser: state => {
-    if (!state.entities) return undefined;
-    const accessToken = TokenUtils.getAccessToken();
-    if (!accessToken) return undefined;
-    const userId = TokenUtils.decodeUserId(accessToken);
-    return denormalize(userId, schema.user, state.entities);
-  },
+  getAuthenticatedUser: createSelector(
+    state => state.entities,
+    () => TokenUtils.getAccessToken(), // NOTE: This selector isn't pure since it's reaching into the access token cookie, but we really want that to be the source of truth to make sure it stops working when the cookie is destroyed.
+    (entities, accessToken) => {
+      if (!entities) return undefined;
+      if (!accessToken) return undefined;
+      const userId = TokenUtils.decodeUserId(accessToken);
+      return denormalize(userId, schema.user, entities);
+    },
+  ),
 
   getEntryPreviews: createSelector(
     state => getEntries(state),
@@ -34,6 +45,17 @@ export default {
         id: entry.id,
         text: entry.text.split('\n')[0] || '(untitled)',
       }));
+    },
+  ),
+
+  getSelectedEntry,
+
+  getEntryFormInitialValues: createSelector(
+    state => getSelectedEntry(state),
+    entry => {
+      if (!entry) return { text: '' };
+      const { text } = entry;
+      return { text };
     },
   ),
 };

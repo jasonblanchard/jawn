@@ -3,12 +3,16 @@ import { frame } from 'redux-frame';
 
 import SettingsPage from 'pages/SettingsPage';
 import LoginPage from 'pages/LoginPage';
+import PathUtils from 'utils/PathUtils';
 import WorkspacePage, { query as WorkspacePageQuery } from 'pages/WorkspacePage';
+
+const WORKSPACE_PATH = '/workspace/:entryId?';
 
 export default {
   workspace: {
     key: 'home',
-    matches: path => Boolean(path.match(/^\/workspace\/.+$/)), // TODO: Use better route matcher, get params out
+    matches: path => PathUtils.matches(WORKSPACE_PATH, path),
+    params: path => PathUtils.params(WORKSPACE_PATH, path),
     onEnterAction: {
       type: frame('LOAD_WORKSPACE_PAGE'),
       interceptors: [
