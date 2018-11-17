@@ -39,8 +39,7 @@ function udpateEntry(values) {
           onFailureAction: {
             type: frame('UPDATE_ENTRY_FAILED'),
             interceptors: [
-              // ['injectCoeffects', { coeffectId: 'registry' }],
-              // ['effect', { effectId: 'changeLocation', args: { path: '/login' } }],
+              ['effect', { effectId: 'dispatch' }],
             ],
           },
         },
