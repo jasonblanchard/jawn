@@ -58,4 +58,6 @@ export default {
       return { text };
     },
   ),
+
+  isEntryFormIsSaving: state => state.isEntryFormIsSaving,
 };

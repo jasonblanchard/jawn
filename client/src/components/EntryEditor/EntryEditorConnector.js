@@ -16,6 +16,7 @@ export const fragments = {
 function mapStateToProps(state) {
   return {
     entry: selectors.getSelectedEntry(state),
+    isSaving: selectors.isEntryFormIsSaving(state),
   };
 }
 

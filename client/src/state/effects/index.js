@@ -1,5 +1,10 @@
+import debounce from 'lodash.debounce';
 import http from 'superagent';
+
+import actions from 'state/actions';
 import routes from 'config/routes';
+
+const debouncedUpdateEntry = debounce((dispatch, input) => dispatch(actions.udpateEntry(input)), 1000, { maxWait: 2000 });
 
 export default {
   changeLocation: (context, args) => {
@@ -39,5 +44,10 @@ export default {
     const { coeffects: { routeId } } = context;
     const route = routes[routeId];
     if (route && route.onEnterAction) dispatch(route.onEnterAction);
+  },
+
+  debouncedUpdateEntry: (context, args, dispatch) => {
+    const input = context.coeffects.action.values;
+    debouncedUpdateEntry(dispatch, input);
   },
 };

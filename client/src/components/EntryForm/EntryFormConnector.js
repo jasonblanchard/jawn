@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
+import { frame } from 'redux-frame';
 
 import actions from 'state/actions';
 import Connector from 'state/Connector';
@@ -11,15 +12,28 @@ function mapStateToProps(state) {
   };
 }
 
+function mapDispatchToProps(dispatch) {
+  return {
+    handleChangeText: (event, text) => {
+      dispatch({
+        type: frame('ENTRY_FORM_CHANGED'),
+        values: { text },
+        interceptors: [
+          ['effect', { effectId: 'debug' }],
+          ['effect', { effectId: 'dispatch' }],
+          ['effect', { effectId: 'debouncedUpdateEntry' }],
+        ],
+      });
+    },
+  };
+}
+
 const form = reduxForm({
   form: 'entry',
   enableReinitialize: true,
-  onChange: (state, dispatch) => {
-    dispatch({ type: 'ENTRY_FORM_CHANGED' });
-  },
   onSubmit: (values, dispatch) => {
     dispatch(actions.entryFormSubmitted(values));
   },
 })(Connector);
 
-export default connect(mapStateToProps)(form);
+export default connect(mapStateToProps, mapDispatchToProps)(form);

@@ -75,4 +75,6 @@ export default {
       ['effect', { effectId: 'dispatch' }],
     ],
   }),
+
+  udpateEntry,
 };

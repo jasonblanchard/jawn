@@ -1,3 +1,5 @@
+import merge from 'lodash.merge';
+
 export default function(state, action) {
   switch (action.type) {
     case 'LOAD_WORKSPACE_PAGE_COMPLETE':
@@ -5,11 +7,7 @@ export default function(state, action) {
       const { entities, entityIds } = action;
       return { ...state, ...{ entities, entityIds } };
     case 'UPDATE_ENTRY_COMPLETE':
-      // TODO: Deep merge
-      const { entities: entries } = action;
-      const updatedEntries = { ...state.entities.entries, ...entries.entries };
-      const updatedEntities = { ...state.entities, ...{ entries: updatedEntries } };
-      return { ...state, ...{ entities: updatedEntities } };
+      return { ...state, ...{ entities: merge({}, state.entities, action.entities) } };
     default:
       return state;
   }
