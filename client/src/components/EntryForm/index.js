@@ -13,6 +13,7 @@ const StyledTextarea = styled.textarea`
   width: 100%;
   padding: ${props => props.theme.spacingMedium};
   transition: box-shadow .1s ease-in-out;
+  box-sizing: border-box;
 
   &:focus {
     outline: 0;

@@ -11,7 +11,7 @@ const MetaContainer = styled.div`
   font-family: ${props => props.theme.fontFamily};
   display: flex;
   justify-content: space-between;
-  margin: ${props => props.theme.spacingMedium} 0;
+  margin: ${props => props.theme.spacingMedium} ${props => props.theme.spacingMedium};
 `;
 
 const SaveContainer = styled.span`
