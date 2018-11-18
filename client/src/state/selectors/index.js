@@ -10,7 +10,7 @@ const getEntries = createSelector(
   state => (state.entityIds ? state.entityIds.entries : []),
   state => state.entities,
   (entryIds, entities) => {
-    if (!entities) return [];
+    if (!entryIds || !entities) return [];
     return denormalize(entryIds, schema.entries, entities)
       // TODO: Better date sorting
       .sort((first, second) => {
