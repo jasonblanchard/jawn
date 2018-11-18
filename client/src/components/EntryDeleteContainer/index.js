@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import withConnectors from 'state/withConnectors';
+import { PrimaryButton, MinimalButton, DangerButton } from 'uikit/Button';
 
 const EntryDeleteContainer = ({ connectors, entryId }) => {
   return (
@@ -10,12 +11,12 @@ const EntryDeleteContainer = ({ connectors, entryId }) => {
         if (didRequestDelete) {
           return (
             <div>
-              Are you sure? <button type="button" onClick={handleClickDelete} disabled={isConfirmButtonDisabled}>yup</button> <button type="button" onClick={handleCancelRequestDelete}>nope</button>
+              Are you sure? <DangerButton type="button" onClick={handleClickDelete} disabled={isConfirmButtonDisabled}>yup</DangerButton> <PrimaryButton type="button" onClick={handleCancelRequestDelete}>nope</PrimaryButton>
             </div>
           );
         }
         return (
-          <button type="button" onClick={handleRequestDelete}>delete</button>
+          <MinimalButton type="button" onClick={handleRequestDelete}>delete</MinimalButton>
         );
       }}
     </connectors.EntryDeleteContainerConnector>

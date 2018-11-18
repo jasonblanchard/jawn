@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 
+import { PrimaryButton } from 'uikit/Button';
 import withConnectors from 'state/withConnectors';
 
 const StyledTextarea = styled.textarea`
@@ -38,7 +39,7 @@ const EntryForm = ({ connectors, entryId, toolbar }) => {
           <form onSubmit={handleSubmit}>
             <Field onChange={handleChangeText} id="text" label="text" name="text" component={Textarea} />
             <ToolbarContainer>
-              <button disabled={pristine || submitting}>save</button>
+              <PrimaryButton disabled={pristine || submitting}>save</PrimaryButton>
               {toolbar}
             </ToolbarContainer>
           </form>

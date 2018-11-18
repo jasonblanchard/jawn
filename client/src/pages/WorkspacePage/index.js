@@ -4,6 +4,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import AuthenticatedPageLayout from 'layouts/AuthenticatedPageLayout';
+import { PrimaryButton } from 'uikit/Button';
 import { fragments as AuthenticatedPageLayoutFragments } from 'layouts/AuthenticatedPageLayout/connector';
 import Link from 'components/Link';
 import EntryEditor from 'components/EntryEditor';
@@ -91,6 +92,10 @@ const EntryPreview = ({ entryPreview, connectors, isActive }) => (
   </connectors.LinkConnector>
 );
 
+const NewButton = styled(PrimaryButton)`
+  width: 90%;
+`;
+
 EntryPreview.propTypes = {
   entryPreview: PropTypes.object,
   connectors: PropTypes.object,
@@ -101,7 +106,7 @@ const EntryPreviewList = ({ connectors }) => (
   <connectors.EntriesConnector>
     {({ entryPreviews, handleClickCreate, selectedIntryId }) => (
       <Nav>
-        <NewButtonContainer><button onClick={handleClickCreate}>new</button></NewButtonContainer>
+        <NewButtonContainer><NewButton onClick={handleClickCreate}>new</NewButton></NewButtonContainer>
         {entryPreviews.map(entryPreview => <EntryPreview key={entryPreview.id} isActive={entryPreview && entryPreview.id === selectedIntryId} entryPreview={entryPreview} connectors={connectors} />)}
       </Nav>
     )}

@@ -44,7 +44,7 @@ export const EntryEditor = ({ connectors }) => {
     <connectors.EntryEditorConnector>
       {({ entry, isSaving }) => {
         if (!entry) {
-          return <div>loading...</div>;
+          return <div>{'<-----'} Make a new one</div>;
         }
 
         return (
