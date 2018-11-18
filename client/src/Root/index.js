@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
+import GlobalStyle from 'styles/GlobalStyle';
+
 import routes from 'config/routes';
 
-import 'styles/global.scss';
+import 'styles/reset.scss';
 
 export default class Root extends Component {
   static propTypes = {
@@ -11,6 +13,11 @@ export default class Root extends Component {
 
   render() {
     const route = routes[this.props.routeId];
-    return route ? route.render() : <div>404: Route not Found</div>;
+    return (
+      <Fragment>
+        <GlobalStyle />
+        {route ? route.render() : <div>404: Route not Found</div>}
+      </Fragment>
+    );
   }
 }

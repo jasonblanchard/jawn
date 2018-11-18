@@ -60,7 +60,6 @@ const NavLink = styled(Link)`
   display: flex;
   border-bottom: 1px solid ${props => props.theme.borderDark};
   border-right: 1px solid ${props => props.theme.borderDark};
-  font-family: ${props => props.theme.fontFamily};
   font-size: ${props => props.theme.fontSizeMedium};
   padding: ${props => props.theme.spacingSmall} ${props => props.theme.spacingMedium};
 
@@ -72,6 +71,16 @@ const NavLink = styled(Link)`
   &:last-child {
     border: 0;
   }
+`;
+
+const NewButtonContainer = styled.div`
+  align-items: center;
+  min-height: 30px;
+  background: ${props => (props.isActive ? props.theme.white : props.theme.backgroundDark)};
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid ${props => props.theme.borderDark};
+  border-right: 1px solid ${props => props.theme.borderDark};
 `;
 
 const EntryPreview = ({ entryPreview, connectors, isActive }) => (
@@ -92,7 +101,7 @@ const EntryPreviewList = ({ connectors }) => (
   <connectors.EntriesConnector>
     {({ entryPreviews, handleClickCreate, selectedIntryId }) => (
       <Nav>
-        <div><button onClick={handleClickCreate}>new</button></div>
+        <NewButtonContainer><button onClick={handleClickCreate}>new</button></NewButtonContainer>
         {entryPreviews.map(entryPreview => <EntryPreview key={entryPreview.id} isActive={entryPreview && entryPreview.id === selectedIntryId} entryPreview={entryPreview} connectors={connectors} />)}
       </Nav>
     )}

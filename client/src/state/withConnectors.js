@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 const withConnectors = connectors => Consumer => (
-  class WrappedAppConsumer extends Component {
+  class WrappedConnectorConsumer extends Component {
     static contextTypes = {
       connectors: PropTypes.object,
     }

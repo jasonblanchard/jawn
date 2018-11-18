@@ -8,8 +8,6 @@ import withConnectors from 'state/withConnectors';
 
 const MetaContainer = styled.div`
   color: ${props => props.theme.fontColorLightest};
-  font-size: ${props => props.theme.fontSizeMedium};
-  font-family: ${props => props.theme.fontFamily};
   display: flex;
   justify-content: space-between;
   margin: ${props => props.theme.spacingMedium} ${props => props.theme.spacingMedium};

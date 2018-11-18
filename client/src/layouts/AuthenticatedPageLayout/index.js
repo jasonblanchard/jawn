@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
 
 import Link from 'components/Link';
@@ -24,11 +24,11 @@ const Heading = styled.h1`
   font-family: ${props => props.theme.fontFamilyBrandHeading};
   font-size: ${props => props.theme.fontSizeLarge};
   text-transform: uppercase;
+  font-weight: 400;
 `;
 
 const HeaderLink = styled(Link)`
   color: ${props => props.theme.textLightest};
-  font-size: ${props => props.theme.fontSizeMedium};
 `;
 
 export default class BasePageLayout extends Component {
@@ -45,7 +45,7 @@ export default class BasePageLayout extends Component {
     const { user } = this.props;
 
     return (
-      <div>
+      <Fragment>
         <Header>
           <Heading>
             <LinkConnector>
@@ -63,7 +63,7 @@ export default class BasePageLayout extends Component {
           </LinkConnector>
         </Header>
         {this.props.children}
-      </div>
+      </Fragment>
     );
   }
 }

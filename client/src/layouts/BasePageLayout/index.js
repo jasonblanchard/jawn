@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import BaseBageLayout from 'layouts/BaseBageLayout';
 
-export default class AuthenticatedPageLayout extends Component {
+export default class BasePageLayout extends Component {
   static propTypes = {
     children: PropTypes.node,
   }
