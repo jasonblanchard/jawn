@@ -56,7 +56,7 @@ const NavLink = styled(Link)`
   color: ${props => props.theme.fontColorDark};
   display: block;
   min-height: 30px;
-  background: ${props => props.theme.backgroundDark};
+  background: ${props => (props.isActive ? props.theme.white : props.theme.backgroundDark)};
   display: flex;
   border-bottom: 1px solid ${props => props.theme.borderDark};
   border-right: 1px solid ${props => props.theme.borderDark};
@@ -74,10 +74,10 @@ const NavLink = styled(Link)`
   }
 `;
 
-const EntryPreview = ({ entryPreview, connectors }) => (
+const EntryPreview = ({ entryPreview, connectors, isActive }) => (
   <connectors.LinkConnector>
     {({ handleClick }) => (
-      <NavLink onClick={handleClick} href={`/workspace/${entryPreview.id}`}>{entryPreview.text}</NavLink>
+      <NavLink onClick={handleClick} isActive={isActive} href={`/workspace/${entryPreview.id}`}>{entryPreview.text}</NavLink>
     )}
   </connectors.LinkConnector>
 );
@@ -85,13 +85,15 @@ const EntryPreview = ({ entryPreview, connectors }) => (
 EntryPreview.propTypes = {
   entryPreview: PropTypes.object,
   connectors: PropTypes.object,
+  isActive: PropTypes.bool,
 };
 
 const EntryPreviewList = ({ connectors }) => (
   <connectors.EntriesConnector>
-    {({ entryPreviews }) => (
+    {({ entryPreviews, handleClickCreate, selectedIntryId }) => (
       <Nav>
-        {entryPreviews.map(entryPreview => <EntryPreview key={entryPreview.id} entryPreview={entryPreview} connectors={connectors} />)}
+        <div><button onClick={handleClickCreate}>new</button></div>
+        {entryPreviews.map(entryPreview => <EntryPreview key={entryPreview.id} isActive={entryPreview && entryPreview.id === selectedIntryId} entryPreview={entryPreview} connectors={connectors} />)}
       </Nav>
     )}
   </connectors.EntriesConnector>
