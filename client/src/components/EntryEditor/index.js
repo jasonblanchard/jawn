@@ -3,6 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import EntryForm from 'components/EntryForm';
+import EntryDeleteContainer from 'components/EntryDeleteContainer';
 import withConnectors from 'state/withConnectors';
 
 const MetaContainer = styled.div`
@@ -50,6 +51,7 @@ export const EntryEditor = ({ connectors }) => {
 
         return (
           <div>
+            <EntryForm entryId={entry.id} toolbar={<EntryDeleteContainer entryId={entry.id} />} />
             <MetaContainer>
               <div>
                 <span>Created at {entry.timeCreated}</span>
@@ -57,7 +59,6 @@ export const EntryEditor = ({ connectors }) => {
               </div>
               {isSaving ? <SavingContainer>saving...</SavingContainer> : <SavedContainer>saved</SavedContainer>}
             </MetaContainer>
-            <EntryForm entryId={entry.id} />
           </div>
         );
     }}

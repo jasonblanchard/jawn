@@ -2,6 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import AuthenticatedPageLayoutConnector from 'layouts/AuthenticatedPageLayout/connector';
+import EntryDeleteContainerConnector from 'components/EntryDeleteContainer/EntryDeleteContainerConnector';
 import EntriesConnector from 'pages/WorkspacePage/EntriesConnector';
 import EntryEditorConnector from 'components/EntryEditor/EntryEditorConnector';
 import EntryFormConnector from 'components/EntryForm/EntryFormConnector';
@@ -20,6 +21,7 @@ class ConnectorProvider extends Component {
     return {
       connectors: {
         AuthenticatedPageLayoutConnector,
+        EntryDeleteContainerConnector,
         EntriesConnector,
         EntryEditorConnector,
         EntryFormConnector,

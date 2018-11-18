@@ -25,14 +25,22 @@ const Textarea = field => (
   <StyledTextarea {...field.input} />
 );
 
-const EntryForm = ({ connectors, entryId }) => {
+const ToolbarContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const EntryForm = ({ connectors, entryId, toolbar }) => {
   return (
     <connectors.EntryFormConnector entryId={entryId}>
       {({ handleSubmit, pristine, submitting, handleChangeText }) => {
         return (
           <form onSubmit={handleSubmit}>
             <Field onChange={handleChangeText} id="text" label="text" name="text" component={Textarea} />
-            <button disabled={pristine || submitting}>save</button>
+            <ToolbarContainer>
+              <button disabled={pristine || submitting}>save</button>
+              {toolbar}
+            </ToolbarContainer>
           </form>
         );
       }}
@@ -43,6 +51,7 @@ const EntryForm = ({ connectors, entryId }) => {
 EntryForm.propTypes = {
   connectors: PropTypes.object,
   entryId: PropTypes.string,
+  toolbar: PropTypes.node,
 };
 
 export default withConnectors()(EntryForm);

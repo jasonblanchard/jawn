@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
+import get from 'lodash.get';
 
 import TokenUtils from 'utils/TokenUtils';
 
@@ -35,6 +36,8 @@ const getSelectedEntryId = createSelector(
     return entry.id;
   },
 );
+
+const deletingEntryId = state => get(state, 'ephemeral.deletingEntryId');
 
 export default {
   getEntries,
@@ -75,4 +78,17 @@ export default {
   isEntryFormIsSaving: state => state.isEntryFormIsSaving,
 
   getSelectedEntryId,
+
+  didRequestDelete: state => get(state, 'ephemeral.didRequestDelete', false),
+
+  deletingEntryId,
+
+  isDeletingSelectedEntry: createSelector(
+    state => getSelectedEntry(state),
+    state => deletingEntryId(state),
+    (selectedEntry, currentDeletingEntryId) => {
+      if (!selectedEntry) return false;
+      return selectedEntry.id === currentDeletingEntryId;
+    },
+  ),
 };

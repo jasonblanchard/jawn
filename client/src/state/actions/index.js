@@ -23,6 +23,14 @@ const CreateEntryQuery = gql`
   }
 `;
 
+const DeletEntryQuery = gql`
+  mutation deleteEntry($id: ID!) {
+    entry: deleteEntry(id: $id) {
+      id
+    }
+  }
+`;
+
 function udpateEntry(id, values) {
   return {
     type: frame('UPDATE_ENTRY'),
@@ -125,4 +133,38 @@ export default {
       ],
     };
   },
+
+  deleteEntry: id => ({
+    type: frame('DELETE_ENTRY'),
+    id,
+    interceptors: [
+      ['effect', { effectId: 'dispatch' }],
+      ['injectCoeffects', { coeffectId: 'accessToken' }],
+      ['graphqalVariables', { id }],
+      ['effect', {
+        effectId: 'graphql',
+        args: {
+          query: DeletEntryQuery,
+          onSuccessAction: {
+            type: frame('DELETE_ENTRY_COMPLETE'),
+            interceptors: [
+              ['effect', { effectId: 'debug' }],
+              ['injectCoeffects', { coeffectId: 'registry' }],
+              ['effect', { effectId: 'changeLocation', path: '/workspace' }],
+              'normalizeBody',
+              ['path', { from: 'normalizedBody.entities', to: 'action.entities' }],
+              ['path', { from: 'normalizedBody.results', to: 'action.entityIds' }],
+              ['effect', { effectId: 'dispatch' }],
+            ],
+          },
+          onFailureAction: {
+            type: frame('DELETE_ENTRY_FAILED'),
+            interceptors: [
+              ['effect', { effectId: 'dispatch' }],
+            ],
+          },
+        },
+      }],
+    ],
+  }),
 };
