@@ -7,12 +7,23 @@ const Button = styled.button`
   border-radius: ${props => props.theme.borderRadiusSmall};
   font-size: ${props => props.theme.fontSizeMedium};
   cursor: pointer;
+
+  &:disabled {
+    cursor: inherit;
+    background-color: ${props => props.theme.colorAccentDisabled};
+    border: ${props => props.theme.borderThin} solid ${props => props.theme.colorAccent};
+  }
 `;
 
 export const PrimaryButton = styled(Button)`
   background: ${props => props.theme.colorAccent};
   color: ${props => props.theme.textLightest};
   border: ${props => props.theme.borderThin} solid ${props => props.theme.colorAccentBorder};
+
+  &:disabled {
+    background-color: ${props => props.theme.colorAccentDisabled};
+    border: ${props => props.theme.borderThin} solid ${props => props.theme.colorAccent};
+  }
 `;
 
 export const DangerButton = styled(Button)`

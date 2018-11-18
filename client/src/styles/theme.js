@@ -11,6 +11,7 @@ const colors = {
   yellow: '#d4d01f',
   blue: '#6da0d6',
   blueDark: '#2a77c7',
+  blueLight: '#adccec',
   red: '#de5c45',
   redDark: '#a04b3c',
 };
@@ -26,6 +27,7 @@ export default {
   colorWarning: colors.yellow,
   colorAccent: colors.blue,
   colorAccentBorder: colors.blueDark,
+  colorAccentDisabled: colors.blueLight,
   colorDanger: colors.red,
   colorDangerBorder: colors.redDark,
   fontColorLightest: colors.grayMedium,

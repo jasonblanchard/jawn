@@ -150,7 +150,7 @@ export default {
             interceptors: [
               ['effect', { effectId: 'debug' }],
               ['injectCoeffects', { coeffectId: 'registry' }],
-              ['effect', { effectId: 'changeLocation', path: '/workspace' }],
+              ['effect', { effectId: 'changeLocation', args: { path: '/workspace' } }],
               'normalizeBody',
               ['path', { from: 'normalizedBody.entities', to: 'action.entities' }],
               ['path', { from: 'normalizedBody.results', to: 'action.entityIds' }],

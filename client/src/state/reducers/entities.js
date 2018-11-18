@@ -7,6 +7,7 @@ export default function(state, action) {
       const { entities, entityIds } = action;
       return { ...state, ...{ entities, entityIds } };
     case 'UPDATE_ENTRY_COMPLETE':
+    case 'CREATE_ENTRY_COMPLETE':
       return { ...state, ...{ entities: merge({}, state.entities, action.entities) } };
     default:
       return state;
