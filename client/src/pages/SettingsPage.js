@@ -1,43 +1,28 @@
-import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import AuthenticatedPageLayout from 'src/components/AuthenticatedPageLayout';
-import TokenUtils from 'src/utils/TokenUtils';
+import AuthenticatedPageLayout from 'layouts/AuthenticatedPageLayout';
+import AuthenticatedPageLayoutConnector, { fragments as AuthenticatedPageLayoutFragments } from 'layouts/AuthenticatedPageLayout/connector';
 
-const QUERY = gql`query SettingsPageQuery($userId: ID!){
-    user(id: $userId) {
-      ...AuthenticatedPageLayout_user
+export default class SettingsPage extends Component {
+  static query = gql`query settingsPageQuery($userId: ID!) {
+      user(id: $userId) {
+        id
+        ...AuthenticatedPageLayout_user
+      }
     }
-  }
-  ${AuthenticatedPageLayout.fragments.user}
-`;
-
-class SettingsPage extends Component {
-  static propTypes = {
-    loading: PropTypes.bool,
-    user: PropTypes.object,
-  }
+    ${AuthenticatedPageLayoutFragments.user}
+  `;
 
   render() {
     return (
-      <AuthenticatedPageLayout loading={this.props.loading} user={this.props.user}>
-        <section role="main">
-          settings page
-        </section>
-      </AuthenticatedPageLayout>
+      <AuthenticatedPageLayoutConnector>
+        {({ user }) => (
+          <AuthenticatedPageLayout user={user}>
+            <div>SettingsPage</div>
+          </AuthenticatedPageLayout>
+        )}
+      </AuthenticatedPageLayoutConnector>
     );
   }
 }
-
-export default graphql(QUERY, {
-  props: ({ data }) => ({
-    loading: data.loading && data.networkStatus === 'loading',
-    user: data.user,
-  }),
-  options: () => ({
-    variables: { userId: TokenUtils.decodeUserId(TokenUtils.getAccessToken()) },
-    fetchPolicy: 'cache-and-network',
-  }),
-})(SettingsPage);
