@@ -11,6 +11,7 @@ export default class Root extends Component {
     routeId: PropTypes.string,
   }
 
+  // TODO: Figure out FOUC issue.
   render() {
     const route = routes[this.props.routeId];
     return (
