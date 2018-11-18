@@ -4,8 +4,7 @@ import http from 'superagent';
 import actions from 'state/actions';
 import routes from 'config/routes';
 
-// TODO: IMPORTANT: Scope this to a specific entry so it doesn't overwrite other ones.
-const debouncedUpdateEntry = debounce((dispatch, input) => dispatch(actions.udpateEntry(input)), 1000, { maxWait: 2000 });
+const debouncedUpdateEntry = debounce((dispatch, id, input) => dispatch(actions.udpateEntry(id, input)), 1000, { maxWait: 2000 });
 
 export default {
   changeLocation: (context, args) => {
@@ -48,7 +47,7 @@ export default {
   },
 
   debouncedUpdateEntry: (context, args, dispatch) => {
-    const input = context.coeffects.action.values;
-    debouncedUpdateEntry(dispatch, input);
+    const { values, id } = context.coeffects.action;
+    debouncedUpdateEntry(dispatch, id, values);
   },
 };

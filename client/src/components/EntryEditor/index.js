@@ -57,7 +57,7 @@ export const EntryEditor = ({ connectors }) => {
               </div>
               {isSaving ? <SavingContainer>saving...</SavingContainer> : <SavedContainer>saved</SavedContainer>}
             </MetaContainer>
-            <EntryForm />
+            <EntryForm entryId={entry.id} />
           </div>
         );
     }}

@@ -13,15 +13,15 @@ const UpdateEntryQuery = gql`
   }
 `;
 
-function udpateEntry(values) {
+function udpateEntry(id, values) {
   return {
     type: frame('UPDATE_ENTRY'),
+    id,
     values,
     interceptors: [
       ['effect', { effectId: 'debug' }],
       ['injectCoeffects', { coeffectId: 'accessToken' }],
-      ['graphqalVariables', { input: { text: values.text } }],
-      ['path', { from: 'state.params.entryId', to: 'graphqalVariables.id' }], // TODO: Weird coupling
+      ['graphqalVariables', { id, input: { text: values.text } }],
       ['effect', {
         effectId: 'graphql',
         args: {
@@ -66,15 +66,18 @@ export default {
     };
   },
 
-  entryFormSubmitted: values => ({
-    type: frame('ENTRY_FORM_SUBMITTED'),
-    values,
-    interceptors: [
-      ['effect', { effectId: 'debug' }],
-      ['action', { action: udpateEntry(values) }],
-      ['effect', { effectId: 'dispatch' }],
-    ],
-  }),
+  entryFormSubmitted: (id, values) => {
+    return {
+      type: frame('ENTRY_FORM_SUBMITTED'),
+      values,
+      id,
+      interceptors: [
+        ['effect', { effectId: 'debug' }],
+        ['action', { action: udpateEntry(id, values) }],
+        ['effect', { effectId: 'dispatch' }],
+      ],
+    };
+  },
 
   udpateEntry,
 };

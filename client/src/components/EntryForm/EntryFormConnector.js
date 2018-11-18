@@ -12,12 +12,13 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch, ownProps) {
   return {
     handleChangeText: (event, text) => {
       dispatch({
         type: frame('ENTRY_FORM_CHANGED'),
         values: { text },
+        id: ownProps.entryId,
         interceptors: [
           ['effect', { effectId: 'debug' }],
           ['effect', { effectId: 'dispatch' }],
@@ -30,9 +31,9 @@ function mapDispatchToProps(dispatch) {
 
 const form = reduxForm({
   form: 'entry',
-  enableReinitialize: true,
-  onSubmit: (values, dispatch) => {
-    dispatch(actions.entryFormSubmitted(values));
+  enableReinitialize: true, // TODO: Is this causing weirdness? Set the values in the store directly instead?
+  onSubmit: (values, dispatch, props) => {
+    dispatch(actions.entryFormSubmitted(props.entryId, values));
   },
 })(Connector);
 

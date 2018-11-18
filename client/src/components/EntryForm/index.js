@@ -25,9 +25,9 @@ const Textarea = field => (
   <StyledTextarea {...field.input} />
 );
 
-const EntryForm = ({ connectors }) => {
+const EntryForm = ({ connectors, entryId }) => {
   return (
-    <connectors.EntryFormConnector>
+    <connectors.EntryFormConnector entryId={entryId}>
       {({ handleSubmit, pristine, submitting, handleChangeText }) => {
         return (
           <form onSubmit={handleSubmit}>
@@ -42,6 +42,7 @@ const EntryForm = ({ connectors }) => {
 
 EntryForm.propTypes = {
   connectors: PropTypes.object,
+  entryId: PropTypes.string,
 };
 
 export default withConnectors()(EntryForm);
