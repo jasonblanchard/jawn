@@ -4,6 +4,7 @@ import http from 'superagent';
 import actions from 'state/actions';
 import routes from 'config/routes';
 
+// TODO: IMPORTANT: Scope this to a specific entry so it doesn't overwrite other ones.
 const debouncedUpdateEntry = debounce((dispatch, input) => dispatch(actions.udpateEntry(input)), 1000, { maxWait: 2000 });
 
 export default {

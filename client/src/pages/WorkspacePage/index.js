@@ -27,19 +27,51 @@ export const query = gql`query workspacePageQuery($userId: ID!, $since: String!)
 `;
 
 const Container = styled.section`
-  display: flex;
+  display: grid;
+  grid-template-columns: 15% 85%;
+  height: 100vh;
+  grid-template-areas: "nav main";
+
+  @media (max-width: 768px) {
+    grid-template-columns: 100%;
+    grid-template-areas:
+      "main"
+      "nav"
+  }
 `;
 
 const Nav = styled.nav`
   flex: 1;
+  grid-area: nav;
 `;
 
 const Main = styled.section`
   flex: 2;
+  grid-area: main;
+  padding: ${props => props.theme.spacingMedium};
 `;
 
 const NavLink = styled(Link)`
+  align-items: center;
+  color: ${props => props.theme.fontColorDark};
   display: block;
+  min-height: 30px;
+  background: ${props => props.theme.backgroundDark};
+  display: flex;
+  border-bottom: 1px solid ${props => props.theme.borderDark};
+  border-right: 1px solid ${props => props.theme.borderDark};
+  font-family: ${props => props.theme.fontFamily};
+  font-size: ${props => props.theme.fontSizeMedium};
+  padding: ${props => props.theme.spacingSmall} ${props => props.theme.spacingMedium};
+
+  &:hover {
+    text-decoration: none;
+    background: ${props => props.theme.backgroundLightest};
+  }
+
+  &:last-child {
+    border: 0;
+  }
 `;
 
 const EntryPreview = ({ entryPreview, connectors }) => (

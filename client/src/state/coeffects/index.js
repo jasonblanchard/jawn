@@ -10,7 +10,7 @@ export default {
 
   params: context => {
     const route = routes[context.coeffects.routeId];
-    return route.params(context.coeffects.location.pathname);
+    return route.params ? route.params(context.coeffects.location.pathname) : {};
   },
 
   accessToken: () => {
