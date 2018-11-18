@@ -7,10 +7,10 @@ import routes from 'config/routes';
 const debouncedUpdateEntry = debounce((dispatch, id, input) => dispatch(actions.udpateEntry(id, input)), 1000, { maxWait: 2000 });
 
 export default {
-  changeLocation: (context, args) => {
-    const { coeffects: { registry } } = context;
+  changeLocation: (context, args = {}) => {
+    const { coeffects: { registry, nextPath } } = context;
     const { method, path } = args;
-    registry.history[method || 'push'](path);
+    registry.history[method || 'push'](path || nextPath);
   },
 
   http: (context, args, dispatch) => {

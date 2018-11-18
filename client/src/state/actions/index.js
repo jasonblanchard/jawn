@@ -2,13 +2,23 @@ import { frame } from 'redux-frame';
 import gql from 'graphql-tag';
 
 
-// TODO: Alias this to `entry` key
 const UpdateEntryQuery = gql`
   mutation updateEntry($id: ID!, $input: EntryInput){
     entry: updateEntry(id: $id, input: $input) {
       id
       text
       timeUpdated
+    }
+  }
+`;
+
+const CreateEntryQuery = gql`
+  mutation createEntry($input: EntryInput) {
+    entry: createEntry(input: $input) {
+      id
+      text
+      timeUpdated
+      timeCreated
     }
   }
 `;
@@ -80,4 +90,39 @@ export default {
   },
 
   udpateEntry,
+
+  createEntry: () => {
+    return {
+      type: frame('CREATE_ENTRY'),
+      interceptors: [
+        ['effect', { effectId: 'debug' }],
+        ['injectCoeffects', { coeffectId: 'accessToken' }],
+        ['effect', {
+          effectId: 'graphql',
+          args: {
+            query: CreateEntryQuery,
+            onSuccessAction: {
+              type: frame('CREATE_ENTRY_COMPLETE'),
+              interceptors: [
+                ['effect', { effectId: 'debug' }],
+                ['injectCoeffects', { coeffectId: 'registry' }],
+                ['effect', { effectId: 'changeLocation' }],
+                'normalizeBody',
+                ['path', { from: 'normalizedBody.entities', to: 'action.entities' }],
+                ['path', { from: 'normalizedBody.results', to: 'action.entityIds' }],
+                'createdEntryPath',
+                ['effect', { effectId: 'dispatch' }],
+              ],
+            },
+            onFailureAction: {
+              type: frame('CREATE_ENTRY_FAILED'),
+              interceptors: [
+                ['effect', { effectId: 'dispatch' }],
+              ],
+            },
+          },
+        }],
+      ],
+    };
+  },
 };

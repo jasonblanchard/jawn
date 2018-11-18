@@ -10,7 +10,12 @@ const getEntries = createSelector(
   state => state.entities,
   (entryIds, entities) => {
     if (!entities) return [];
-    return denormalize(entryIds, schema.entries, entities) || [];
+    return denormalize(entryIds, schema.entries, entities)
+      // TODO: Better date sorting
+      .sort((first, second) => {
+        if (first === second) return 0;
+        return first > second ? 1 : -1;
+      }) || [];
   },
 );
 
@@ -20,6 +25,14 @@ const getSelectedEntry = createSelector(
   (entryId, entities) => {
     if (!entities) return undefined;
     return denormalize(entryId, schema.entry, entities);
+  },
+);
+
+const getSelectedEntryId = createSelector(
+  state => getSelectedEntry(state),
+  (entry) => {
+    if (!entry) return undefined;
+    return entry.id;
   },
 );
 
@@ -60,4 +73,6 @@ export default {
   ),
 
   isEntryFormIsSaving: state => state.isEntryFormIsSaving,
+
+  getSelectedEntryId,
 };

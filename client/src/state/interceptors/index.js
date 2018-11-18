@@ -42,4 +42,13 @@ export default {
       before: context => mergeWithCoeffects(context, { action: variables.action }),
     };
   },
+
+  createdEntryPath: {
+    id: 'createdEntryPath',
+    before: context => {
+      const id = context.coeffects.action.entityIds.entry;
+      const nextPath = `/workspace/${id}`;
+      return mergeWithCoeffects(context, { nextPath });
+    },
+  },
 };
