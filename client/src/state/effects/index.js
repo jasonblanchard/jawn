@@ -50,4 +50,9 @@ export default {
     const { values, id } = context.coeffects.action;
     debouncedUpdateEntry(dispatch, id, values);
   },
+
+  scrollToTop: () => {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+  },
 };

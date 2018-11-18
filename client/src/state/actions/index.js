@@ -80,6 +80,7 @@ export default {
         ['path', { from: 'params', to: 'action.params' }],
         ['effect', { effectId: 'dispatch' }],
         ['effect', { effectId: 'dispatchPageOnEnter' }],
+        ['effect', { effectId: 'scrollToTop' }],
       ],
     };
   },
