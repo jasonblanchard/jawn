@@ -42,8 +42,13 @@ const SavingContainer = styled(SaveContainer)`
 export const EntryEditor = ({ connectors }) => {
   return (
     <connectors.EntryEditorConnector>
-      {({ entry, isSaving }) => {
-        if (!entry) {
+      {({ entry, isSaving, selectedEntryId }) => {
+        // TODO: This is kinda dumb. Consider rendering a different page in this case.
+        if (!entry && !selectedEntryId) {
+          return <div>{'<---'} Create a new one</div>;
+        }
+
+        if (!entry && !!selectedEntryId) {
           return <div>Loading...</div>;
         }
 

@@ -20,20 +20,14 @@ const getEntries = createSelector(
   },
 );
 
+const getSelectedEntryId = state => state.params.entryId;
+
 const getSelectedEntry = createSelector(
-  state => state.params.entryId,
+  state => getSelectedEntryId(state),
   state => state.entities,
   (entryId, entities) => {
     if (!entities) return undefined;
     return denormalize(entryId, schema.entry, entities);
-  },
-);
-
-const getSelectedEntryId = createSelector(
-  state => getSelectedEntry(state),
-  (entry) => {
-    if (!entry) return undefined;
-    return entry.id;
   },
 );
 
