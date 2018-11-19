@@ -1,10 +1,11 @@
 import { connect } from 'react-redux';
 import Connector from 'state/Connector';
-import getInState from 'state/selectors/getInState';
+
+import selectors from 'state/selectors';
 
 function mapStateToProps(state) {
   return {
-    routeId: getInState(state, 'routeId'),
+    routeId: selectors.getRouteId(state),
   };
 }
 

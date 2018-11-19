@@ -3,14 +3,13 @@ import { reduxForm } from 'redux-form';
 import { frame } from 'redux-frame';
 
 import Connector from 'state/Connector';
-import getInState from 'state/selectors/getInState';
-
+import selectors from 'state/selectors';
 import validate from './validate';
 
 function mapStateToProps(state) {
   return {
-    submitting: Boolean(getInState(state, 'loginStarted')),
-    submitFailed: Boolean(getInState(state, 'loginFailed')),
+    submitting: selectors.didLoginStart(state),
+    submitFailed: selectors.didLoginFail(state),
   };
 }
 

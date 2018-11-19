@@ -36,6 +36,12 @@ const deletingEntryId = state => get(state, 'ephemeral.deletingEntryId');
 export default {
   getEntries,
 
+  getRouteId: state => state.routeId,
+
+  didLoginStart: state => Boolean(state.loginStarted),
+
+  didLoginFail: state => Boolean(state.loginFailed),
+
   getAuthenticatedUser: createSelector(
     state => state.entities,
     () => TokenUtils.getAccessToken(), // NOTE: This selector isn't pure since it's reaching into the access token cookie, but we really want that to be the source of truth to make sure it stops working when the cookie is destroyed.
