@@ -27,6 +27,12 @@ export default function(state, action) {
           deletingEntryId: undefined,
         },
       });
+    case 'LOAD_WORKSPACE_PAGE_COMPLETE':
+      return merge({}, state, {
+        ephemeral: {
+          selectedEntryId: state.params.entryId,
+        },
+      });
     default:
       return state;
   }

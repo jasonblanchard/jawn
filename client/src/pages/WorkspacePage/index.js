@@ -120,12 +120,12 @@ EntryPreviewList.propTypes = {
 export const WorkspacePage = ({ connectors }) => {
   return (
     <connectors.AuthenticatedPageLayoutConnector>
-      {({ user }) => (
+      {({ user, selectedEntryId }) => (
         <AuthenticatedPageLayout user={user}>
           <Container>
             <EntryPreviewList connectors={connectors} />
             <Main>
-              <EntryEditor />
+              {selectedEntryId ? <EntryEditor /> : null}
             </Main>
           </Container>
         </AuthenticatedPageLayout>

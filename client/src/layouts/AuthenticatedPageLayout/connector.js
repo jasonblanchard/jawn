@@ -6,6 +6,7 @@ import selectors from 'state/selectors';
 
 function mapStateToProps(state) {
   return {
+    selectedEntryId: selectors.getSelectedEntryId(state),
     user: selectors.getAuthenticatedUser(state),
   };
 }

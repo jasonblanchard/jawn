@@ -20,7 +20,7 @@ const getEntries = createSelector(
   },
 );
 
-const getSelectedEntryId = state => state.params.entryId;
+const getSelectedEntryId = state => get(state, 'ephemeral.selectedEntryId');
 
 const getSelectedEntry = createSelector(
   state => getSelectedEntryId(state),

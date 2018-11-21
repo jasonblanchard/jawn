@@ -31,7 +31,6 @@ function mapDispatchToProps(dispatch, ownProps) {
 
 const form = reduxForm({
   form: 'entry',
-  enableReinitialize: true, // TODO: Is this causing weirdness? Set the values in the store directly instead?
   onSubmit: (values, dispatch, props) => {
     dispatch(actions.entryFormSubmitted(props.entryId, values));
   },
