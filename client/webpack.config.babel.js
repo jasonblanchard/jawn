@@ -31,12 +31,12 @@ module.exports = () => {
     },
     module: {
       rules: [
-        {
-          enforce: 'pre',
-          test: /\.js$/,
-          include: relativePath('src'),
-          loader: 'eslint-loader',
-        },
+        // {
+        //   enforce: 'pre',
+        //   test: /\.js$/,
+        //   include: relativePath('src'),
+        //   loader: 'eslint-loader',
+        // },
         {
           test: /\.js$/,
           include: relativePath('src'),
