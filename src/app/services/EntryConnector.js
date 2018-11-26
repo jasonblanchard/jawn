@@ -5,7 +5,7 @@ const LOG_TAG = 'EntryConnector';
 
 const EntrySchema = new Schema({
   text: String,
-  timeCreated: String,
+  timeCreated: { type: String, index: true },
   timeUpdated: String,
   userId: { type: String, index: true }, // TODO: Figure out how to build these indexes.
 });
