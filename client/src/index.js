@@ -9,6 +9,7 @@ import RootConnector from 'Root/RootConnector';
 import actions from 'state/actions';
 import theme from 'styles/theme';
 import ConnectorProvider from 'state/ConnectorProvider';
+import connectors from 'connectors';
 
 const registry = bootstrap();
 const { store } = registry;
@@ -16,7 +17,7 @@ const { store } = registry;
 store.dispatch(actions.resolveLocation());
 
 ReactDOM.render(
-  <ConnectorProvider>
+  <ConnectorProvider connectors={connectors}>
     <ThemeProvider theme={theme}>
       <Provider store={store}>
         <RootConnector>
