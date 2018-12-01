@@ -1,4 +1,4 @@
-import TokenUtils from 'src/utils/TokenUtils';
+import TokenUtils from 'utils/TokenUtils';
 
 import routes from 'config/routes';
 
