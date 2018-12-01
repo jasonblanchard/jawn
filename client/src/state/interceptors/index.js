@@ -2,7 +2,7 @@ import { normalize } from 'normalizr';
 import { mergeWithCoeffects } from 'redux-frame';
 
 import routes from 'config/routes';
-import schemas from 'src/state/entities/schema';
+import schemas from 'state/entities/schema';
 
 export default {
   locationToRouteId: {

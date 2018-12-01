@@ -84,11 +84,11 @@ export default {
   deletingEntryId,
 
   isDeletingSelectedEntry: createSelector(
-    state => getSelectedEntry(state),
+    state => getSelectedEntryId(state),
     state => deletingEntryId(state),
-    (selectedEntry, currentDeletingEntryId) => {
-      if (!selectedEntry) return false;
-      return selectedEntry.id === currentDeletingEntryId;
+    (selectedEntryId, currentDeletingEntryId) => {
+      if (!selectedEntryId) return false;
+      return selectedEntryId === currentDeletingEntryId;
     },
   ),
 };
