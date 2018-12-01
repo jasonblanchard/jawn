@@ -6,5 +6,6 @@
     "src/**/*.js"
   ],
   "coverageDirectory": "coverage",
+  "setupTestFrameworkScriptFile": "<rootDir>src/tests/setupTestFramework.js",
   "coverageReporters": ["json", "lcov", "text", "html"]
 }
