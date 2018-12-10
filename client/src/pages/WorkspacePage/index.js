@@ -122,7 +122,7 @@ export const WorkspacePage = ({ connectors }) => {
     <connectors.AuthenticatedPageLayoutConnector>
       {({ user, selectedEntryId }) => (
         <AuthenticatedPageLayout user={user}>
-          <Container>
+          <Container role="main">
             <EntryPreviewList connectors={connectors} />
             <Main>
               {selectedEntryId ? <EntryEditor /> : null}

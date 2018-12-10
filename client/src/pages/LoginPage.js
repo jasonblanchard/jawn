@@ -8,11 +8,13 @@ export default class LoginPage extends Component {
   render() {
     return (
       <AuthenticatedPageLayout>
-        <LoginFormConnector>
-          {props => (
-            <LoginForm {...props} />
-          )}
-        </LoginFormConnector>
+        <div role="main">
+          <LoginFormConnector>
+            {props => (
+              <LoginForm {...props} />
+            )}
+          </LoginFormConnector>
+        </div>
       </AuthenticatedPageLayout>
     );
   }

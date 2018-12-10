@@ -57,7 +57,7 @@ export default class BasePageLayout extends Component {
           <LinkConnector>
             {({ handleClick }) => (
               <nav>
-                <HeaderLink onClick={handleClick} href="/settings">{user.username}</HeaderLink>
+                {user.username ? <HeaderLink onClick={handleClick} href="/settings">{user.username}</HeaderLink> : null}
               </nav>
             )}
           </LinkConnector>

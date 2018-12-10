@@ -26,7 +26,7 @@ export default class LoginForm extends Component {
     return (
       <div>
         <label htmlFor={id}>{label}</label>
-        <input {...input} type={type} />
+        <input id={id} {...input} type={type} />
         {touched && (error && <span>{error}</span>)}
       </div>
     );

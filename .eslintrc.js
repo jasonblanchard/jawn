@@ -4,9 +4,11 @@ module.exports = {
     "plugins": [
         "import",
         "react",
+        "cypress"
     ],
     "env": {
-      "node": true
+      "node": true,
+      "cypress/globals": true
     },
     "rules": {
       "arrow-body-style": 0,

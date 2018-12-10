@@ -43,6 +43,7 @@
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-loader": "^2.1.1",
+    "eslint-plugin-cypress": "^2.1.2",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.2",
     "eslint-plugin-react": "^7.11.1",
@@ -59,6 +60,7 @@
     "build": "webpack",
     "lint": "eslint src/",
     "watch-all": "rm -f client/build/static/assets.json && concurrently --names \"client,server,node\" --prefix-colors \"green,cyan,yellow\" \"cd client && npm run watch\" \"npm run build -- --watch\" \"wait-on client/build/static/assets.json && nodemon --watch build build/server.js\"",
-    "start": "node build/server.js"
+    "start": "node build/server.js",
+    "watch-all-ci": "PORT=8082 MONGO_STRING=mongodb://localhost:27017/jawn_test npm run watch-all"
   }
 }
