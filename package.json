@@ -61,6 +61,6 @@
     "lint": "eslint src/",
     "watch-all": "rm -f client/build/static/assets.json && concurrently --names \"client,server,node\" --prefix-colors \"green,cyan,yellow\" \"cd client && npm run watch\" \"npm run build -- --watch\" \"wait-on client/build/static/assets.json && nodemon --watch build build/server.js\"",
     "start": "node build/server.js",
-    "watch-all-ci": "PORT=8082 MONGO_STRING=mongodb://localhost:27017/jawn_test npm run watch-all"
+    "watch-all-integration": "PORT=8082 MONGO_HOST=localhost DB_NAME=jawn_test npm run watch-all"
   }
 }
