@@ -18,21 +18,5 @@ import 'cypress-axe';
 // Import commands.js using ES2015 syntax:
 import './commands';
 
-Cypress.Commands.overwrite('injectAxe', (orig) => {
-  orig();
-  // FIXME: `orig` here is async, so this is probably a race condition...
-  cy.window()
-    .then(window => {
-      window.axe.configure({
-        rules: [
-          {
-            id: 'color-contrast',
-            enabled: false,
-          },
-        ],
-      });
-    });
-});
-
 // Alternatively you can use CommonJS syntax:
 // require('./commands')

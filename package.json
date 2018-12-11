@@ -61,6 +61,6 @@
     "lint": "eslint src/",
     "watch-all": "rm -f client/build/static/assets.json && concurrently --names \"client,server,node\" --prefix-colors \"green,cyan,yellow\" \"cd client && npm run watch\" \"npm run build -- --watch\" \"wait-on client/build/static/assets.json && nodemon --watch build build/server.js\"",
     "start": "node build/server.js",
-    "watch-all-integration": "PORT=8082 MONGO_HOST=localhost DB_NAME=jawn_test npm run watch-all"
+    "watch-all-integration": "rm -f client/build/static/assets.json && concurrently --names \"client,server,node,cypress\" --prefix-colors \"green,cyan,yellow,orange\" \"cd client && npm run watch\" \"npm run build -- --watch\" \"wait-on client/build/static/assets.json && PORT=8082 DB_NAME=jawn_test nodemon --watch build build/server.js\" \"wait-on client/build/static/assets.json && cd tests && PORT=8082 MONGO_HOST=localhost DB_NAME=jawn_test npm run cypress:open\""
   }
 }

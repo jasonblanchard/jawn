@@ -1,5 +1,10 @@
 describe('Login', () => {
-  it('Failed login', () => {
+  beforeEach(() => {
+    cy.task('db:reset');
+    cy.clearCookies();
+  });
+
+  it('failed login', () => {
     cy.visit('/login');
     cy.injectAxe();
     cy.contains('Username');
@@ -11,9 +16,12 @@ describe('Login', () => {
     cy.checkA11y();
   });
 
-  // TODO: Seed the database with this user.
-  it('Login', () => {
-    cy.task('db:reset');
+  it('visiting workspace page without logging in redirects to login page', () => {
+    cy.visit('/workspace');
+    cy.url().should('include', '/login');
+  });
+
+  it('successful login', () => {
     cy.task('db:create', {
       type: 'user',
       fields: {
@@ -30,5 +38,14 @@ describe('Login', () => {
     cy.contains('Submit').click();
     cy.url().should('include', '/workspace');
     cy.checkA11y();
+  });
+
+  it('successful login bypassing page', () => {
+    cy.login()
+      .then(() => {
+        cy.visit('/workspace');
+        cy.url().should('include', '/workspace');
+        cy.contains('new');
+      });
   });
 });

@@ -55,7 +55,7 @@ module.exports = (on) => {
       return hashPassword(fields.password || 'testpass', SALT_ROUNDS)
         .then(password => {
           const record = new models[type](Object.assign({}, fields, { password }));
-          return record.save();
+          return record.save().then(result => Object.assign({}, { id: result._id }, result));
         });
     },
   });
