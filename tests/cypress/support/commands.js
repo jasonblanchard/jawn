@@ -37,7 +37,9 @@ Cypress.Commands.add('createAccessToken', id => {
 });
 
 Cypress.Commands.add('login', () => {
-  return cy.task('db:create', {
+  const context = {};
+
+  return cy.task('db:create:user', {
     type: 'user',
     fields: {
       username: 'test',
@@ -45,10 +47,14 @@ Cypress.Commands.add('login', () => {
       password: 'realtestpass',
     },
   }).then(user => {
+    context.user = user;
     return cy.createAccessToken(user.id);
   }).then(token => {
     return cy.setCookie('token', token);
-  });
+  })
+    .then(() => {
+      return context.user;
+    });
 });
 
 Cypress.Commands.overwrite('injectAxe', (orig) => {

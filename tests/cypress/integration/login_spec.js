@@ -22,7 +22,7 @@ describe('Login', () => {
   });
 
   it('successful login', () => {
-    cy.task('db:create', {
+    cy.task('db:create:user', {
       type: 'user',
       fields: {
         username: 'test',

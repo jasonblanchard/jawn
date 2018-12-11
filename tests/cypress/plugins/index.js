@@ -39,8 +39,16 @@ const UserSchema = new Schema({
   timeCreated: String,
 });
 
+const EntrySchema = new Schema({
+  text: String,
+  timeCreated: { type: String, index: true },
+  timeUpdated: String,
+  userId: { type: String, index: true }, // TODO: Figure out how to build these indexes.
+});
+
 const models = {
   user: db.model('User', UserSchema),
+  entry: db.model('Entry', EntrySchema),
 };
 
 module.exports = (on) => {
@@ -51,12 +59,23 @@ module.exports = (on) => {
       return db.dropDatabase();
     },
 
-    'db:create': ({ type, fields }) => {
+    'db:create:user': ({ type, fields }) => {
       return hashPassword(fields.password || 'testpass', SALT_ROUNDS)
         .then(password => {
           const record = new models[type](Object.assign({}, fields, { password }));
-          return record.save().then(result => Object.assign({}, { id: result._id }, result));
+          return record.save().then(result => Object.assign({}, result._doc, { id: result._id }));
         });
+    },
+
+    'db:create': ({ type, fields }) => {
+      if (Array.isArray(fields)) {
+        const records = fields.map(fieldSet => {
+          return new models[type](Object.assign({}, fieldSet, { timeCreated: new Date().toString() })).save();
+        });
+        return Promise.all(records);
+      }
+      const record = new models[type](Object.assign({}, fields, { timeCreated: new Date().toString() }));
+      return record.save().then(result => Object.assign({}, result._doc, { id: result._id }));
     },
   });
 };
