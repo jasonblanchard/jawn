@@ -56,12 +56,12 @@ module.exports = () => {
                 localIdentName: '[name]-[local]--[hash:base64:5]',
               },
             },
-            {
-              loader: 'sass-loader',
-              options: {
-                sourceMap: true,
-              },
-            },
+            // {
+            //   loader: 'sass-loader',
+            //   options: {
+            //     sourceMap: true,
+            //   },
+            // },
           ]),
         },
       ],

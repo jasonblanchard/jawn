@@ -4,7 +4,7 @@ import GlobalStyle from 'styles/GlobalStyle';
 
 import routes from 'config/routes';
 
-import 'styles/reset.scss';
+import 'styles/reset.css';
 
 export default class Root extends Component {
   static propTypes = {

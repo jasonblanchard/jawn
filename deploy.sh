@@ -7,8 +7,9 @@ set -o errexit
 [ -s "$NVM_DIR/nvm.sh" ] && . $NVM_DIR/nvm.sh # Load nvm
 nvm use
 
-npm install
-npm run build-all-production
+# TODO: Remove, I don't think these are necessary now
+# npm install
+# npm run build-all-production
 
 docker-compose build app
 docker-compose push app
