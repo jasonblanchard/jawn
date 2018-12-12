@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { frame } from 'redux-frame';
 
-import Connector from 'state/connector';
+import Connector from 'state/Connector';
 
 function mapDispatchToProps(dispatch) {
   return {

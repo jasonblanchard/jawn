@@ -27,5 +27,7 @@ RUN mkdir -p /home/app/webapp
 RUN cp -a /tmp/node_modules /home/app/webapp
 ADD . /home/app/webapp
 
+# TODO: Build app here instead of assuming it has been build externally?
+
 # Use baseimage-docker's init process.
 CMD ["/sbin/my_init"]

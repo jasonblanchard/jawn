@@ -19,7 +19,9 @@ const SALT_ROUNDS = 10;
 
 // TODO: Put all this database stuff somewhere else.
 mongoose.Promise = Promise;
-const dbURL = 'mongodb://localhost:27017/jawn_test';
+const mongohost = process.env.MONGO_HOST || 'localhost';
+const database = process.env.DB_NAME || 'jawn_test';
+const dbURL = `mongodb://${mongohost}:27017/${database}`;
 const db = mongoose.createConnection(dbURL);
 
 // TODO: Lots of dumb duplication, here.
