@@ -14,7 +14,7 @@ services:
     depends_on:
       - mongo
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost"]
+      test: ["CMD", "curl", "-f", "http://localhost"] # TODO: Create a real health check endpoint
       interval: 15s
       timeout: 10s
       retries: 3
@@ -36,6 +36,7 @@ services:
       - ./tests/cypress/screenshots:/home/app/tests/cypress/screenshots
     depends_on:
       - mongo
+      - app
     # command: bash -c "cd /home/app/tests && npm run cypress:run"
 networks:
   backend:
