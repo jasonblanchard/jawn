@@ -14,7 +14,7 @@ services:
     depends_on:
       - mongo
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://nothing"]
+      test: ["CMD", "curl", "-f", "http://app"]
       interval: 15s
       timeout: 10s
       retries: 3
