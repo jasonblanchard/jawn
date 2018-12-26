@@ -18,7 +18,7 @@ services:
       interval: 15s
       timeout: 10s
       retries: 3
-      start_period: 40s
+      # start_period: 40s
   mongo:
     image: mongo:3.7.1
     networks:
