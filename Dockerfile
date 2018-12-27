@@ -38,5 +38,8 @@ ADD . /home/app/webapp
 
 RUN cd /home/app/webapp && npm run build-all-production
 
+HEALTHCHECK --interval=15s --timeout=10s --retries=3 \
+  CMD curl -f http://localhost/health || exit 1
+
 # Use baseimage-docker's init process.
 CMD ["/sbin/my_init"]

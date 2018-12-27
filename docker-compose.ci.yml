@@ -11,6 +11,8 @@ services:
       DB_NAME: jawn_test
       MONGO_HOST: mongo
       PORT: '8081'
+      LOG_LEVEL: 'DEBUG'
+      APP_SECRET: "$$2a$$10$$HuxYWte8dvZJM9UHBMEFZO" # TODO: Centralize this
     depends_on:
       - mongo
   mongo:
@@ -30,6 +32,7 @@ services:
       - ./tests/cypress/screenshots:/home/app/tests/cypress/screenshots
     depends_on:
       - mongo
+      - app
     # command: bash -c "cd /home/app/tests && npm run cypress:run"
 networks:
   backend:

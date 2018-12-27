@@ -27,7 +27,7 @@ import jwt from 'jsonwebtoken';
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 Cypress.Commands.add('createAccessToken', id => {
-  const secret = '$2a$10$HuxYWte8dvZJM9UHBMEFZO';
+  const secret = '$2a$10$HuxYWte8dvZJM9UHBMEFZO'; // TODO: Figure out how to share with docker-compose.ci.tml
   return new Cypress.Promise(resolve => {
     jwt.sign({ id }, secret, {}, (error, token) => {
       if (error) return null;

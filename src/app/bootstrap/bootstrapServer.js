@@ -17,7 +17,7 @@ const ASSET_PATHS = JSON.parse(fs.readFileSync(path.join(__dirname, BUILD_PATH, 
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 export default function(registry) {
-  const appSecret = process.env.APP_SECRET;
+  const appSecret = process.env.APP_SECRET; // TODO: Bootstrap this separately
   const {
     graphqlService,
     logger,
@@ -50,6 +50,10 @@ export default function(registry) {
       return !request.originalUrl.match(/^\/api\//);
     },
   }));
+
+  app.get('/health', (request, response) => {
+    return response.json({ ok: true });
+  });
 
   app.post('/api/login', loginController.handleLogin);
   app.post('/api/sign-up', loginController.handleSignUp);
