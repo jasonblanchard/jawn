@@ -12,15 +12,9 @@ services:
       MONGO_HOST: mongo
       PORT: '8081'
       LOG_LEVEL: 'DEBUG'
-      APP_SECRET: "$$2a$$10$$HuxYWte8dvZJM9UHBMEFZO"
+      APP_SECRET: "$$2a$$10$$HuxYWte8dvZJM9UHBMEFZO" # TODO: Centralize this
     depends_on:
       - mongo
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost"] # TODO: Create a real health check endpoint
-      interval: 15s
-      timeout: 10s
-      retries: 3
-      # start_period: 40s
   mongo:
     image: mongo:3.7.1
     networks:
