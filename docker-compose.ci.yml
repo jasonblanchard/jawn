@@ -12,7 +12,7 @@ services:
       MONGO_HOST: mongo
       PORT: '8081'
       LOG_LEVEL: 'DEBUG'
-      APP_SECRET: '$2a$10$HuxYWte8dvZJM9UHBMEFZO'
+      APP_SECRET: "CHANGE_ME"
     depends_on:
       - mongo
     healthcheck:
