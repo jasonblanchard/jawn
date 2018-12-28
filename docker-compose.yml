@@ -3,12 +3,6 @@ services:
   app:
     build: .
     image: jasonblanchard/jawn-app
-    # healthcheck:
-    #   test: ["CMD", "curl", "-f", "http://localhost"]
-    #   interval: 15s
-    #   timeout: 10s
-    #   retries: 3
-    #   start_period: 40s
     ports:
         - "80:80"
     networks:
