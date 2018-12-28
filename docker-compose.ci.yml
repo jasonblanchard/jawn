@@ -33,6 +33,5 @@ services:
     depends_on:
       - mongo
       - app
-    # command: bash -c "cd /home/app/tests && npm run cypress:run"
 networks:
   backend:

@@ -1,8 +1,7 @@
 version: "3"
 services:
   app:
-    build: .
-    image: jasonblanchard/jawn-app
+    image: jasonblanchard/jawn-app:latest
     ports:
         - "80:80"
     networks:
