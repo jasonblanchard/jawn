@@ -2,10 +2,11 @@
 
 echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
-TAG=git rev-parse HEAD
+TAG=$(git rev-parse HEAD)
+IMAGE=jasonblanchard/jawn-app
 
-docker tag jasonblanchard/jawn-app latest
-docker tag jasonblanchard/jawn-app "$(TAG)"
+docker tag $IMAGE "$IMAGE:latest"
+docker tag $IMAGE "$IMAGE:$TAG"
 
-docker push jasonblanchard/jawn-app:latest
-docker push "jasonblanchard/jawn-app:$(TAG)"
+docker push "$IMAGE:latest"
+docker push "$IMAGE:$TAG"
