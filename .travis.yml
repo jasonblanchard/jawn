@@ -1,13 +1,15 @@
 language: node_js
 env:
+  matrix:
   - DOCKER_COMPOSE_VERSION=1.23.1
+  global:
+  - secure: tI1KBYZgGw3qYVLAKOzGwfX+RsBazlGLYJ6dNdTaMg0hxPuJWyyjh6LUBY0CPFCKek2wFNyT4AJ85A+v4PPOqD/aip4O7w8GLz6ntUGnKA8HsMZ+8yPF2ayo+85CPJyH7bca0BRh9GcSIzqmfo4s37eCVM5SyILcSc9jIhSLIG9tbOmJCAAVk2SO3P1TJ0kqwSHRrzpjLp9443/keYjVEH1X8Ciuw0C3RoM6Sb8q3nXSjS5o20w/gnOMcfVnlno3hKBhvzikNlckRGxdbFFszgzDHCFohgMcf5SXuStQ+gQpglYB6GHU79P8ii+1n2UpuKHG4KSxPV2uSqK36Q661pzWoxvng5bO0NTE/PZ6MMhjgr4tS6bhRGnIhmE8soSfeMPIYtv4nLuK2cVLRl1ny/b/xg7TrPKncbz7EdiNNBycgcy2CJDQy+paDRmiyt+dRtW4iTE9rGimT8Jlofze/qATXHzBIaFdeenSJx8dn3uwcfeZoJF093IZMY6dlKOZM9I/v6eLR0n1JT0nlwkpYthQhZMJV2fiuD+64TH6oSXULPiQpdRn9cf3a5UC4ptNW++88LIvEWBC8hKEaS3oqU9EG4/1G7WiqV+fu++0P9s8KaTU7EYOvcV08dFaGwYa0HxMFaizElsvKV0hpHRxoHZOGBfGL6Vl4Gkgg3HDOG4=
+  - secure: F1ywnu5gUB0pwXM5a40+AjJTCJfs9AXUei150pjr/6RKFrACajDbEHw25B4ObBHvmJLqLpKlzaFKB+WO+vcBaLgwC4rzi3Sh9zT7YSUSletplctEaY5zsqeqQEXTgThvsVrreLoOIwUAR5ZWOiVTOLCv0WyUJOOaASHFEMdO/m8GeYZbaJs6Cvl9Ej1a4BjYqB/CuS4F/nNAn26Zl/ZZcv4OcGaKghLddJ+CczP1K+3njl8dOvC6nPXkeh1ckyzH/TOr5m5V8I3qvqCv0q5SI50IrnAt/oVDZo8B863cE5xp/icaxrIXv/nYOMgznRjv6cSvyxG0fnB4NF/FeyyCPX02J1l0W1lLsWe8GXFVlnEj44fe3aJ6PxmzRpyIgryR1D/1J2hNpIvz4EEBuwM+KDziG/V9jLf86f3dQQXAMbFEuMTEVmeOyyCJemKNMxTsp2KPemRDrQbCJo6mJEF7q2MqU2ikl/x2Y7j8aVuPGsnJkT5NlK6c8qn+MJ+7AskTiJIzVmLwGRcC0YldufyI9XP01FGtCwa9steVJS38cFqjenAG/O/15cqquthCZbMeEurhdFuf5UV7Ni7gA4tni6u0Xk9uKaqF0jrq+3a9Pzu4RIPaXQOw9TAbRhjX2Ctj3r0Y9b9d2D+wlc8+2cPr4Y/p//XdsSebuwK/Co82U7k=
 before_install:
-  # Install latest Docker
   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
   - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
   - sudo apt-get update
   - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
-  # Install latest docker-compose
   - sudo rm /usr/local/bin/docker-compose
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
@@ -15,11 +17,18 @@ before_install:
 services:
   - docker
 script:
+  - echo $DOCKER_USERNAME
+  - echo $DOCKER_PASSWORD
   - docker-compose -f docker-compose.ci.yml build
   - docker-compose -f docker-compose.ci.yml up -d
   - sleep 15 # TODO: Loop and check health of container
   - docker ps -a
   - docker-compose -f docker-compose.ci.yml exec -T app bash -c "cd /home/app/webapp/client && npm run test"
   - docker-compose -f docker-compose.ci.yml run tests bash -c "cd /home/app/tests && npm run cypress:run"
+deploy:
+  provider: script
+  script: bash ./scripts/docker_push
+  on:
+    branch: master
 after_failure:
   - docker-compose -f docker-compose.ci.yml logs
