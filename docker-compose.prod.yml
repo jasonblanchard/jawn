@@ -1,7 +1,7 @@
 version: "3"
 services:
   app:
-    image: jasonblanchard/jawn-app:latest
+    image: "jasonblanchard/jawn-app:${TAG}"
     ports:
         - "80:80"
     networks:
