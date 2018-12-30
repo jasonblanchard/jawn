@@ -1,7 +1,7 @@
 import bootstrap from 'app/bootstrap';
 import environment from 'dotenv';
 
-environment.config({ silent: true });
+environment.config();
 
 const LOG_TAG = 'entrypoint';
 

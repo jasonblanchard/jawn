@@ -12,7 +12,7 @@ import path from 'path';
 import TokenUtils from 'app/utils/TokenUtils';
 
 const LOG_TAG = 'app';
-const BUILD_PATH = '../client/build';
+const BUILD_PATH = '../../../client/build';
 const ASSET_PATHS = JSON.parse(fs.readFileSync(path.join(__dirname, BUILD_PATH, '/static/assets.json'), 'utf8'));
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
