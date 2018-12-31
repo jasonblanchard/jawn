@@ -1,4 +1,4 @@
-import { Schema } from 'mongoose';
+import { Document, Schema } from 'mongoose';
 import DataLoader from 'dataloader';
 import moment from 'moment';
 
@@ -11,7 +11,31 @@ const UserSchema = new Schema({
   timeCreated: String,
 });
 
-function mapRecordToObject(record) {
+interface UserRecord extends Document {
+  username: string;
+  email: string;
+  password: string;
+  timeCreated: string;
+}
+
+export interface UserEntity {
+  id: string,
+  username: string;
+  email: string;
+  timeCreated: string;
+}
+
+export interface UserEntityWithAuth extends UserEntity {
+  password: string;
+}
+
+export type UserEntityInputParams = {
+  username: string;
+  email: string;
+  password: string;
+}
+
+function mapRecordToObject(record: UserRecord): UserEntity | null {
   if (!record) return null;
 
   return {
@@ -24,14 +48,21 @@ function mapRecordToObject(record) {
 
 // TODO: Error handling.
 export default class UserConnector {
-  constructor({ store, logger }) {
+  _store: any;
+  _model: any;
+  _logger: any;
+  _userIdLoader: DataLoader<{}, {}>;
+
+  // TODO: Update `any`s
+  constructor({ store, logger }: { store: any, logger: any }) {
     this._store = store;
     this._model = store.model('User', UserSchema);
     this._logger = logger;
     this._userIdLoader = new DataLoader(ids => this._batchLoadById(ids));
   }
 
-  _batchLoadById(ids) {
+  // TODO: What is {}[]?
+  _batchLoadById(ids: {}[]): Promise<({} | Error)[]> {
     this._logger.debug({ ids }, LOG_TAG);
 
     return this._model.find({
@@ -39,43 +70,47 @@ export default class UserConnector {
         $in: ids,
       },
     })
-      .then(records => {
+      .then((records: [UserRecord]) => {
         return records.map(mapRecordToObject);
       })
-      .then(entities => {
+      .then((entities: [UserEntity]) => {
         this._logger.debug({ entities }, LOG_TAG);
 
-        const entitiesById = entities.reduce((accum, entity) => {
+        type UserEntityByIdType = {
+          [key:string]: UserEntity
+        }
+
+        const entitiesById: UserEntityByIdType = entities.reduce((accum: UserEntityByIdType, entity: UserEntity) => {
           accum[entity.id] = entity;
           return accum;
         }, {});
 
         // Ensure that the return value is same length as `ids` and is in the same order https://github.com/facebook/dataloader#batch-function
-        return ids.map(id => entitiesById[id]);
+        return ids.map((id: number) => entitiesById[id]);
       });
   }
 
-  findById = id => {
+  findById = (id: number) => {
     if (!id) return Promise.resolve();
     return this._userIdLoader.load(id);
   }
 
-  findByUsername(username) {
+  findByUsername(username: string): Promise<UserEntity> {
     this._logger.debug({ username }, LOG_TAG);
     return this._model.findOne({ username })
       .then(mapRecordToObject);
   }
 
-  findForAuth(username) {
+  findForAuth(username: string): Promise<UserEntityWithAuth> {
     this._logger.debug({ username }, LOG_TAG);
     return this._model.findOne({ username })
-      .then(user => {
+      .then((user: UserRecord) => {
         if (!user) return undefined; // TODO: Raise error
         return Object.assign({}, mapRecordToObject(user), { password: user.password });
       });
   }
 
-  create(params) {
+  create(params: UserEntityInputParams): Promise<UserEntity> {
     const fields = Object.assign({}, params, { timeCreated: moment().format() });
     this._logger.debug({ username: params.username }, LOG_TAG);
 

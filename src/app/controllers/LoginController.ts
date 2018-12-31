@@ -1,19 +1,28 @@
+import {Request, Response, NextFunction} from "express";
+import { UserEntityWithAuth } from 'app/services/UserConnector';
 import Boom from 'boom';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+
+import UserService from 'app/services/UserService';
 
 const LOG_TAG = 'LoginController';
 const SALT_ROUNDS = 10;
 
 export default class LoginController {
-  constructor(store, userService, logger, appSecret) {
+  _store: any;
+  _userService: UserService;
+  _logger: any;
+  _appSecret: string;
+
+  constructor(store: any, userService: UserService, logger: any, appSecret: string) {
     this._store = store;
     this._userService = userService;
     this._logger = logger;
     this._appSecret = appSecret;
   }
 
-  handleLogin = (request, response, next) => {
+  handleLogin = (request: Request, response: Response, next: NextFunction) => {
     if (!request.body.username || !request.body.password) return next(Boom.badRequest('Username or password not provided'));
 
     const { username, password } = request.body;
@@ -47,28 +56,28 @@ export default class LoginController {
       });
   }
 
-  handleSignUp = (request, response, next) => {
+  handleSignUp = (request: Request, response: Response, next: NextFunction) => {
     const { email, username, password } = request.body;
     if (!email || !username || !password) return next(Boom.badRequest('Username or password not provided'));
 
     this._userService.findForAuth(username)
-      .then(user => {
+      .then((user: UserEntityWithAuth): Promise<any> => {
         this._logger.debug({ user }, LOG_TAG);
-        if (user) return next(Boom.conflict('Username is taken'));
+        if (user) throw Boom.conflict('Username is taken');
         return this.hashPassword(password, SALT_ROUNDS);
       })
-      .then(hashedPassword => {
+      .then((hashedPassword: string) => {
         return this._userService.create({ email, username, password: hashedPassword });
       })
       .then(() => {
         response.status(204).send();
       })
-      .catch(error => {
+      .catch((error: Error) => {
         next(error);
       });
   }
 
-  hashPassword = (password, saltRounds) => {
+  hashPassword = (password: string, saltRounds: number) => {
     return new Promise((resolve, reject) => {
       bcrypt.hash(password, saltRounds, (error, hash) => {
         if (error) return reject(error);
