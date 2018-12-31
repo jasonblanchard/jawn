@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Document, Schema } from 'mongoose';
 import moment from 'moment';
 
 const LOG_TAG = 'EntryConnector';
@@ -10,7 +10,26 @@ const EntrySchema = new Schema({
   userId: { type: String, index: true }, // TODO: Figure out how to build these indexes.
 });
 
-function mapRecordToObject(record) {
+interface EntryRecord extends Document {
+  text: string;
+  timeCreated: string;
+  timeUpdated: string;
+  userId: string;
+}
+
+export interface EntryEntity {
+  id: string;
+  text: string;
+  timeCreated: string;
+  timeUpdated: string;
+  userId: string;
+}
+
+export type EntryEntityInputParams = {
+  text: string;
+}
+
+function mapRecordToObject(record: EntryRecord): EntryEntity {
   return {
     id: record.id,
     text: record.text || '',
@@ -22,17 +41,22 @@ function mapRecordToObject(record) {
 
 // TODO: Error handling.
 export default class EntryConnector {
-  constructor({ store, logger }) {
+  _store: any;
+  _model: any;
+  _logger: any;
+
+  constructor({ store, logger }: { store: any, logger: any}) {
     this._store = store;
     this._model = store.model('Entry', EntrySchema);
     this._logger = logger;
   }
 
-  listByUser(userId, options) {
+  listByUser(userId: string, options: { since: string, before: string}) {
     this._logger.debug({ options }, LOG_TAG);
 
     const query = {
       userId,
+      _id: {},
     };
 
     if (options.since) {
@@ -45,7 +69,7 @@ export default class EntryConnector {
       query._id = { ...query._id, ...{ $lt: beforeObjectId } };
     }
 
-    return this._model.find(query).then(records => {
+    return this._model.find(query).then((records: [EntryRecord]) => {
       const entries = records.map(mapRecordToObject);
       // this._logger.debug({ entries }, LOG_TAG);
 
@@ -53,7 +77,7 @@ export default class EntryConnector {
     });
   }
 
-  create(params, userId) {
+  create(params: EntryEntityInputParams, userId: string): Promise<EntryEntity> {
     const fields = Object.assign({}, params, { timeCreated: moment().format(), userId });
     this._logger.debug({ fields }, LOG_TAG);
 
@@ -61,7 +85,7 @@ export default class EntryConnector {
     return entry.save().then(mapRecordToObject);
   }
 
-  update(id, params, userId) {
+  update(id: string, params: EntryEntityInputParams, userId: string): Promise<EntryEntity> {
     const fields = Object.assign({}, params, { timeUpdated: moment().format() });
     const query = { _id: id, userId };
     this._logger.debug({ fields, query }, LOG_TAG);
@@ -70,7 +94,7 @@ export default class EntryConnector {
     return this._model.findOneAndUpdate(query, { $set: fields }, { new: true }).then(mapRecordToObject);
   }
 
-  delete(id, userId) {
+  delete(id: string, userId: string): Promise<{id: string}> {
     // TODO: If not found, raise an error;
     return this._model.remove({ _id: id, userId })
       .then(() => ({
