@@ -1,5 +1,6 @@
 import { Document, Schema } from 'mongoose';
 import DataLoader from 'dataloader';
+import LoggerService from 'app/services/LoggerService';
 import moment from 'moment';
 
 const LOG_TAG = 'UserConnector';
@@ -18,7 +19,7 @@ interface UserRecord extends Document {
   timeCreated: string;
 }
 
-export interface UserEntity {
+interface UserEntity {
   id: string,
   username: string;
   email: string;
@@ -48,13 +49,13 @@ function mapRecordToObject(record: UserRecord): UserEntity | null {
 
 // TODO: Error handling.
 export default class UserConnector {
-  _store: any;
-  _model: any;
-  _logger: any;
-  _userIdLoader: DataLoader<{}, {}>;
+  private _store: any;
+  private _model: any;
+  private _logger: LoggerService;
+  private _userIdLoader: DataLoader<{}, {}>;
 
   // TODO: Update `any`s
-  constructor({ store, logger }: { store: any, logger: any }) {
+  constructor({ store, logger }: { store: any, logger: LoggerService }) {
     this._store = store;
     this._model = store.model('User', UserSchema);
     this._logger = logger;
@@ -62,7 +63,7 @@ export default class UserConnector {
   }
 
   // TODO: What is {}[]?
-  _batchLoadById(ids: {}[]): Promise<({} | Error)[]> {
+  _batchLoadById(ids: {}[]) {
     this._logger.debug({ ids }, LOG_TAG);
 
     return this._model.find({
@@ -95,7 +96,7 @@ export default class UserConnector {
     return this._userIdLoader.load(id);
   }
 
-  findByUsername(username: string): Promise<UserEntity> {
+  findByUsername(username: string) {
     this._logger.debug({ username }, LOG_TAG);
     return this._model.findOne({ username })
       .then(mapRecordToObject);
@@ -105,12 +106,12 @@ export default class UserConnector {
     this._logger.debug({ username }, LOG_TAG);
     return this._model.findOne({ username })
       .then((user: UserRecord) => {
-        if (!user) return undefined; // TODO: Raise error
+        if (!user) throw new Error(); // TODO: Raise error
         return Object.assign({}, mapRecordToObject(user), { password: user.password });
       });
   }
 
-  create(params: UserEntityInputParams): Promise<UserEntity> {
+  create(params: UserEntityInputParams) {
     const fields = Object.assign({}, params, { timeCreated: moment().format() });
     this._logger.debug({ username: params.username }, LOG_TAG);
 

@@ -1,8 +1,8 @@
 import {Request, Response, NextFunction} from "express";
-import { UserEntityWithAuth } from 'app/services/UserConnector';
 import Boom from 'boom';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import Logger from 'app/services/LoggerService';
 
 import UserService from 'app/services/UserService';
 
@@ -12,10 +12,10 @@ const SALT_ROUNDS = 10;
 export default class LoginController {
   _store: any;
   _userService: UserService;
-  _logger: any;
+  _logger: Logger;
   _appSecret: string;
 
-  constructor(store: any, userService: UserService, logger: any, appSecret: string) {
+  constructor(store: any, userService: UserService, logger: Logger, appSecret: string) {
     this._store = store;
     this._userService = userService;
     this._logger = logger;
@@ -29,7 +29,7 @@ export default class LoginController {
     this._logger.debug({ username }, LOG_TAG);
 
     this._userService.findForAuth(username)
-      .then(user => {
+      .then((user) => {
         if (!user) {
           this._logger.debug('User does not exist', LOG_TAG);
           return next(Boom.unauthorized('Username & password do not match'));
@@ -51,7 +51,7 @@ export default class LoginController {
           });
         });
       })
-      .catch(error => {
+      .catch((error) => {
         next(error);
       });
   }
@@ -61,7 +61,7 @@ export default class LoginController {
     if (!email || !username || !password) return next(Boom.badRequest('Username or password not provided'));
 
     this._userService.findForAuth(username)
-      .then((user: UserEntityWithAuth): Promise<any> => {
+      .then((user): Promise<any> => {
         this._logger.debug({ user }, LOG_TAG);
         if (user) throw Boom.conflict('Username is taken');
         return this.hashPassword(password, SALT_ROUNDS);
@@ -72,7 +72,7 @@ export default class LoginController {
       .then(() => {
         response.status(204).send();
       })
-      .catch((error: Error) => {
+      .catch((error) => {
         next(error);
       });
   }

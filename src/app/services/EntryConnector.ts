@@ -1,3 +1,4 @@
+import LoggerService from 'app/services/LoggerService';
 import mongoose, { Document, Schema } from 'mongoose';
 import moment from 'moment';
 
@@ -29,7 +30,7 @@ export type EntryEntityInputParams = {
   text: string;
 }
 
-function mapRecordToObject(record: EntryRecord): EntryEntity {
+function mapRecordToObject(record: EntryRecord) {
   return {
     id: record.id,
     text: record.text || '',
@@ -41,17 +42,15 @@ function mapRecordToObject(record: EntryRecord): EntryEntity {
 
 // TODO: Error handling.
 export default class EntryConnector {
-  _store: any;
-  _model: any;
-  _logger: any;
+  private _model: any;
+  private _logger: LoggerService;
 
-  constructor({ store, logger }: { store: any, logger: any}) {
-    this._store = store;
+  constructor({ logger, store }: { store: any, logger: LoggerService}) {
     this._model = store.model('Entry', EntrySchema);
     this._logger = logger;
   }
 
-  listByUser(userId: string, options: { since: string, before: string}) {
+  listByUser(userId: string, options: { since?: string, before?: string}) {
     this._logger.debug({ options }, LOG_TAG);
 
     const query = {
@@ -77,7 +76,7 @@ export default class EntryConnector {
     });
   }
 
-  create(params: EntryEntityInputParams, userId: string): Promise<EntryEntity> {
+  create(params: EntryEntityInputParams, userId: string) {
     const fields = Object.assign({}, params, { timeCreated: moment().format(), userId });
     this._logger.debug({ fields }, LOG_TAG);
 
@@ -85,7 +84,7 @@ export default class EntryConnector {
     return entry.save().then(mapRecordToObject);
   }
 
-  update(id: string, params: EntryEntityInputParams, userId: string): Promise<EntryEntity> {
+  update(id: string, params: EntryEntityInputParams, userId: string) {
     const fields = Object.assign({}, params, { timeUpdated: moment().format() });
     const query = { _id: id, userId };
     this._logger.debug({ fields, query }, LOG_TAG);
@@ -94,7 +93,7 @@ export default class EntryConnector {
     return this._model.findOneAndUpdate(query, { $set: fields }, { new: true }).then(mapRecordToObject);
   }
 
-  delete(id: string, userId: string): Promise<{id: string}> {
+  delete(id: string, userId: string) {
     // TODO: If not found, raise an error;
     return this._model.remove({ _id: id, userId })
       .then(() => ({
