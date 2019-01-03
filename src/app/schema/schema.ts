@@ -51,32 +51,32 @@ type Context = {
 
 const resolvers = {
   Entry: {
-    user: (parent: ParentParams, args: any, context: Context) => {
+    user: (parent: ParentParams, _args: any, context: Context) => {
       return context.services.userService.findById(parent.userId);
     },
   },
   User: {
-    entries: (parent: ParentParams, args: { id: string }, context: Context) => {
+    entries: (parent: ParentParams, _args: { id: string }, context: Context) => {
       return context.services.entryService.listByUser(parent.userId, {});
     },
   },
   Query: {
-    entries: (parent: ParentParams, args: { since: string, before: string }, context: Context) => {
+    entries: (_parent: ParentParams, args: { since: string, before: string }, context: Context) => {
       const { since, before } = args;
       return context.services.entryService.listByUser(context.userId, { since, before });
     },
-    user: (parent: ParentParams, args: { id: string }, context: Context) => {
+    user: (_parent: ParentParams, args: { id: string }, context: Context) => {
       return context.services.userService.findById(args.id);
     },
   },
   Mutation: {
-    updateEntry: (parent: ParentParams, args: { id: string, input: EntryEntityInputParams }, context: Context) => {
+    updateEntry: (_parent: ParentParams, args: { id: string, input: EntryEntityInputParams }, context: Context) => {
       return context.services.entryService.update(args.id, args.input, context.userId);
     },
-    createEntry: (parent: ParentParams, args: { input: EntryEntityInputParams }, context: Context) => {
+    createEntry: (_parent: ParentParams, args: { input: EntryEntityInputParams }, context: Context) => {
       return context.services.entryService.create(args.input, context.userId);
     },
-    deleteEntry: (parent: ParentParams, args: { id: string }, context: Context) => {
+    deleteEntry: (_parent: ParentParams, args: { id: string }, context: Context) => {
       return context.services.entryService.delete(args.id, context.userId);
     },
   },

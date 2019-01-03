@@ -49,14 +49,12 @@ function mapRecordToObject(record: UserRecord): UserEntity | null {
 
 // TODO: Error handling.
 export default class UserConnector {
-  private _store: any;
   private _model: any;
   private _logger: LoggerService;
   private _userIdLoader: DataLoader<{}, {}>;
 
   // TODO: Update `any`s
   constructor({ store, logger }: { store: any, logger: LoggerService }) {
-    this._store = store;
     this._model = store.model('User', UserSchema);
     this._logger = logger;
     this._userIdLoader = new DataLoader(ids => this._batchLoadById(ids));
