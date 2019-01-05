@@ -1,10 +1,8 @@
-import mongoose from 'mongoose';
+import { createConnection } from 'app/services/MongoService';
 
 export default function() {
-  // TODO: Move this stuff to a service with types
-  mongoose.Promise = Promise;
   const dbURL = process.env.MONGO_USERNAME ? `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}:27017/jawn` : `mongodb://${process.env.MONGO_HOST}:27017/${process.env.DB_NAME}`;
-  const db = mongoose.createConnection(dbURL);
+  const db = createConnection(dbURL);
 
   // https://github.com/Automattic/mongoose/issues/5169#issuecomment-314983113
   db.on('error', err => {

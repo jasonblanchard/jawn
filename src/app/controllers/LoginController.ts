@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { MongoStore } from 'app/services/MongoService';
 import Boom from 'boom';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -10,12 +11,12 @@ const LOG_TAG = 'LoginController';
 const SALT_ROUNDS = 10;
 
 export default class LoginController {
-  _store: any;
+  _store: MongoStore;
   _userService: UserService;
   _logger: Logger;
   _appSecret: string;
 
-  constructor(store: any, userService: UserService, logger: Logger, appSecret: string) {
+  constructor(store: MongoStore, userService: UserService, logger: Logger, appSecret: string) {
     this._store = store;
     this._userService = userService;
     this._logger = logger;

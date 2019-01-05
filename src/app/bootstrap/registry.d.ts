@@ -1,4 +1,5 @@
 import { IContainer } from 'bottlejs';
+import { MongoStore } from 'app/services/MongoService';
 import UserService from 'app/services/UserService';
 import GraphqlService from 'app/services/GraphqlService';
 import LoggerService, { LogLevelDesc } from 'app/services/LoggerService';
@@ -9,4 +10,5 @@ export interface Registry extends IContainer {
     graphqlService: GraphqlService
     logger: LoggerService
     loginController: LoginController
+    store: MongoStore
 }

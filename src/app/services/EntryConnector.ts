@@ -1,5 +1,6 @@
+import { MongoStore } from 'app/services/MongoService';
 import LoggerService from 'app/services/LoggerService';
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Schema, Model } from 'mongoose';
 import moment from 'moment';
 
 const LOG_TAG = 'EntryConnector';
@@ -42,10 +43,10 @@ function mapRecordToObject(record: EntryRecord) {
 
 // TODO: Error handling.
 export default class EntryConnector {
-  private _model: any;
+  private _model: Model<EntryRecord>;
   private _logger: LoggerService;
 
-  constructor({ logger, store }: { store: any, logger: LoggerService}) {
+  constructor({ logger, store }: { store: MongoStore, logger: LoggerService}) {
     this._model = store.model('Entry', EntrySchema);
     this._logger = logger;
   }

@@ -1,4 +1,5 @@
 import { Request } from "express";
+import { MongoStore } from 'app/services/MongoService';
 import EntryService from 'app/services/EntryService';
 import EntryConnector from 'app/services/EntryConnector';
 import LoggerService from 'app/services/LoggerService';
@@ -13,10 +14,10 @@ export interface GraphQLRequest extends Request {
 }
 
 export default class GraphqlService {
-  private _store: any;
+  private _store: MongoStore;
   private _logger: LoggerService;
 
-  constructor({ store, logger }: { store: any, logger: LoggerService}) {
+  constructor({ store, logger }: { store: MongoStore, logger: LoggerService}) {
     this._store = store;
     this._logger = logger;
   }

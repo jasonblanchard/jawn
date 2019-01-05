@@ -1,4 +1,5 @@
-import { Document, Schema } from 'mongoose';
+import { Document, Schema, Model } from 'mongoose';
+import { MongoStore } from 'app/services/MongoService';
 import DataLoader from 'dataloader';
 import LoggerService from 'app/services/LoggerService';
 import moment from 'moment';
@@ -49,12 +50,12 @@ function mapRecordToObject(record: UserRecord): UserEntity | null {
 
 // TODO: Error handling.
 export default class UserConnector {
-  private _model: any;
+  private _model: Model<UserRecord>;
   private _logger: LoggerService;
   private _userIdLoader: DataLoader<{}, UserEntity>;
 
   // TODO: Update `any`s
-  constructor({ store, logger }: { store: any, logger: LoggerService }) {
+  constructor({ store, logger }: { store: MongoStore, logger: LoggerService }) {
     this._model = store.model('User', UserSchema);
     this._logger = logger;
     this._userIdLoader = new DataLoader(ids => this._batchLoadById(ids));
