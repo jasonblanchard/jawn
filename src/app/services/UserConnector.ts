@@ -52,17 +52,15 @@ function mapRecordToObject(record: UserRecord): UserEntity | null {
 export default class UserConnector {
   private _model: Model<UserRecord>;
   private _logger: LoggerService;
-  private _userIdLoader: DataLoader<{}, UserEntity>;
+  private _userIdLoader: DataLoader<string, UserEntity>;
 
-  // TODO: Update `any`s
   constructor({ store, logger }: { store: MongoStore, logger: LoggerService }) {
     this._model = store.model('User', UserSchema);
     this._logger = logger;
     this._userIdLoader = new DataLoader(ids => this._batchLoadById(ids));
   }
 
-  // TODO: What is {}[]?
-  _batchLoadById(ids: {}[]) {
+  _batchLoadById(ids: string[]) {
     this._logger.debug({ ids }, LOG_TAG);
 
     return this._model.find({
@@ -86,7 +84,7 @@ export default class UserConnector {
         }, {});
 
         // Ensure that the return value is same length as `ids` and is in the same order https://github.com/facebook/dataloader#batch-function
-        return ids.map((id: number) => entitiesById[id]);
+        return ids.map(id => entitiesById[id]);
       });
   }
 
