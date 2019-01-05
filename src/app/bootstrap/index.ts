@@ -1,4 +1,4 @@
-import Bottle from 'bottlejs';
+import Bottle, { IContainer } from 'bottlejs';
 
 import bootstrapGraphqlService from './bootstrapGraphqlService';
 import bootstrapLogger from './bootstrapLogger';
@@ -7,7 +7,7 @@ import bootstrapServer from './bootstrapServer';
 import bootstrapStore from './bootstrapStore';
 import bootstrapUserService from './bootstrapUserService';
 
-export default function() {
+export default function(): IContainer {
   const bottle = new Bottle();
 
   bottle.factory('graphqlService', bootstrapGraphqlService);

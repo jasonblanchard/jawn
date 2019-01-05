@@ -1,4 +1,4 @@
-import {Request, Response, NextFunction} from "express";
+import { Request, Response, NextFunction } from "express";
 import Boom from 'boom';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';

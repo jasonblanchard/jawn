@@ -6,7 +6,7 @@ import UserService from 'app/services/UserService';
 import UserConnector from 'app/services/UserConnector';
 import schema from 'app/schema/schema';
 
-interface GraphQLRequest extends Request {
+export interface GraphQLRequest extends Request {
   accessTokenPayload: {
     id: string
   }

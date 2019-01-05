@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 export default function() {
+  // TODO: Move this stuff to a service with types
   mongoose.Promise = Promise;
   const dbURL = process.env.MONGO_USERNAME ? `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}:27017/jawn` : `mongodb://${process.env.MONGO_HOST}:27017/${process.env.DB_NAME}`;
   const db = mongoose.createConnection(dbURL);

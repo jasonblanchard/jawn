@@ -1,5 +1,7 @@
 import logger, { LogLevelDesc } from 'loglevel';
 
+export { LogLevelDesc };
+
 // TODO: Build this out.
 export default class LoggerService {
   private _logger: logger.Logger;

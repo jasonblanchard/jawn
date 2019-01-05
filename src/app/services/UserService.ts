@@ -1,8 +1,8 @@
-import UserConnector, { UserEntityInputParams, UserEntityWithAuth } from 'app/services/UserConnector';
+import UserConnector, { UserEntityInputParams } from 'app/services/UserConnector';
 
 // TODO: Error handling.
 export default class UserService {
-  _connector: any;
+  _connector: UserConnector;
 
   constructor({ connector }: { connector: UserConnector }) {
     this._connector = connector;
@@ -17,7 +17,7 @@ export default class UserService {
   }
 
   // TODO: Use return types exported from UserConnector so these don't have to stay in sync?
-  findForAuth(username: string): Promise<UserEntityWithAuth> {
+  findForAuth(username: string) {
     return this._connector.findForAuth(username);
   }
 

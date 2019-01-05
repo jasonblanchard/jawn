@@ -1,8 +1,10 @@
 import { graphqlExpress } from 'apollo-server-express';
+import { Registry } from 'app/bootstrap/registry';
+import { GraphQLRequest } from 'app/services/GraphqlService';
 import bodyParser from 'body-parser';
 import Boom from 'boom';
 import cookieParser from 'cookie-parser';
-import express from 'express';
+import express, { Request, Response } from 'express';
 import expressJwt from 'express-jwt';
 import favicon from 'serve-favicon';
 import fs from 'fs';
@@ -16,7 +18,8 @@ const BUILD_PATH = '../../../client/build';
 const ASSET_PATHS = JSON.parse(fs.readFileSync(path.join(__dirname, BUILD_PATH, '/static/assets.json'), 'utf8'));
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
-export default function(registry) {
+
+export default function(registry: Registry) {
   const appSecret = process.env.APP_SECRET; // TODO: Bootstrap this separately
   const {
     graphqlService,
@@ -36,7 +39,7 @@ export default function(registry) {
   app.use(morgan(NODE_ENV === 'development' ? 'dev' : 'combined'));
   // TODO: Include audience nd issuer values?
   app.use(expressJwt({
-    secret: appSecret,
+    secret: appSecret || '',
     requestProperty: 'accessTokenPayload',
     getToken: request => {
       return TokenUtils.parseAuthorizationHeader(request.headers.authorization);
@@ -51,16 +54,16 @@ export default function(registry) {
     },
   }));
 
-  app.get('/health', (request, response) => {
+  app.get('/health', (_request, response) => {
     return response.json({ ok: true });
   });
 
   app.post('/api/login', loginController.handleLogin);
   app.post('/api/sign-up', loginController.handleSignUp);
 
-  app.use('/api/graphql', graphqlExpress(request => graphqlService.handleRequest(request)));
+  app.use('/api/graphql', graphqlExpress((request: GraphQLRequest) => graphqlService.handleRequest(request)));
 
-  app.use('/api/*', (request, response, next) => {
+  app.use('/api/*', (_request, _response, next) => {
     next(Boom.notFound());
   });
 
@@ -90,7 +93,7 @@ export default function(registry) {
       });
   });
 
-  app.use((error, request, response, next) => { // eslint-disable-line no-unused-vars
+  app.use((error: Boom, _request: Request, response: Response) => {
     if (error.name === 'UnauthorizedError') {
       error = Boom.unauthorized();
     }

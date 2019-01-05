@@ -19,7 +19,7 @@ interface UserRecord extends Document {
   timeCreated: string;
 }
 
-interface UserEntity {
+export interface UserEntity {
   id: string,
   username: string;
   email: string;
@@ -51,7 +51,7 @@ function mapRecordToObject(record: UserRecord): UserEntity | null {
 export default class UserConnector {
   private _model: any;
   private _logger: LoggerService;
-  private _userIdLoader: DataLoader<{}, {}>;
+  private _userIdLoader: DataLoader<{}, UserEntity>;
 
   // TODO: Update `any`s
   constructor({ store, logger }: { store: any, logger: LoggerService }) {
@@ -89,8 +89,8 @@ export default class UserConnector {
       });
   }
 
-  findById = (id: number) => {
-    if (!id) return Promise.resolve();
+  findById = (id: string): Promise<UserEntity | null> => {
+    if (!id) return Promise.resolve(null);
     return this._userIdLoader.load(id);
   }
 
