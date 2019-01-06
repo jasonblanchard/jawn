@@ -62,12 +62,12 @@ export default class LoginController {
     if (!email || !username || !password) return next(Boom.badRequest('Username or password not provided'));
 
     this._userService.findForAuth(username)
-      .then((user): Promise<any> => {
+      .then((user) => {
         this._logger.debug({ user }, LOG_TAG);
         if (user) throw Boom.conflict('Username is taken');
         return this.hashPassword(password, SALT_ROUNDS);
       })
-      .then((hashedPassword: string) => {
+      .then((hashedPassword) => {
         return this._userService.create({ email, username, password: hashedPassword });
       })
       .then(() => {
@@ -78,7 +78,7 @@ export default class LoginController {
       });
   }
 
-  hashPassword = (password: string, saltRounds: number) => {
+  hashPassword = (password: string, saltRounds: number): Promise<string> => {
     return new Promise((resolve, reject) => {
       bcrypt.hash(password, saltRounds, (error, hash) => {
         if (error) return reject(error);

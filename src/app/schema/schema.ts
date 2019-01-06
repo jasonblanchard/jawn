@@ -57,7 +57,7 @@ const resolvers = {
   },
   User: {
     entries: (parent: ParentParams, _args: { id: string }, context: Context) => {
-      return context.services.entryService.listByUser(parent.userId, {});
+      return context.services.entryService.listByUser(parent.userId);
     },
   },
   Query: {

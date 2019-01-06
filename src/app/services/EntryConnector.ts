@@ -31,6 +31,8 @@ export type EntryEntityInputParams = {
   text: string;
 }
 
+export type ListByUserInputParams = { since?: string, before?: string }
+
 function mapRecordToObject(record: EntryRecord) {
   return {
     id: record.id,
@@ -51,7 +53,7 @@ export default class EntryConnector {
     this._logger = logger;
   }
 
-  listByUser(userId: string, options: { since?: string, before?: string}) {
+  listByUser(userId: string, options: ListByUserInputParams = {}) {
     this._logger.debug({ options }, LOG_TAG);
 
     const query = {
@@ -69,7 +71,7 @@ export default class EntryConnector {
       query._id = { ...query._id, ...{ $lt: beforeObjectId } };
     }
 
-    return this._model.find(query).then((records: [EntryRecord]) => {
+    return this._model.find(query).then((records: EntryRecord[]) => {
       const entries = records.map(mapRecordToObject);
       // this._logger.debug({ entries }, LOG_TAG);
 

@@ -68,10 +68,10 @@ export default class UserConnector {
         $in: ids,
       },
     })
-      .then((records: [UserRecord]) => {
+      .then((records) => {
         return records.map(mapRecordToObject);
       })
-      .then((entities: [UserEntity]) => {
+      .then((entities) => {
         this._logger.debug({ entities }, LOG_TAG);
 
         type UserEntityByIdType = {

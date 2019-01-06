@@ -1,4 +1,4 @@
-import EntryConnector, { EntryEntityInputParams } from 'app/services/EntryConnector'
+import EntryConnector, { EntryEntityInputParams, ListByUserInputParams } from 'app/services/EntryConnector'
 
 // TODO: Error handling.
 export default class EntryService {
@@ -8,7 +8,7 @@ export default class EntryService {
     this._connector = connector;
   }
 
-  listByUser(userId: string, options: { since?: string, before?: string}) {
+  listByUser(userId: string, options?: ListByUserInputParams) {
     return this._connector.listByUser(userId, options);
   }
 
