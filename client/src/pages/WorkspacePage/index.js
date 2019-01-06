@@ -44,6 +44,14 @@ const Container = styled.section`
 const Nav = styled.nav`
   flex: 1;
   grid-area: nav;
+  height: 100vh;
+  overflow: scroll;
+  background: ${props => props.theme.colors.grayLight};
+
+  @media (max-width: 768px) {
+    height: auto;
+    overflow: visible;
+  }
 `;
 
 const Main = styled.section`
@@ -67,10 +75,6 @@ const NavLink = styled(Link)`
   &:hover {
     text-decoration: none;
     background: ${props => props.theme.backgroundLightest};
-  }
-
-  &:last-child {
-    border: 0;
   }
 `;
 
