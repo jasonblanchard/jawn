@@ -46,7 +46,7 @@ class Registry implements RegistryInterface, IContainer {
   }
 }
 
-export default function(): Registry {
+export default function() {
   const bottle = new Bottle();
 
   bottle.factory('graphqlService', (registry: Registry) => bootstrapGraphqlService(registry));
