@@ -31,7 +31,7 @@ export interface UserEntityWithAuth extends UserEntity {
   password: string;
 }
 
-export type UserEntityInputParams = {
+export interface UserEntityInputParams {
   username: string;
   email: string;
   password: string;
@@ -74,7 +74,7 @@ export default class UserConnector {
       .then((entities) => {
         this._logger.debug({ entities }, LOG_TAG);
 
-        type UserEntityByIdType = {
+        interface UserEntityByIdType {
           [key:string]: UserEntity
         }
 

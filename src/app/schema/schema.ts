@@ -37,11 +37,11 @@ const typeDefs = `
   }
 `;
 
-type ParentParams = {
+interface ParentParams {
   userId: string
 }
 
-type Context = {
+interface Context {
   userId: string
   services: {
     entryService: EntryService

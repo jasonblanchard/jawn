@@ -27,11 +27,14 @@ export interface EntryEntity {
   userId: string;
 }
 
-export type EntryEntityInputParams = {
+export interface EntryEntityInputParams {
   text: string;
 }
 
-export type ListByUserInputParams = { since?: string, before?: string }
+export interface ListByUserInputParams {
+  since?: string,
+  before?: string
+}
 
 function mapRecordToObject(record: EntryRecord) {
   return {
