@@ -14,21 +14,21 @@ export interface GraphQLRequest extends Request {
 }
 
 export default class GraphqlService {
-  private _store: MongoStore;
-  private _logger: LoggerService;
+  private store: MongoStore;
+  private logger: LoggerService;
 
   constructor({ store, logger }: { store: MongoStore, logger: LoggerService}) {
-    this._store = store;
-    this._logger = logger;
+    this.store = store;
+    this.logger = logger;
   }
 
   handleRequest = (request: GraphQLRequest) => {
     const entryService = new EntryService({
-      connector: new EntryConnector({ store: this._store, logger: this._logger }),
+      connector: new EntryConnector({ store: this.store, logger: this.logger }),
     });
 
     const userService = new UserService({
-      connector: new UserConnector({ store: this._store, logger: this._logger }),
+      connector: new UserConnector({ store: this.store, logger: this.logger }),
     });
 
     return {

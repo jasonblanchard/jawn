@@ -2,26 +2,26 @@ import UserConnector, { UserEntityInputParams } from 'app/services/UserConnector
 
 // TODO: Error handling.
 export default class UserService {
-  _connector: UserConnector;
+  connector: UserConnector;
 
   constructor({ connector }: { connector: UserConnector }) {
-    this._connector = connector;
+    this.connector = connector;
   }
 
   findById(id: string) {
-    return this._connector.findById(id);
+    return this.connector.findById(id);
   }
 
   findByUsername(username: string) {
-    return this._connector.findByUsername(username);
+    return this.connector.findByUsername(username);
   }
 
   // TODO: Use return types exported from UserConnector so these don't have to stay in sync?
   findForAuth(username: string) {
-    return this._connector.findForAuth(username);
+    return this.connector.findForAuth(username);
   }
 
   create(params: UserEntityInputParams) {
-    return this._connector.create(params);
+    return this.connector.create(params);
   }
 }

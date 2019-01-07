@@ -4,23 +4,23 @@ export { LogLevelDesc };
 
 // TODO: Build this out.
 export default class LoggerService {
-  private _logger: logger.Logger;
+  private logger: logger.Logger;
 
   constructor(loglevel: LogLevelDesc) {
-    this._logger = logger;
+    this.logger = logger;
     logger.setLevel(loglevel);
   }
 
   info(message: any, tag: string) {
-    this._logger.debug(LoggerService.format('INFO', message, tag));
+    this.logger.debug(LoggerService.format('INFO', message, tag));
   }
 
   debug(message: any, tag: string) {
-    this._logger.debug(LoggerService.format('DEBUG', message, tag));
+    this.logger.debug(LoggerService.format('DEBUG', message, tag));
   }
 
   error(message: any, tag: string) {
-    this._logger.error(LoggerService.format('ERROR', message, tag));
+    this.logger.error(LoggerService.format('ERROR', message, tag));
   }
 
   static format(level: string, message: any, tag: string) {

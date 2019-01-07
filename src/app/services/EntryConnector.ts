@@ -48,16 +48,16 @@ function mapRecordToObject(record: EntryRecord) {
 
 // TODO: Error handling.
 export default class EntryConnector {
-  private _model: Model<EntryRecord>;
-  private _logger: LoggerService;
+  private model: Model<EntryRecord>;
+  private logger: LoggerService;
 
   constructor({ logger, store }: { store: MongoStore, logger: LoggerService}) {
-    this._model = store.model('Entry', EntrySchema);
-    this._logger = logger;
+    this.model = store.model('Entry', EntrySchema);
+    this.logger = logger;
   }
 
   listByUser(userId: string, options: ListByUserInputParams = {}) {
-    this._logger.debug({ options }, LOG_TAG);
+    this.logger.debug({ options }, LOG_TAG);
 
     const query = {
       userId,
@@ -74,9 +74,9 @@ export default class EntryConnector {
       query._id = { ...query._id, ...{ $lt: beforeObjectId } };
     }
 
-    return this._model.find(query).then((records: EntryRecord[]) => {
+    return this.model.find(query).then((records: EntryRecord[]) => {
       const entries = records.map(mapRecordToObject);
-      // this._logger.debug({ entries }, LOG_TAG);
+      // this.logger.debug({ entries }, LOG_TAG);
 
       return entries;
     });
@@ -84,24 +84,24 @@ export default class EntryConnector {
 
   create(params: EntryEntityInputParams, userId: string) {
     const fields = Object.assign({}, params, { timeCreated: moment().format(), userId });
-    this._logger.debug({ fields }, LOG_TAG);
+    this.logger.debug({ fields }, LOG_TAG);
 
-    const entry = new this._model(fields);
+    const entry = new this.model(fields);
     return entry.save().then(mapRecordToObject);
   }
 
   update(id: string, params: EntryEntityInputParams, userId: string) {
     const fields = Object.assign({}, params, { timeUpdated: moment().format() });
     const query = { _id: id, userId };
-    this._logger.debug({ fields, query }, LOG_TAG);
+    this.logger.debug({ fields, query }, LOG_TAG);
 
     // TODO: If not found, raise an error.
-    return this._model.findOneAndUpdate(query, { $set: fields }, { new: true }).then(mapRecordToObject);
+    return this.model.findOneAndUpdate(query, { $set: fields }, { new: true }).then(mapRecordToObject);
   }
 
   delete(id: string, userId: string) {
     // TODO: If not found, raise an error;
-    return this._model.remove({ _id: id, userId })
+    return this.model.remove({ _id: id, userId })
       .then(() => ({
         id,
       }));

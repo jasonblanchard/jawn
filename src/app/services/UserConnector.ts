@@ -50,20 +50,20 @@ function mapRecordToObject(record: UserRecord): UserEntity | null {
 
 // TODO: Error handling.
 export default class UserConnector {
-  private _model: Model<UserRecord>;
-  private _logger: LoggerService;
-  private _userIdLoader: DataLoader<string, UserEntity>;
+  private model: Model<UserRecord>;
+  private logger: LoggerService;
+  private userIdLoader: DataLoader<string, UserEntity>;
 
   constructor({ store, logger }: { store: MongoStore, logger: LoggerService }) {
-    this._model = store.model('User', UserSchema);
-    this._logger = logger;
-    this._userIdLoader = new DataLoader(ids => this._batchLoadById(ids));
+    this.model = store.model('User', UserSchema);
+    this.logger = logger;
+    this.userIdLoader = new DataLoader(ids => this._batchLoadById(ids));
   }
 
   _batchLoadById(ids: string[]) {
-    this._logger.debug({ ids }, LOG_TAG);
+    this.logger.debug({ ids }, LOG_TAG);
 
-    return this._model.find({
+    return this.model.find({
       _id: {
         $in: ids,
       },
@@ -72,7 +72,7 @@ export default class UserConnector {
         return records.map(mapRecordToObject);
       })
       .then((entities) => {
-        this._logger.debug({ entities }, LOG_TAG);
+        this.logger.debug({ entities }, LOG_TAG);
 
         interface UserEntityByIdType {
           [key:string]: UserEntity
@@ -90,18 +90,18 @@ export default class UserConnector {
 
   findById = (id: string): Promise<UserEntity | null> => {
     if (!id) return Promise.resolve(null);
-    return this._userIdLoader.load(id);
+    return this.userIdLoader.load(id);
   }
 
   findByUsername(username: string) {
-    this._logger.debug({ username }, LOG_TAG);
-    return this._model.findOne({ username })
+    this.logger.debug({ username }, LOG_TAG);
+    return this.model.findOne({ username })
       .then(mapRecordToObject);
   }
 
   findForAuth(username: string): Promise<UserEntityWithAuth> {
-    this._logger.debug({ username }, LOG_TAG);
-    return this._model.findOne({ username })
+    this.logger.debug({ username }, LOG_TAG);
+    return this.model.findOne({ username })
       .then((user: UserRecord) => {
         if (!user) throw new Error(); // TODO: Raise error
         return Object.assign({}, mapRecordToObject(user), { password: user.password });
@@ -110,9 +110,9 @@ export default class UserConnector {
 
   create(params: UserEntityInputParams) {
     const fields = Object.assign({}, params, { timeCreated: moment().format() });
-    this._logger.debug({ username: params.username }, LOG_TAG);
+    this.logger.debug({ username: params.username }, LOG_TAG);
 
-    const user = new this._model(fields);
+    const user = new this.model(fields);
     return user.save().then(mapRecordToObject);
   }
 }
