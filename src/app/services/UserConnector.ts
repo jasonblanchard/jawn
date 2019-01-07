@@ -57,10 +57,10 @@ export default class UserConnector {
   constructor({ store, logger }: { store: MongoStore, logger: LoggerService }) {
     this.model = store.model('User', UserSchema);
     this.logger = logger;
-    this.userIdLoader = new DataLoader(ids => this._batchLoadById(ids));
+    this.userIdLoader = new DataLoader(ids => this.batchLoadById(ids));
   }
 
-  _batchLoadById(ids: string[]) {
+  private batchLoadById(ids: string[]) {
     this.logger.debug({ ids }, LOG_TAG);
 
     return this.model.find({
