@@ -1,4 +1,4 @@
-import { Request } from "express";
+import express from "express";
 import { MongoStore } from 'app/services/MongoService';
 import EntryService from 'app/services/EntryService';
 import EntryConnector from 'app/services/EntryConnector';
@@ -6,12 +6,6 @@ import LoggerService from 'app/services/LoggerService';
 import UserService from 'app/services/UserService';
 import UserConnector from 'app/services/UserConnector';
 import schema from 'app/schema/schema';
-
-export interface GraphQLRequest extends Request {
-  accessTokenPayload: {
-    id: string
-  }
-}
 
 export default class GraphqlService {
   private store: MongoStore;
@@ -22,7 +16,7 @@ export default class GraphqlService {
     this.logger = logger;
   }
 
-  handleRequest = (request: GraphQLRequest) => {
+  handleRequest = (request: express.Request) => {
     const entryService = new EntryService({
       connector: new EntryConnector({ store: this.store, logger: this.logger }),
     });

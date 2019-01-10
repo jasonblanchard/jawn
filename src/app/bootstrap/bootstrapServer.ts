@@ -1,6 +1,5 @@
 import { graphqlExpress } from 'apollo-server-express';
 import { Registry } from 'app/bootstrap/registry';
-import { GraphQLRequest } from 'app/services/GraphqlService';
 import bodyParser from 'body-parser';
 import Boom from 'boom';
 import cookieParser from 'cookie-parser';
@@ -61,7 +60,7 @@ export default function(registry: Registry) {
   app.post('/api/login', loginController.handleLogin);
   app.post('/api/sign-up', loginController.handleSignUp);
 
-  app.use('/api/graphql', graphqlExpress((request: GraphQLRequest) => graphqlService.handleRequest(request)));
+  app.use('/api/graphql', graphqlExpress((request: Request) => graphqlService.handleRequest(request)));
 
   app.use('/api/*', (_request, _response, next) => {
     next(Boom.notFound());
