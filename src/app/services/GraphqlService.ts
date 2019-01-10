@@ -28,7 +28,7 @@ export default class GraphqlService {
     return {
       schema,
       context: {
-        userId: request.accessTokenPayload.id,
+        userId: request.accessTokenPayload && request.accessTokenPayload.id,
         services: {
           entryService,
           userService,

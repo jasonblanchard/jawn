@@ -1,7 +1,7 @@
 declare namespace Express {
   export interface Request {
-    accessTokenPayload: {
-      id: string
+    accessTokenPayload?: {
+      id?: string
     }
   }
 }

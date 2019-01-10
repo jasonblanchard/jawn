@@ -7,7 +7,6 @@ import express, { Request, Response } from 'express';
 import expressJwt from 'express-jwt';
 import favicon from 'serve-favicon';
 import fs from 'fs';
-import get from 'lodash.get';
 import morgan from 'morgan';
 import path from 'path';
 import TokenUtils from 'app/utils/TokenUtils';
@@ -67,7 +66,7 @@ export default function(registry: Registry) {
   });
 
   app.get('*', (request, response, next) => {
-    const id = get(request, 'accessTokenPayload.id');
+    const id = request.accessTokenPayload && request.accessTokenPayload.id || '';
     userService.findById(id)
       .then(user => {
         logger.debug({ user: user || {} }, LOG_TAG);
