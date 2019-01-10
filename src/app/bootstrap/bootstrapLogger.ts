@@ -1,5 +1,6 @@
-import LoggerService, { LogLevelDesc } from 'app/services/LoggerService';
+import LoggerService, { LogLevel } from 'app/services/LoggerService';
 
 export default function() {
-  return new LoggerService(<LogLevelDesc>process.env.LOG_LEVEL || 'ERROR');
+  const logLevel = LogLevel[<LogLevel>process.env.LOG_LEVEL || LogLevel.ERROR];
+  return new LoggerService(logLevel);
 }

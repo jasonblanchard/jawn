@@ -1,12 +1,19 @@
 import logger, { LogLevelDesc } from 'loglevel';
 
-export { LogLevelDesc };
+export enum LogLevel {
+  TRACE = 'TRACE',
+  DEBUG = 'DEBUG',
+  INFO = 'INFO',
+  WARN = 'WARN',
+  ERROR = 'ERROR',
+  SILENT = 'SILENT'
+}
 
 // TODO: Build this out.
 export default class LoggerService {
   private logger: logger.Logger;
 
-  constructor(loglevel: LogLevelDesc) {
+  constructor(loglevel: LogLevelDesc) { // NOTE: Using LogLevelDesc to make sure the LogLevel keys stay in sync with LogLevelDesc options
     this.logger = logger;
     logger.setLevel(loglevel);
   }
