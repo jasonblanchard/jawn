@@ -1,5 +1,9 @@
 import { makeExecutableSchema } from 'graphql-tools';
 
+import EntryService from 'app/services/EntryService';
+import UserService from 'app/services/UserService';
+import { EntryEntityInputParams } from 'app/services/EntryConnector';
+
 const typeDefs = `
   type User {
     id: ID!
@@ -33,34 +37,46 @@ const typeDefs = `
   }
 `;
 
+interface ParentParams {
+  userId: string
+}
+
+interface Context {
+  userId: string
+  services: {
+    entryService: EntryService
+    userService: UserService
+  }
+}
+
 const resolvers = {
   Entry: {
-    user: (parent, args, context) => {
+    user: (parent: ParentParams, _args: any, context: Context) => {
       return context.services.userService.findById(parent.userId);
     },
   },
   User: {
-    entries: (parent, args, context) => {
-      return context.services.entryService.listByUser(parent.id);
+    entries: (parent: ParentParams, _args: { id: string }, context: Context) => {
+      return context.services.entryService.listByUser(parent.userId);
     },
   },
   Query: {
-    entries: (parent, args, context) => {
+    entries: (_parent: ParentParams, args: { since: string, before: string }, context: Context) => {
       const { since, before } = args;
       return context.services.entryService.listByUser(context.userId, { since, before });
     },
-    user: (parent, args, context) => {
+    user: (_parent: ParentParams, args: { id: string }, context: Context) => {
       return context.services.userService.findById(args.id);
     },
   },
   Mutation: {
-    updateEntry: (parent, args, context) => {
+    updateEntry: (_parent: ParentParams, args: { id: string, input: EntryEntityInputParams }, context: Context) => {
       return context.services.entryService.update(args.id, args.input, context.userId);
     },
-    createEntry: (parent, args, context) => {
+    createEntry: (_parent: ParentParams, args: { input: EntryEntityInputParams }, context: Context) => {
       return context.services.entryService.create(args.input, context.userId);
     },
-    deleteEntry: (parent, args, context) => {
+    deleteEntry: (_parent: ParentParams, args: { id: string }, context: Context) => {
       return context.services.entryService.delete(args.id, context.userId);
     },
   },
