@@ -99,7 +99,7 @@ export default class UserConnector {
       .then(mapRecordToObject);
   }
 
-  findForAuth(username: string): Promise<UserEntityWithAuth> {
+  findForAuth(username: string) {
     this.logger.debug({ username }, LOG_TAG);
     return this.model.findOne({ username })
       .then((user: UserRecord) => {
