@@ -1,6 +1,13 @@
 import { createGlobalStyle } from 'styled-components';
 
+// TODO: Move App class to constants
 const GlobalStyle = createGlobalStyle`
+  html, body, .App {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
   @font-face {
     font-family: MoonRegular;
     src: url('/static/fonts/moon/Moon2.0-Regular.otf') format('opentype');

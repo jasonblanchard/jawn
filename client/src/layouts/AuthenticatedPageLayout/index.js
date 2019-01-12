@@ -12,7 +12,7 @@ const Header = styled.header`
   color: ${props => props.theme.textLightest};
   display: flex;
   font-family: ${props => props.theme.fontFamilyBrand};
-  height: 30px;
+  min-height: 30px;
   justify-content: space-between;
   letter-spacing: ${props => props.theme.letterSpacingBrand};
   padding: 5px;

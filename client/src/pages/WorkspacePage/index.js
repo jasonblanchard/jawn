@@ -30,7 +30,7 @@ export const query = gql`query workspacePageQuery($userId: ID!, $since: String!)
 const Container = styled.section`
   display: grid;
   grid-template-columns: 15% 85%;
-  height: 100vh;
+  height: 100%;
   grid-template-areas: "nav main";
 
   @media (max-width: 768px) {
@@ -44,7 +44,6 @@ const Container = styled.section`
 const Nav = styled.nav`
   flex: 1;
   grid-area: nav;
-  height: 100vh;
   overflow: scroll;
   background: ${props => props.theme.colors.grayLight};
 
