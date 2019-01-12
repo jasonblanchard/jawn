@@ -30,7 +30,7 @@ export const query = gql`query workspacePageQuery($userId: ID!, $since: String!)
 const Container = styled.section`
   display: grid;
   grid-template-columns: 15% 85%;
-  height: 100vh;
+  height: 100%;
   grid-template-areas: "nav main";
 
   @media (max-width: 768px) {
@@ -44,6 +44,13 @@ const Container = styled.section`
 const Nav = styled.nav`
   flex: 1;
   grid-area: nav;
+  overflow: scroll;
+  background: ${props => props.theme.colors.grayLight};
+
+  @media (max-width: 768px) {
+    height: auto;
+    overflow: visible;
+  }
 `;
 
 const Main = styled.section`
@@ -67,10 +74,6 @@ const NavLink = styled(Link)`
   &:hover {
     text-decoration: none;
     background: ${props => props.theme.backgroundLightest};
-  }
-
-  &:last-child {
-    border: 0;
   }
 `;
 
