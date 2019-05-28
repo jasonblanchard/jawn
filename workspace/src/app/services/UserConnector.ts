@@ -103,7 +103,8 @@ export default class UserConnector {
     this.logger.debug({ username }, LOG_TAG);
     return this.model.findOne({ username })
       .then((user: UserRecord) => {
-        if (!user) throw new Error(); // TODO: Raise error
+        // if (!user) throw new Error(); // TODO: Raise error
+        if (!user) return undefined;
         return Object.assign({}, mapRecordToObject(user), { password: user.password });
       });
   }

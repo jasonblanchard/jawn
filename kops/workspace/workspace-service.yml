@@ -8,14 +8,7 @@ metadata:
       apiVersion: ambassador/v1
       kind:  Mapping
       name:  workspace_mapping
-      prefix: /workspace/
-      service: workspace
-      ---
-      apiVersion: ambassador/v1
-      kind:  Mapping
-      name:  workspace_static_mapping
-      prefix: /static/
-      rewrite: ""
+      prefix: /
       service: workspace
 spec:
   type: ClusterIP
@@ -43,14 +36,20 @@ spec:
     metadata:
       labels:
         app: workspace
-        version: '1'
+        version: '4'
     spec:
       containers:
       - name: workspace
-        image: jasonblanchard/jawn-workspace
+        image: jasonblanchard/jawn-workspace:4
         env:
           - name: 'PORT'
             value: '80'
+          - name: 'MONGO_HOST'
+            value: 'mongo'
+          - name: 'DB_NAME'
+            value: 'jawn'
+          - name: 'LOG_LEVEL'
+            value: 'DEBUG'
         ports:
         - containerPort: 80
         readinessProbe:
