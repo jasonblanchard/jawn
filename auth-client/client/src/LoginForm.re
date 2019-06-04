@@ -10,9 +10,20 @@ let validate = (fields) => {
   results;
 };
 
+// TODO: Move somewhere else
+let validatePassword = (password) => {
+  let result = switch (password) {
+      | None | Some("") => Some("Password Can't be empty")
+      | Some(_) => None;
+  };
+  Js.log(result);
+  result;
+};
+
 [@react.component]
 let make = () => {
   let onSubmit = (values) => {
+    Js.log("sdafasdf");
     switch(values) {
       | None => Js.log("Invalid")
       | Some(values) => {
@@ -25,12 +36,19 @@ let make = () => {
 
   let { Forms.pristine, handleSubmit, form } = Forms.useForm(~onSubmit=onSubmit, ~validate=validate, ());
 
-  let username = Forms.useField("username", form);
-  let password = Forms.useField("password", form);
+  let username = Forms.useField(~name="username", ~form=form, ());
+  let password = Forms.useField(~name="password", ~form=form, ~validate=validatePassword, ());
 
   let usernameErrorMessage =
     switch (username.meta.touched, username.meta.valid) {
     | (true, false) => ReasonReact.string("Need to supply username")
+    | (false, _) => ReasonReact.null
+    | (true, true) => ReasonReact.null
+  };
+
+  let passwordErrorMessage =
+    switch (password.meta.touched, password.meta.valid) {
+    | (true, false) => ReasonReact.string("Need to supply password")
     | (false, _) => ReasonReact.null
     | (true, true) => ReasonReact.null
   };
@@ -53,6 +71,8 @@ let make = () => {
     </div>
     <div>
       <label htmlFor={password.input.name}>
+        {passwordErrorMessage}
+        <br />
         {ReasonReact.string("password")}
       </label>
       <input

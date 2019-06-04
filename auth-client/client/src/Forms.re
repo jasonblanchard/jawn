@@ -57,7 +57,9 @@ type rffFieldRenderProps = Js.t({
   meta: rffFieldMetaProps
 });
 
-[@bs.module "react-final-form-hooks"] external rffUseField : (string, rffForm) => rffFieldRenderProps = "useField";
+type rffFieldValidator = option(option(string) => option(string));
+
+[@bs.module "react-final-form-hooks"] external rffUseField : (string, rffForm, rffFieldValidator) => rffFieldRenderProps = "useField";
 
 [@bs.deriving jsConverter]
 type fieldInputProps = {
@@ -79,11 +81,11 @@ type fieldRenderProps = {
   meta: fieldMetaProps
 }
 
-let useField = (key, form) => {
-  let renderProps = rffUseField(key, form);
+let useField = (~name, ~form, ~validate=?, ()) => {
+  let renderProps = rffUseField(name, form, validate);
   // Js.log(renderProps);
 
-    {
+  {
     input: fieldInputPropsFromJs(renderProps##input),
     meta: fieldMetaPropsFromJs(renderProps##meta)
   }
