@@ -1,13 +1,85 @@
-type options = Js.t({
+type rffForm = Js.t({
   .
-  onSubmit: unit => unit
 });
 
-type formStuff = Js.t({
+type rffUseFormOptions = Js.t({
   .
-  pristine: bool
+  onSubmit: unit => unit,
 });
 
-[@bs.module "react-final-form-hooks"] external useForm : options => formStuff = "useForm";
-let test = () => "asdf";
-let useForm = useForm;
+type rffFormRenderProps = Js.t({
+  .
+  pristine: bool,
+  handleSubmit: ReactEvent.Form.t => unit,
+  submitting: bool,
+  form: rffForm
+});
+[@bs.module "react-final-form-hooks"] external rffUseForm : rffUseFormOptions => rffFormRenderProps = "useForm";
+
+[@bs.deriving jsConverter]
+type formRenderProps = {
+  pristine: bool,
+  handleSubmit: ReactEvent.Form.t => unit,
+  submitting: bool,
+  form: rffForm
+};
+
+let useForm = (~onSubmit) => {
+    let options = [%bs.obj {
+      onSubmit: onSubmit
+    }];
+
+    let renderProps = rffUseForm(options);
+    formRenderPropsFromJs(renderProps);
+};
+
+type rffFieldInputProps = Js.t({
+  .
+  name: string,
+  value: string,
+  onChange: ReactEvent.Form.t => unit,
+  onBlur: ReactEvent.Focus.t => unit,
+  onFocus: ReactEvent.Focus.t => unit
+})
+
+type rffFieldMetaProps = Js.t({
+  .
+  touched: bool
+});
+
+type rffFieldRenderProps = Js.t({
+  .
+  input: rffFieldInputProps,
+  meta: rffFieldMetaProps
+});
+
+[@bs.module "react-final-form-hooks"] external rffUseField : (string, rffForm) => rffFieldRenderProps = "useField";
+
+[@bs.deriving jsConverter]
+type fieldInputProps = {
+  name: string,
+  value: string,
+  onChange: ReactEvent.Form.t => unit,
+  onBlur: ReactEvent.Focus.t => unit,
+  onFocus: ReactEvent.Focus.t => unit
+};
+
+[@bs.deriving jsConverter]
+type fieldMetaProps = {
+  touched: bool
+};
+
+type fieldRenderProps = {
+  input: fieldInputProps,
+  meta: fieldMetaProps
+}
+
+let useField = (key, form) => {
+  let renderProps = rffUseField(key, form);
+  // Js.log(renderProps);
+
+    {
+    input: fieldInputPropsFromJs(renderProps##input),
+    meta: fieldMetaPropsFromJs(renderProps##meta)
+  }
+}
