@@ -12,12 +12,10 @@ let validate = (fields) => {
 
 // TODO: Move somewhere else
 let validatePassword = (password) => {
-  let result = switch (password) {
+  switch (password) {
       | None | Some("") => Some("Password Can't be empty")
       | Some(_) => None;
   };
-  Js.log(result);
-  result;
 };
 
 [@react.component]
