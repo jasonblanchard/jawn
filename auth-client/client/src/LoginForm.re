@@ -1,17 +1,40 @@
+  type validateArgs = Js.t({
+    .
+    username: string,
+    password: string
+  });
+
 [@react.component]
 let make = () => {
-  let onSubmit = () => Js.log("Submitted")
-  let { Forms.pristine, handleSubmit, form } = Forms.useForm(~onSubmit=onSubmit);
+  let onSubmit = () => Js.log("Submitted");
+
+  let validate = (fields) => {
+    let results = Js.Dict.empty();
+
+    switch (Js.Dict.get(fields, "username")) {
+      | None | Some("") => Js.Dict.set(results, "username", "Can't be empty")
+      | Some(value) => Js.log(value)
+    };
+
+    results;
+  };
+  let { Forms.pristine, handleSubmit, form } = Forms.useForm(~onSubmit=onSubmit, ~validate=validate, ());
 
   let username = Forms.useField("username", form);
   let password = Forms.useField("password", form);
 
-  let touched = username.meta.touched;
-  Js.log({j| username is touched: $touched |j});
+  let usernameErrorMessage =
+    switch (username.meta.touched, username.meta.valid) {
+    | (true, false) => ReasonReact.string("Need to supply username")
+    | (false, _) => ReasonReact.null
+    | (true, true) => ReasonReact.null
+  };
 
   <form onSubmit={handleSubmit}>
     <div>
       <label htmlFor={username.input.name}>
+        {usernameErrorMessage}
+        <br />
         {ReasonReact.string("Username")}
       </label>
       <input

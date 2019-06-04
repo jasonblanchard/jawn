@@ -4,6 +4,7 @@ type rffForm = Js.t({
 
 type rffUseFormOptions = Js.t({
   .
+  validate: option(Js.Dict.t(string) => Js.Dict.t(string)),
   onSubmit: unit => unit,
 });
 
@@ -14,7 +15,8 @@ type rffFormRenderProps = Js.t({
   submitting: bool,
   form: rffForm
 });
-[@bs.module "react-final-form-hooks"] external rffUseForm : rffUseFormOptions => rffFormRenderProps = "useForm";
+
+[@bs.module "react-final-form-hooks"] external rffUseForm : rffUseFormOptions => rffFormRenderProps = "useForm"
 
 [@bs.deriving jsConverter]
 type formRenderProps = {
@@ -24,9 +26,10 @@ type formRenderProps = {
   form: rffForm
 };
 
-let useForm = (~onSubmit) => {
+let useForm = (~onSubmit, ~validate=?, ()) => {
     let options = [%bs.obj {
-      onSubmit: onSubmit
+      onSubmit: onSubmit,
+      validate: validate
     }];
 
     let renderProps = rffUseForm(options);
@@ -44,7 +47,8 @@ type rffFieldInputProps = Js.t({
 
 type rffFieldMetaProps = Js.t({
   .
-  touched: bool
+  touched: bool,
+  valid: bool
 });
 
 type rffFieldRenderProps = Js.t({
@@ -66,7 +70,8 @@ type fieldInputProps = {
 
 [@bs.deriving jsConverter]
 type fieldMetaProps = {
-  touched: bool
+  touched: bool,
+  valid: bool
 };
 
 type fieldRenderProps = {
@@ -76,7 +81,7 @@ type fieldRenderProps = {
 
 let useField = (key, form) => {
   let renderProps = rffUseField(key, form);
-  // Js.log(renderProps);
+  Js.log(renderProps);
 
     {
     input: fieldInputPropsFromJs(renderProps##input),
