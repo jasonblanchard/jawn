@@ -1,23 +1,28 @@
-  type validateArgs = Js.t({
-    .
-    username: string,
-    password: string
-  });
+// TODO: Move somewhere else
+let validate = (fields) => {
+  let results = Js.Dict.empty();
+
+  switch (Js.Dict.get(fields, "username")) {
+    | None | Some("") => Js.Dict.set(results, "username", "Can't be empty")
+    | Some(value) => Js.log(value)
+  };
+
+  results;
+};
 
 [@react.component]
 let make = () => {
-  let onSubmit = () => Js.log("Submitted");
-
-  let validate = (fields) => {
-    let results = Js.Dict.empty();
-
-    switch (Js.Dict.get(fields, "username")) {
-      | None | Some("") => Js.Dict.set(results, "username", "Can't be empty")
-      | Some(value) => Js.log(value)
-    };
-
-    results;
+  let onSubmit = (values) => {
+    switch(values) {
+      | None => Js.log("Invalid")
+      | Some(values) => {
+        let username = Js.Dict.get(values, "username");
+        let password = Js.Dict.get(values, "password");
+        Js.log({j|Called with username: $username password $password|j});
+      }
+    }
   };
+
   let { Forms.pristine, handleSubmit, form } = Forms.useForm(~onSubmit=onSubmit, ~validate=validate, ());
 
   let username = Forms.useField("username", form);

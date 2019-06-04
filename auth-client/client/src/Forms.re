@@ -5,7 +5,7 @@ type rffForm = Js.t({
 type rffUseFormOptions = Js.t({
   .
   validate: option(Js.Dict.t(string) => Js.Dict.t(string)),
-  onSubmit: unit => unit,
+  onSubmit: option(Js.Dict.t(string)) => unit,
 });
 
 type rffFormRenderProps = Js.t({
@@ -81,7 +81,7 @@ type fieldRenderProps = {
 
 let useField = (key, form) => {
   let renderProps = rffUseField(key, form);
-  Js.log(renderProps);
+  // Js.log(renderProps);
 
     {
     input: fieldInputPropsFromJs(renderProps##input),
