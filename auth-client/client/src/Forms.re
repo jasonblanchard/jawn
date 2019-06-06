@@ -13,7 +13,8 @@ type rffFormRenderProps = Js.t({
   pristine: bool,
   handleSubmit: ReactEvent.Form.t => unit,
   submitting: bool,
-  form: rffForm
+  form: rffForm,
+  valid: bool
 });
 
 [@bs.module "react-final-form-hooks"] external rffUseForm : rffUseFormOptions => rffFormRenderProps = "useForm"
@@ -23,7 +24,8 @@ type formRenderProps = {
   pristine: bool,
   handleSubmit: ReactEvent.Form.t => unit,
   submitting: bool,
-  form: rffForm
+  form: rffForm,
+  valid: bool
 };
 
 let useForm = (~onSubmit, ~validate=?, ()) => {
@@ -33,6 +35,7 @@ let useForm = (~onSubmit, ~validate=?, ()) => {
     }];
 
     let renderProps = rffUseForm(options);
+    // Js.log(renderProps);
     formRenderPropsFromJs(renderProps);
 };
 

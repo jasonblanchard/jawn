@@ -4,7 +4,7 @@ let validate = (fields) => {
 
   switch (Js.Dict.get(fields, "username")) {
     | None | Some("") => Js.Dict.set(results, "username", "Can't be empty")
-    | Some(value) => Js.log(value)
+    | Some(_) => ()
   };
 
   results;
@@ -21,7 +21,6 @@ let validatePassword = (password) => {
 [@react.component]
 let make = () => {
   let onSubmit = (values) => {
-    Js.log("sdafasdf");
     switch(values) {
       | None => Js.log("Invalid")
       | Some(values) => {
@@ -32,7 +31,7 @@ let make = () => {
     }
   };
 
-  let { Forms.pristine, handleSubmit, form } = Forms.useForm(~onSubmit=onSubmit, ~validate=validate, ());
+  let { Forms.pristine, handleSubmit, form, valid } = Forms.useForm(~onSubmit=onSubmit, ~validate=validate, ());
 
   let username = Forms.useField(~name="username", ~form=form, ());
   let password = Forms.useField(~name="password", ~form=form, ~validate=validatePassword, ());
@@ -49,6 +48,12 @@ let make = () => {
     | (true, false) => ReasonReact.string("Need to supply password")
     | (false, _) => ReasonReact.null
     | (true, true) => ReasonReact.null
+  };
+
+  let disabled = switch(pristine, valid) {
+    | (true, _) => true
+    | (_, false) => true
+    | (false, true) => false
   };
 
   <form onSubmit={handleSubmit}>
@@ -83,6 +88,6 @@ let make = () => {
         type_="password"
       />
     </div>
-    <button disabled={pristine}>{ReasonReact.string("login")}</button>
+    <button disabled={disabled}>{ReasonReact.string("login")}</button>
   </form>
 };
