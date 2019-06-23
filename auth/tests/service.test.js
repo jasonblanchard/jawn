@@ -1,0 +1,109 @@
+const fetch = require('node-fetch');
+var cookieParser = require('cookie');
+
+const baseUrl = process.env.SERVICE_BASE_URL;
+
+test('the service is running', () => {
+  return fetch(`${baseUrl}/health`)
+    .then(response => response.json())
+    .then(body => {
+      expect(body.status).toEqual("ok");
+    });
+});
+
+describe('GET /login', () => {
+  it('returns 401 when given invalid username', () => {
+    return fetch(`${baseUrl}/login`, {
+      method: 'POST',
+      body: JSON.stringify({ username: 'test', password: 'wrong' }),
+      headers: { 'Content-Type': 'application/json' },
+    })
+    .then(response => {
+      expect(response.status).toEqual(401);
+    });
+  });
+
+  it('returns 201 when given valid username', () => {
+    return fetch(`${baseUrl}/login`, {
+      method: 'POST',
+      body: JSON.stringify({ username: 'test', password: 'testpass' }),
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then(response => {
+        const cookies = response.headers.get('set-cookie');
+        expect(response.status).toEqual(201);
+        expect(cookies).toMatch(/^sessionId=.+/);
+      });
+  });
+});
+
+describe('GET /csrf', () => {
+  it('returns a CSRF token', () => {
+    return fetch(`${baseUrl}/csrf`)
+      .then(response => response.json())
+      .then(body => {
+        expect(body.csrfToken).toMatch(/\w+/);
+      });
+  });
+});
+
+describe('GET /session/authn', () => {
+  it('returns 401 without an active session', () => {
+    return fetch(`${baseUrl}/session/authn`)
+      .then(response => {
+        expect(response.status).toEqual(401);
+      });
+  });
+
+  it('returns 200 with token with valid session', () => {
+    return fetch(`${baseUrl}/login`, {
+      method: 'POST',
+      body: JSON.stringify({ username: 'test', password: 'testpass' }),
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then(response => {
+        const cookieString = response.headers.get('set-cookie');
+        const cookies = cookieParser.parse(cookieString);
+        return fetch(`${baseUrl}/session/authn`, {
+          headers: {
+            cookie: `sessionId=${cookies.sessionId}`
+          }
+        });
+      })
+      .then(response => {
+        expect(response.status).toEqual(200);
+        const authorizationHeader = response.headers.get('Authorization');
+        expect(authorizationHeader).toMatch(/^Bearer .+/);
+      });
+  });
+});
+
+describe('DELETE /session', () => {
+  it('removes the cookie', () => {
+    return fetch(`${baseUrl}/login`, {
+      method: 'POST',
+      body: JSON.stringify({ username: 'test', password: 'testpass' }),
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then(response => {
+        const cookieString = response.headers.get('set-cookie');
+        const cookies = cookieParser.parse(cookieString);
+        return fetch(`${baseUrl}/session/authn`, {
+          headers: {
+            cookie: `sessionId=${cookies.sessionId}`
+          }
+        });
+      })
+      .then(() => {
+        return fetch(`${baseUrl}/session`, {
+          method: 'DELETE'
+        });
+      })
+      .then(response => {
+        expect(response.status).toEqual(204);
+        const cookieString = response.headers.get('set-cookie');
+        const cookies = cookieParser.parse(cookieString);
+        expect(cookies.sessionId).toEqual('');
+      });
+  });
+});
