@@ -29,7 +29,7 @@ app.use(session({
   // TODO: Use RedisStore
 }));
 
-const csrfProtection = csrf();
+const csrfProtection = csrf({ cookie: true });
 app.use(cookieParser());
 
 app.get('/health', (request, response) => {
@@ -73,7 +73,7 @@ app.use(function (err, request, response, next) {
   if (err.code !== 'EBADCSRFTOKEN') return next(err)
 
   // handle CSRF token errors here
-  console.log(request.headers);
+  // console.log(request.headers);
   response.status(403)
   response.json({ error: "Invalid csrf token" });
 })

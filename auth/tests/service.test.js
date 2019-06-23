@@ -76,6 +76,52 @@ describe('GET /session/authn', () => {
         expect(authorizationHeader).toMatch(/^Bearer .+/);
       });
   });
+
+  it('rejects POST requests without a CSRF token', async () => {
+    const loginResponse = await fetch(`${baseUrl}/login`, {
+      method: 'POST',
+      body: JSON.stringify({ username: 'test', password: 'testpass' }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    const cookieString = loginResponse.headers.get('set-cookie');
+    const cookies = cookieParser.parse(cookieString);
+
+    const authnResponse = await fetch(`${baseUrl}/session/authn`, {
+      method: 'POST',
+      headers: {
+        cookie: `sessionId=${cookies.sessionId}`,
+      },
+    });
+
+    expect(authnResponse.status).toEqual(403);
+  });
+
+  it('allows POST requests with CSRF token', async () => {
+    const loginResponse = await fetch(`${baseUrl}/login`, {
+      method: 'POST',
+      body: JSON.stringify({ username: 'test', password: 'testpass' }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    const cookieString = loginResponse.headers.get('set-cookie');
+    const cookies = cookieParser.parse(cookieString);
+
+    const csrfResponse = await (fetch(`${baseUrl}/csrf`));
+    const csrfResponseCookiesString = csrfResponse.headers.get('set-cookie');
+    const csrfResponseCookies = cookieParser.parse(csrfResponseCookiesString);
+    const { csrfToken } = await csrfResponse.json();
+
+    const authnResponse = await fetch(`${baseUrl}/session/authn`, {
+      method: 'POST',
+      headers: {
+        cookie: `sessionId=${cookies.sessionId}; _csrf=${csrfResponseCookies['_csrf']}`,
+        'CSRF-Token': csrfToken,
+      },
+    });
+
+    expect(authnResponse.status).toEqual(200);
+  });
 });
 
 describe('DELETE /session', () => {
