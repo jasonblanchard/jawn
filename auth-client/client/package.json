@@ -16,6 +16,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@gladimdim/bs-semver": "^0.3.0",
+    "@jasonblanchard/bs-react-final-form-hooks": "0.0.2",
     "final-form": "^4.13.1",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",

@@ -10,7 +10,8 @@ const usersByUsername = {
   'test': {
     username: 'test',
     password: 'testpass',
-    id: 1
+    id: 1,
+    uuid: 'bcf4e360-2bd4-41a1-a9d0-786577e02f4a'
   }
 }
  
@@ -32,7 +33,7 @@ const csrfProtection = csrf();
 app.use(cookieParser());
 
 app.get('/health', (request, response) => {
-  return response.json({ status: 'ok', service: 'auth', version: 10 });
+  return response.json({ status: 'ok', service: 'auth', version: 1 });
 });
  
 app.post('/login', (request, response) => {
@@ -40,7 +41,7 @@ app.post('/login', (request, response) => {
   const user = usersByUsername[username];
   
   if (user && user.password === password) {
-    request.session.user = { id: 1 };
+    request.session.user = { id: user.id, uuid: user.uuid };
     return response.status(201).end();
   }
 
@@ -54,7 +55,7 @@ app.get('/csrf', csrfProtection, (request, response) => {
 app.use('/session/authn*', csrfProtection, (request, response) => {
   if (request.cookies.sessionId && request.session.user) {
     // TODO: Cache this and regenerate when it expires
-    var token = jwt.sign({ authenticatedUserId: request.session.user.id }, 'shhhhh');
+    var token = jwt.sign({ uesrUuid: request.session.user.uuid }, 'shhhhh');
     response.header('Authorization', `Bearer ${token}`);
     return response.status(200).end();
   }

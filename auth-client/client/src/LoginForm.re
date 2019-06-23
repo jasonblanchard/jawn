@@ -1,16 +1,12 @@
-// TODO: Move somewhere else
-let validate = (fields) => {
-  let results = Js.Dict.empty();
-
-  switch (Js.Dict.get(fields, "username")) {
-    | None | Some("") => Js.Dict.set(results, "username", "Can't be empty")
-    | Some(_) => ()
+// TODO: Move somewhere else// TODO: Move somewhere else
+let validateUsername = (username) => {
+  switch (username) {
+      | None | Some("") => Some("Username Can't be empty")
+      | Some(_) => None;
   };
-
-  results;
 };
 
-// TODO: Move somewhere else
+// TODO: Move somewhere else// TODO: Move somewhere else
 let validatePassword = (password) => {
   switch (password) {
       | None | Some("") => Some("Password Can't be empty")
@@ -18,34 +14,35 @@ let validatePassword = (password) => {
   };
 };
 
+type formValues = {
+  .
+  "username": string,
+  "password": string
+};
+
 [@react.component]
 let make = () => {
-  let onSubmit = (values) => {
-    switch(values) {
-      | None => Js.log("Invalid")
-      | Some(values) => {
-        let username = Js.Dict.get(values, "username");
-        let password = Js.Dict.get(values, "password");
-        Js.log({j|Called with username: $username password $password|j});
-      }
-    }
+  let onSubmit = (values: formValues) => {
+    let username = values##username;
+    let password = values##password;
+    Js.log({j|Called with username: $username password $password|j});
   };
 
-  let { Forms.pristine, handleSubmit, form, valid } = Forms.useForm(~onSubmit=onSubmit, ~validate=validate, ());
+  let { ReactFinalFormHooks.Hooks.pristine, handleSubmit, form, valid } = ReactFinalFormHooks.Hooks.useForm(~onSubmit=onSubmit, ());
 
-  let username = Forms.useField(~name="username", ~form=form, ());
-  let password = Forms.useField(~name="password", ~form=form, ~validate=validatePassword, ());
+  let username = ReactFinalFormHooks.Hooks.useField(~name="username", ~form=form, ~validate=validateUsername, ());
+  let password = ReactFinalFormHooks.Hooks.useField(~name="password", ~form=form, ~validate=validatePassword, ());
 
   let usernameErrorMessage =
     switch (username.meta.touched, username.meta.valid) {
-    | (true, false) => ReasonReact.string("Need to supply username")
+    | (true, false) => ReasonReact.string(username.meta.error)
     | (false, _) => ReasonReact.null
     | (true, true) => ReasonReact.null
   };
 
   let passwordErrorMessage =
     switch (password.meta.touched, password.meta.valid) {
-    | (true, false) => ReasonReact.string("Need to supply password")
+    | (true, false) => ReasonReact.string(password.meta.error)
     | (false, _) => ReasonReact.null
     | (true, true) => ReasonReact.null
   };
@@ -78,6 +75,7 @@ let make = () => {
         <br />
         {ReasonReact.string("password")}
       </label>
+      {password.meta.touched ? ReasonReact.string("true") : ReasonReact.string("false")}
       <input
         name={password.input.name}
         value={password.input.value}
