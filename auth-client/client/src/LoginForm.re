@@ -21,11 +21,11 @@ type formValues = {
 };
 
 [@react.component]
-let make = () => {
+let make = (~didSubmitFail, ~isSubmitting, ~onSubmit) => {
   let onSubmit = (values: formValues) => {
     let username = values##username;
     let password = values##password;
-    Js.log({j|Called with username: $username password $password|j});
+    onSubmit(username, password);
   };
 
   let { ReactFinalFormHooks.Hooks.pristine, handleSubmit, form, valid } = ReactFinalFormHooks.Hooks.useForm(~onSubmit=onSubmit, ());
@@ -47,10 +47,16 @@ let make = () => {
     | (true, true) => ReasonReact.null
   };
 
-  let disabled = switch(pristine, valid) {
-    | (true, _) => true
-    | (_, false) => true
-    | (false, true) => false
+  let submitError = switch(didSubmitFail) {
+    | true => ReasonReact.string("nope")
+    | false => ReasonReact.null
+  };
+
+  let disabled = switch(pristine, valid, isSubmitting) {
+    | (_, _, true) => true
+    | (true, _, _) => true
+    | (_, false, _) => true
+    | (false, true, _) => false
   };
 
   <form onSubmit={handleSubmit}>
@@ -75,7 +81,6 @@ let make = () => {
         <br />
         {ReasonReact.string("password")}
       </label>
-      {password.meta.touched ? ReasonReact.string("true") : ReasonReact.string("false")}
       <input
         name={password.input.name}
         value={password.input.value}
@@ -87,5 +92,8 @@ let make = () => {
       />
     </div>
     <button disabled={disabled}>{ReasonReact.string("login")}</button>
+    <div>
+      submitError
+    </div>
   </form>
 };

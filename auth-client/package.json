@@ -6,13 +6,18 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/app.js",
-    "watch": "nodemon src/app.js"
+    "watch": "nodemon src/app.js",
+    "cypress:open": "cypress open"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
     "morgan": "^1.9.1",
-    "nodemon": "^1.19.1"
+    "nodemon": "^1.19.1",
+    "whatwg-fetch": "^3.0.0"
+  },
+  "devDependencies": {
+    "cypress": "^3.3.1"
   }
 }

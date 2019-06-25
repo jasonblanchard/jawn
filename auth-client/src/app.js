@@ -11,7 +11,7 @@ app.get('/health', (request, response) => {
   return response.json({ status: 'ok', service: 'auth-client', version: 1 });
 });
 
-app.get('/login', (request, response) => {
+app.get('/*', (request, response) => {
   return response.sendFile(path.resolve(__dirname + '/../client/build/index.html'));
 });
 

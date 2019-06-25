@@ -16,7 +16,9 @@
   "bs-dependencies": [
     "reason-react",
     "@jasonblanchard/bs-react-final-form-hooks",
-    "@gladimdim/bs-semver"
+    "@gladimdim/bs-semver",
+    "bs-fetch",
+    "bs-webapi"
   ],
   "refmt": 3
 }
