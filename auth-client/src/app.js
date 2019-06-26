@@ -34,4 +34,7 @@ app.use((err, request, response, next) => {
   response.json({ error: "Something went wrong" });
 });
 
-app.listen(process.env.PORT || 8082);
+const port = process.env.PORT || 8082;
+app.listen(port, () => {
+  console.log(`>>> Listening on port ${port} <<<`);
+});
