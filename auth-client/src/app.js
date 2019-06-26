@@ -19,15 +19,12 @@ app.get('/*', (request, response, next) => {
     if (error) {
       return next(error);
     }
-    // TODO: Templatize this
     const hydratedHtml = file.replace("{%env%}", `
     var homepagePath='${process.env.HOMEPAGE_PATH}';
     var authApiPath = '${process.env.AUTH_API_PATH}';
     `);
     return response.send(hydratedHtml);
   });
-
-  // return response.sendFile(path.resolve(__dirname + '/../client/build/index.html'));
 });
 
 app.use((err, request, response, next) => {
