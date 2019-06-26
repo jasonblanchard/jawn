@@ -78,4 +78,7 @@ app.use(function (err, request, response, next) {
   response.json({ error: "Invalid csrf token" });
 })
 
-app.listen(process.env.PORT || 8082);
+const port = process.env.PORT || 8082;
+app.listen(port, () => {
+  console.log(`>>> Listning on port ${port} <<<`);
+});
