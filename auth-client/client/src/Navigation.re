@@ -1,6 +1,6 @@
 open Webapi.Dom;
 open Location;
 
-let hardLink() {
-  assign("/workspace", location);
+let hardLink(path) {
+  assign(path, location);
 }

@@ -1,3 +1,7 @@
+// TODO: Inject these a better way
+[@bs.val] external homepagePath: string = "homepagePath";
+[@bs.val] external authApiPath: string = "authApiPath";
+
 type state = {
   didLoginSubmitFail: bool,
   isLoginSubmitting: bool
@@ -21,12 +25,14 @@ let make = () => {
 
   let handleSubmit = (username, password) => {
     Js.log({j|Called with username: $username password $password|j});
+    /* TODO: Pass in API path as config */
     ignore(Js.Promise.(
-      Fetch.fetchWithInit("/auth/login", Fetch.RequestInit.make(~method_=Post, ()))
+      Fetch.fetchWithInit(authApiPath, Fetch.RequestInit.make(~method_=Post, ()))
       |> then_(response => {
         switch (Fetch.Response.ok(response)) {
           | true => {
-            Navigation.hardLink();
+            /* TODO: Pass in path as config */
+            Navigation.hardLink(homepagePath);
             resolve();
           }
           | false => {
