@@ -36,11 +36,11 @@ spec:
     metadata:
       labels:
         app: auth-client
-        version: '8'
+        version: '9'
     spec:
       containers:
       - name: auth-client
-        image: jasonblanchard/jawn-auth-client:8
+        image: jasonblanchard/jawn-auth-client:9
         env:
           - name: 'PORT'
             value: '8080'
