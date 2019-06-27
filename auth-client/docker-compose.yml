@@ -2,7 +2,7 @@ version: "3.7"
 services: 
   app: 
     build: .
-    image: jasonblanchard/jawn-auth-client:app
+    image: jasonblanchard/jawn-auth-client
     command:
       - /bin/bash
       - -c
@@ -12,6 +12,7 @@ services:
       HOMEPAGE_PATH: /workspace
       AUTH_API_PATH: /auth/login
       PORT: 8080
+      BASE_PATH: ""
     expose:
       - "8080"
     healthcheck:

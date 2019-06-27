@@ -63,3 +63,5 @@ COPY --from=build --chown=docker:docker $APP_HOME/src $APP_HOME/src
 COPY --from=build --chown=docker:docker $APP_HOME/package.json $APP_HOME/package.json
 
 WORKDIR $APP_HOME
+
+CMD ["npm", "start", "--production"]

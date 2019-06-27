@@ -2,7 +2,7 @@ version: "3.7"
 services: 
   app: 
     build: .
-    image: jasonblanchard/jawn-auth:app
+    image: jasonblanchard/jawn-auth
     command:
       - /bin/bash
       - -c
