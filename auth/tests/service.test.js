@@ -52,6 +52,27 @@ describe('GET /session/authn', () => {
     return fetch(`${baseUrl}/session/authn`)
       .then(response => {
         expect(response.status).toEqual(401);
+        return response.text();
+      }).then(body => {
+        expect(body).toEqual('Unauthorized');
+      });
+  });
+
+  it('returns 401 with json when client accepts json', () => {
+    return fetch(`${baseUrl}/session/authn`, {
+      headers: {
+        "Accept": "application/json"
+      }
+    })
+      .then(response => {
+        expect(response.status).toEqual(401);
+        return response.json();
+      }).then(body => {
+        expect(body).toEqual({
+          statusCode: 401,
+          error: 'Unauthorized',
+          message: 'Unauthorized'
+        });
       });
   });
 

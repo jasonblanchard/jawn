@@ -6,10 +6,21 @@ metadata:
     getambassador.io/config: |
       ---
       apiVersion: ambassador/v1
+      kind: AuthService
+      name: authentication
+      auth_service: "auth:8080"
+      path_prefix:  "/session/authn"
+      proto: http
+      allow_request_body: true
+      allowed_request_headers:
+        - "CSRF-Token"
+      ---
+      apiVersion: ambassador/v1
       kind:  Mapping
       name:  auth_mapping
       prefix: /auth/api/
       service: auth:8080
+      bypass_auth: true
 spec:
   type: ClusterIP
   ports:
@@ -36,11 +47,11 @@ spec:
     metadata:
       labels:
         app: auth
-        version: '3'
+        version: '4'
     spec:
       containers:
       - name: auth
-        image: jasonblanchard/jawn-auth:3
+        image: jasonblanchard/jawn-auth:4
         env:
           - name: 'PORT'
             value: '8080'

@@ -1,4 +1,5 @@
 var express = require('express');
+var Boom = require('@hapi/boom');
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -59,7 +60,16 @@ app.use('/session/authn*', csrfProtection, (request, response) => {
     response.header('Authorization', `Bearer ${token}`);
     return response.status(200).end();
   }
-  return response.status(401).end();
+  const error = Boom.unauthorized();
+
+  switch (request.accepts(['html', 'json'])) {
+    case 'html':
+      return response.status(401).send(error.message);
+    case 'json':
+      return response.status(401).json(error.output.payload);
+    default:
+      return response.status(401).send(error.message);
+  }
 });
 
 app.delete('/session', (request, response) => {
