@@ -1,0 +1,421 @@
+   0.0 TEL | Telepresence 0.101 launched at Thu Jun 27 19:59:34 2019
+   0.0 TEL |   /usr/local/bin/telepresence --swap-deployment auth --docker-run --rm -p 8082:8082 -v /Users/jblanchard/projects/jawn/auth/src:/usr/src/app/src jasonblanchard/jawn-auth npm run watch
+   0.0 TEL | Platform: darwin
+   0.0 TEL | Python 3.7.3 (default, Mar 27 2019, 09:23:39)
+   0.0 TEL | [Clang 10.0.0 (clang-1000.11.45.5)]
+   0.0 TEL | [1] Running: uname -a
+   0.0   1 | Darwin jblanchard-l2.corp.instructure.com 17.7.0 Darwin Kernel Version 17.7.0: Wed Apr 24 21:17:24 PDT 2019; root:xnu-4570.71.45~1/RELEASE_X86_64 x86_64
+   0.0 TEL | [1] ran in 0.01 secs.
+   0.0 TEL | BEGIN SPAN main.py:40(main)
+   0.0 TEL | BEGIN SPAN startup.py:74(__init__)
+   0.0 TEL | Found kubectl -> /usr/local/bin/kubectl
+   0.0 TEL | [2] Capturing: kubectl version --short
+   0.6 TEL | [2] captured in 0.52 secs.
+   0.6 TEL | [3] Capturing: kubectl config current-context
+   0.7 TEL | [3] captured in 0.11 secs.
+   0.7 TEL | [4] Capturing: kubectl config view -o json
+   0.8 TEL | [4] captured in 0.07 secs.
+   0.8 TEL | [5] Capturing: kubectl --context docker-for-desktop get ns default
+   1.1 TEL | [5] captured in 0.32 secs.
+   1.1 TEL | Command: kubectl 1.10.11
+   1.1 TEL | Context: docker-for-desktop, namespace: default, version: 1.10.11
+   1.1 TEL | Looks like we're in a local VM, e.g. minikube.
+   1.1 TEL | END SPAN startup.py:74(__init__)    1.0s
+   1.1 TEL | Found ssh -> /usr/bin/ssh
+   1.1 TEL | [6] Capturing: ssh -V
+   1.1 TEL | [6] captured in 0.05 secs.
+   1.1 TEL | Found docker -> /usr/local/bin/docker
+   1.1 TEL | Found sshfs -> /usr/local/bin/sshfs
+   1.1 TEL | Found umount -> /sbin/umount
+   1.1 TEL | Found sudo -> /usr/bin/sudo
+   1.1 TEL | [7] Running: sudo -n echo -n
+   1.3   7 | sudo: a password is required
+   1.3 TEL | [7] exit 1 in 0.16 secs.
+   1.3 >>> | How Telepresence uses sudo: https://www.telepresence.io/reference/install#dependencies
+   1.3 >>> | Invoking sudo. Please enter your sudo password.
+   1.3 TEL | [8] Running: sudo echo -n
+   6.8 TEL | [8] ran in 5.55 secs.
+   6.8 >>> | Volumes are rooted at $TELEPRESENCE_ROOT. See https://telepresence.io/howto/volumes.html for details.
+   6.8 TEL | [9] Running: kubectl --context docker-for-desktop --namespace default get pods telepresence-connectivity-check --ignore-not-found
+   7.0 TEL | [9] ran in 0.14 secs.
+   7.5 TEL | Scout info: {'latest_version': '0.101', 'application': 'telepresence', 'notices': []}
+   7.5 TEL | BEGIN SPAN deployment.py:179(supplant_deployment)
+   7.5 >>> | Starting network proxy to cluster by swapping out Deployment auth with a proxy
+   7.5 TEL | BEGIN SPAN remote.py:78(get_deployment_json)
+   7.5 TEL | [10] Capturing: kubectl --context docker-for-desktop --namespace default get deployment -o json auth
+   7.6 TEL | [10] captured in 0.18 secs.
+   7.6 TEL | END SPAN remote.py:78(get_deployment_json)    0.2s
+   7.6 TEL | [11] Running: kubectl --context docker-for-desktop --namespace default delete deployment auth-c7bf9b0902144a1b8d8a54ebbcb23965 --ignore-not-found
+   7.8 TEL | [11] ran in 0.17 secs.
+   7.8 TEL | [12] Running: kubectl --context docker-for-desktop --namespace default apply -f -
+   8.0  12 | deployment.extensions "auth-c7bf9b0902144a1b8d8a54ebbcb23965" created
+   8.0 TEL | [12] ran in 0.21 secs.
+   8.0 TEL | [13] Running: kubectl --context docker-for-desktop --namespace default scale deployment auth --replicas=0
+   8.3  13 | deployment.extensions "auth" scaled
+   8.3 TEL | [13] ran in 0.27 secs.
+   8.3 TEL | END SPAN deployment.py:179(supplant_deployment)    0.8s
+   8.3 TEL | BEGIN SPAN remote.py:151(get_remote_info)
+   8.3 TEL | BEGIN SPAN remote.py:78(get_deployment_json)
+   8.3 TEL | [14] Capturing: kubectl --context docker-for-desktop --namespace default get deployment -o json --selector=telepresence=c7bf9b0902144a1b8d8a54ebbcb23965
+   8.5 TEL | [14] captured in 0.20 secs.
+   8.5 TEL | END SPAN remote.py:78(get_deployment_json)    0.2s
+   8.5 TEL | Searching for Telepresence pod:
+   8.5 TEL |   with name auth-c7bf9b0902144a1b8d8a54ebbcb23965-*
+   8.5 TEL |   with labels {'app': 'auth', 'telepresence': 'c7bf9b0902144a1b8d8a54ebbcb23965', 'version': '3'}
+   8.5 TEL | [15] Capturing: kubectl --context docker-for-desktop --namespace default get pod -o json --selector=telepresence=c7bf9b0902144a1b8d8a54ebbcb23965
+   8.7 TEL | [15] captured in 0.24 secs.
+   8.7 TEL | Checking auth-c7bf9b0902144a1b8d8a54ebbcb23965-76989ff8d9-rh8q6
+   8.7 TEL | Looks like we've found our pod!
+   8.7 TEL | BEGIN SPAN remote.py:113(wait_for_pod)
+   8.7 TEL | [16] Capturing: kubectl --context docker-for-desktop --namespace default get pod auth-c7bf9b0902144a1b8d8a54ebbcb23965-76989ff8d9-rh8q6 -o json
+   9.1 TEL | [16] captured in 0.34 secs.
+   9.3 TEL | [17] Capturing: kubectl --context docker-for-desktop --namespace default get pod auth-c7bf9b0902144a1b8d8a54ebbcb23965-76989ff8d9-rh8q6 -o json
+   9.6 TEL | [17] captured in 0.25 secs.
+   9.8 TEL | [18] Capturing: kubectl --context docker-for-desktop --namespace default get pod auth-c7bf9b0902144a1b8d8a54ebbcb23965-76989ff8d9-rh8q6 -o json
+  10.0 TEL | [18] captured in 0.17 secs.
+  10.3 TEL | [19] Capturing: kubectl --context docker-for-desktop --namespace default get pod auth-c7bf9b0902144a1b8d8a54ebbcb23965-76989ff8d9-rh8q6 -o json
+  10.5 TEL | [19] captured in 0.27 secs.
+  10.8 TEL | [20] Capturing: kubectl --context docker-for-desktop --namespace default get pod auth-c7bf9b0902144a1b8d8a54ebbcb23965-76989ff8d9-rh8q6 -o json
+  11.0 TEL | [20] captured in 0.27 secs.
+  11.3 TEL | [21] Capturing: kubectl --context docker-for-desktop --namespace default get pod auth-c7bf9b0902144a1b8d8a54ebbcb23965-76989ff8d9-rh8q6 -o json
+  11.9 TEL | [21] captured in 0.58 secs.
+  12.1 TEL | [22] Capturing: kubectl --context docker-for-desktop --namespace default get pod auth-c7bf9b0902144a1b8d8a54ebbcb23965-76989ff8d9-rh8q6 -o json
+  12.4 TEL | [22] captured in 0.30 secs.
+  12.7 TEL | [23] Capturing: kubectl --context docker-for-desktop --namespace default get pod auth-c7bf9b0902144a1b8d8a54ebbcb23965-76989ff8d9-rh8q6 -o json
+  13.1 TEL | [23] captured in 0.44 secs.
+  13.4 TEL | [24] Capturing: kubectl --context docker-for-desktop --namespace default get pod auth-c7bf9b0902144a1b8d8a54ebbcb23965-76989ff8d9-rh8q6 -o json
+  13.9 TEL | [24] captured in 0.53 secs.
+  14.2 TEL | [25] Capturing: kubectl --context docker-for-desktop --namespace default get pod auth-c7bf9b0902144a1b8d8a54ebbcb23965-76989ff8d9-rh8q6 -o json
+  14.4 TEL | [25] captured in 0.22 secs.
+  14.6 TEL | [26] Capturing: kubectl --context docker-for-desktop --namespace default get pod auth-c7bf9b0902144a1b8d8a54ebbcb23965-76989ff8d9-rh8q6 -o json
+  14.9 TEL | [26] captured in 0.29 secs.
+  15.2 TEL | [27] Capturing: kubectl --context docker-for-desktop --namespace default get pod auth-c7bf9b0902144a1b8d8a54ebbcb23965-76989ff8d9-rh8q6 -o json
+  15.5 TEL | [27] captured in 0.28 secs.
+  15.7 TEL | [28] Capturing: kubectl --context docker-for-desktop --namespace default get pod auth-c7bf9b0902144a1b8d8a54ebbcb23965-76989ff8d9-rh8q6 -o json
+  16.1 TEL | [28] captured in 0.41 secs.
+  16.4 TEL | [29] Capturing: kubectl --context docker-for-desktop --namespace default get pod auth-c7bf9b0902144a1b8d8a54ebbcb23965-76989ff8d9-rh8q6 -o json
+  16.7 TEL | [29] captured in 0.30 secs.
+  16.9 TEL | [30] Capturing: kubectl --context docker-for-desktop --namespace default get pod auth-c7bf9b0902144a1b8d8a54ebbcb23965-76989ff8d9-rh8q6 -o json
+  17.2 TEL | [30] captured in 0.29 secs.
+  17.5 TEL | [31] Capturing: kubectl --context docker-for-desktop --namespace default get pod auth-c7bf9b0902144a1b8d8a54ebbcb23965-76989ff8d9-rh8q6 -o json
+  17.7 TEL | [31] captured in 0.26 secs.
+  18.0 TEL | [32] Capturing: kubectl --context docker-for-desktop --namespace default get pod auth-c7bf9b0902144a1b8d8a54ebbcb23965-76989ff8d9-rh8q6 -o json
+  18.3 TEL | [32] captured in 0.34 secs.
+  18.6 TEL | [33] Capturing: kubectl --context docker-for-desktop --namespace default get pod auth-c7bf9b0902144a1b8d8a54ebbcb23965-76989ff8d9-rh8q6 -o json
+  18.7 TEL | [33] captured in 0.15 secs.
+  19.0 TEL | [34] Capturing: kubectl --context docker-for-desktop --namespace default get pod auth-c7bf9b0902144a1b8d8a54ebbcb23965-76989ff8d9-rh8q6 -o json
+  19.4 TEL | [34] captured in 0.37 secs.
+  19.6 TEL | [35] Capturing: kubectl --context docker-for-desktop --namespace default get pod auth-c7bf9b0902144a1b8d8a54ebbcb23965-76989ff8d9-rh8q6 -o json
+  19.8 TEL | [35] captured in 0.21 secs.
+  20.1 TEL | [36] Capturing: kubectl --context docker-for-desktop --namespace default get pod auth-c7bf9b0902144a1b8d8a54ebbcb23965-76989ff8d9-rh8q6 -o json
+  20.3 TEL | [36] captured in 0.26 secs.
+  20.6 TEL | [37] Capturing: kubectl --context docker-for-desktop --namespace default get pod auth-c7bf9b0902144a1b8d8a54ebbcb23965-76989ff8d9-rh8q6 -o json
+  20.8 TEL | [37] captured in 0.23 secs.
+  20.8 TEL | END SPAN remote.py:113(wait_for_pod)   12.1s
+  20.8 TEL | END SPAN remote.py:151(get_remote_info)   12.5s
+  20.8 TEL | BEGIN SPAN connect.py:36(connect)
+  20.8 TEL | [38] Launching kubectl logs: kubectl --context docker-for-desktop --namespace default logs -f auth-c7bf9b0902144a1b8d8a54ebbcb23965-76989ff8d9-rh8q6 --container auth --tail=10
+  20.8 TEL | [39] Launching kubectl port-forward: kubectl --context docker-for-desktop --namespace default port-forward auth-c7bf9b0902144a1b8d8a54ebbcb23965-76989ff8d9-rh8q6 51557:8022
+  20.9 TEL | [40] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51557 telepresence@127.0.0.1 /bin/true
+  21.0 TEL | [40] exit 255 in 0.15 secs.
+  21.3  39 | Forwarding from 127.0.0.1:51557 -> 8022
+  21.3  39 | Forwarding from [::1]:51557 -> 8022
+  21.3 TEL | [41] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51557 telepresence@127.0.0.1 /bin/true
+  21.3  39 | Handling connection for 51557
+  21.8  38 | Listening...
+  21.8  38 | 2019-06-27T23:59:56+0000 [-] Loading ./forwarder.py...
+  21.8  38 | 2019-06-27T23:59:56+0000 [-] /etc/resolv.conf changed, reparsing
+  21.8  38 | 2019-06-27T23:59:56+0000 [-] Resolver added ('10.96.0.10', 53) to server list
+  21.8  38 | 2019-06-27T23:59:56+0000 [-] SOCKSv5Factory starting on 9050
+  21.8  38 | 2019-06-27T23:59:56+0000 [socks.SOCKSv5Factory#info] Starting factory <socks.SOCKSv5Factory object at 0x7f5b57dcd630>
+  21.8  38 | 2019-06-27T23:59:56+0000 [-] DNSDatagramProtocol starting on 9053
+  21.8  38 | 2019-06-27T23:59:56+0000 [-] Starting protocol <twisted.names.dns.DNSDatagramProtocol object at 0x7f5b57dcd9e8>
+  21.8  38 | 2019-06-27T23:59:56+0000 [-] Loaded.
+  21.8  38 | 2019-06-27T23:59:56+0000 [twisted.scripts._twistd_unix.UnixAppLogger#info] twistd 19.2.1 (/usr/bin/python3.6 3.6.8) starting up.
+  21.8  38 | 2019-06-27T23:59:56+0000 [twisted.scripts._twistd_unix.UnixAppLogger#info] reactor class: twisted.internet.epollreactor.EPollReactor.
+  21.8 TEL | [41] ran in 0.54 secs.
+  21.8 >>> | Forwarding remote port 8080 to local port 8080.
+  21.8 >>> | 
+  21.8 TEL | Launching Web server for proxy poll
+  21.8 TEL | [42] Launching SSH port forward (socks and proxy poll): ssh -N -oServerAliveInterval=1 -oServerAliveCountMax=10 -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51557 telepresence@127.0.0.1 -L127.0.0.1:51571:127.0.0.1:9050 -R9055:127.0.0.1:51572
+  21.9 TEL | END SPAN connect.py:36(connect)    1.0s
+  21.9 TEL | BEGIN SPAN remote_env.py:28(get_remote_env)
+  21.9 TEL | [43] Capturing: kubectl --context docker-for-desktop --namespace default exec auth-c7bf9b0902144a1b8d8a54ebbcb23965-76989ff8d9-rh8q6 --container auth -- python3 podinfo.py
+  21.9  39 | Handling connection for 51557
+  22.6 TEL | [43] captured in 0.73 secs.
+  22.6 TEL | END SPAN remote_env.py:28(get_remote_env)    0.7s
+  22.6 TEL | BEGIN SPAN mount.py:32(mount_remote_volumes)
+  22.6 TEL | [44] Running: sudo sshfs -p 51557 -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -o allow_other telepresence@127.0.0.1:/ /tmp/tel-17yvq4_0/fs
+  24.3  39 | Handling connection for 51557
+  24.5 TEL | [44] ran in 1.91 secs.
+  24.5 TEL | END SPAN mount.py:32(mount_remote_volumes)    1.9s
+  24.5 TEL | BEGIN SPAN container.py:139(run_docker_command)
+  24.5 TEL | [45] Launching Network container: docker run -p=8082:8082 --publish=127.0.0.1:51592:38022/tcp --hostname=auth-c7bf9b0902144a1b8d8a54ebbcb23965-76989ff8d9-rh8q6 --dns=10.96.0.10 --dns-search=default.svc.cluster.local --dns-search=svc.cluster.local --dns-search=cluster.local --dns-opt=ndots:5 --rm --privileged --name=telepresence-1561679999-362567-98993 datawire/telepresence-local:0.101 proxy '{"cidrs": ["0/0"], "expose_ports": [[8080, 8080]]}'
+  24.5 TEL | [46] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51592 root@127.0.0.1 /bin/true
+  24.6 TEL | [46] exit 255 in 0.04 secs.
+  24.8 TEL | [47] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51592 root@127.0.0.1 /bin/true
+  24.9 TEL | [47] exit 255 in 0.05 secs.
+  25.1 TEL | [48] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51592 root@127.0.0.1 /bin/true
+  25.2 TEL | [48] exit 255 in 0.05 secs.
+  25.3  45 | Unable to find image 'datawire/telepresence-local:0.101' locally
+  25.4 TEL | [49] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51592 root@127.0.0.1 /bin/true
+  25.5 TEL | [49] exit 255 in 0.05 secs.
+  25.7 TEL | [50] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51592 root@127.0.0.1 /bin/true
+  25.8 TEL | [50] exit 255 in 0.05 secs.
+  26.0 TEL | [51] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51592 root@127.0.0.1 /bin/true
+  26.1 TEL | [51] exit 255 in 0.05 secs.
+  26.1  45 | 0.101: Pulling from datawire/telepresence-local
+  26.1  45 | 5a3ea8efae5d: Already exists
+  26.1  45 | f5524d020c2a: Pulling fs layer
+  26.1  45 | 66f2a191dd59: Pulling fs layer
+  26.1  45 | 59e7ceedd2c6: Pulling fs layer
+  26.1  45 | 3e4fd5946f74: Pulling fs layer
+  26.1  45 | ca0928ee1da4: Pulling fs layer
+  26.1  45 | 3e4fd5946f74: Waiting
+  26.1  45 | ca0928ee1da4: Waiting
+  26.3 TEL | [52] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51592 root@127.0.0.1 /bin/true
+  26.4 TEL | [52] exit 255 in 0.05 secs.
+  26.5  45 | 59e7ceedd2c6: Verifying Checksum
+  26.5  45 | 59e7ceedd2c6: Download complete
+  26.5  45 | 66f2a191dd59: Verifying Checksum
+  26.5  45 | 66f2a191dd59: Download complete
+  26.6 TEL | [53] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51592 root@127.0.0.1 /bin/true
+  26.7 TEL | [53] exit 255 in 0.05 secs.
+  26.9 TEL | [54] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51592 root@127.0.0.1 /bin/true
+  27.0  45 | 3e4fd5946f74: Verifying Checksum
+  27.0  45 | 3e4fd5946f74: Download complete
+  27.0 TEL | [54] exit 255 in 0.04 secs.
+  27.0  45 | ca0928ee1da4: Verifying Checksum
+  27.0  45 | ca0928ee1da4: Download complete
+  27.2 TEL | [55] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51592 root@127.0.0.1 /bin/true
+  27.3 TEL | [55] exit 255 in 0.04 secs.
+  27.5 TEL | [56] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51592 root@127.0.0.1 /bin/true
+  27.6 TEL | [56] exit 255 in 0.05 secs.
+  27.8 TEL | [57] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51592 root@127.0.0.1 /bin/true
+  27.9 TEL | [57] exit 255 in 0.05 secs.
+  28.1 TEL | [58] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51592 root@127.0.0.1 /bin/true
+  28.2 TEL | [58] exit 255 in 0.04 secs.
+  28.4 TEL | [59] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51592 root@127.0.0.1 /bin/true
+  28.5 TEL | [59] exit 255 in 0.05 secs.
+  28.7 TEL | [60] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51592 root@127.0.0.1 /bin/true
+  28.8 TEL | [60] exit 255 in 0.04 secs.
+  29.0  45 | f5524d020c2a: Verifying Checksum
+  29.0  45 | f5524d020c2a: Download complete
+  29.0 TEL | [61] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51592 root@127.0.0.1 /bin/true
+  29.1 TEL | [61] exit 255 in 0.04 secs.
+  29.3 TEL | [62] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51592 root@127.0.0.1 /bin/true
+  29.4 TEL | [62] exit 255 in 0.09 secs.
+  29.7 TEL | [63] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51592 root@127.0.0.1 /bin/true
+  29.7 TEL | [63] exit 255 in 0.05 secs.
+  30.0 TEL | [64] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51592 root@127.0.0.1 /bin/true
+  30.0 TEL | [64] exit 255 in 0.04 secs.
+  30.3 TEL | [65] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51592 root@127.0.0.1 /bin/true
+  30.3 TEL | [65] exit 255 in 0.04 secs.
+  30.6 TEL | [66] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51592 root@127.0.0.1 /bin/true
+  30.6 TEL | [66] exit 255 in 0.04 secs.
+  30.9 TEL | [67] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51592 root@127.0.0.1 /bin/true
+  30.9 TEL | [67] exit 255 in 0.04 secs.
+  31.2 TEL | [68] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51592 root@127.0.0.1 /bin/true
+  31.2 TEL | [68] exit 255 in 0.04 secs.
+  31.5 TEL | [69] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51592 root@127.0.0.1 /bin/true
+  31.6 TEL | [69] exit 255 in 0.18 secs.
+  31.9 TEL | [70] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51592 root@127.0.0.1 /bin/true
+  32.0 TEL | [70] exit 255 in 0.07 secs.
+  32.2 TEL | [71] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51592 root@127.0.0.1 /bin/true
+  32.2  45 | f5524d020c2a: Pull complete
+  32.3 TEL | [71] exit 255 in 0.04 secs.
+  32.4  45 | 66f2a191dd59: Pull complete
+  32.5 TEL | [72] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51592 root@127.0.0.1 /bin/true
+  32.6 TEL | [72] exit 255 in 0.05 secs.
+  32.6  45 | 59e7ceedd2c6: Pull complete
+  32.7  45 | 3e4fd5946f74: Pull complete
+  32.8 TEL | [73] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51592 root@127.0.0.1 /bin/true
+  32.9 TEL | [73] exit 255 in 0.05 secs.
+  33.0  45 | ca0928ee1da4: Pull complete
+  33.0  45 | Digest: sha256:fdff63a745522dc14a54ce6693d5547c952255634d3efe615792bb0a42c5c762
+  33.0  45 | Status: Downloaded newer image for datawire/telepresence-local:0.101
+  33.1 TEL | [74] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51592 root@127.0.0.1 /bin/true
+  33.2 TEL | [74] exit 255 in 0.05 secs.
+  33.4 TEL | [75] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51592 root@127.0.0.1 /bin/true
+  33.8  45 | [INFO  tini (1)] Spawned child process 'python3' with pid '6'
+  34.0  45 |    0.0 TEL | Telepresence 0+unknown launched at Fri Jun 28 00:00:08 2019
+  34.0  45 |    0.0 TEL |   /usr/bin/entrypoint.py proxy '{"cidrs": ["0/0"], "expose_ports": [[8080, 8080]]}'
+  34.0  45 |    0.0 TEL | Platform: linux
+  34.0  45 |    0.0 TEL | Python 3.6.8 (default, Apr 22 2019, 10:28:12)
+  34.0  45 |    0.0 TEL | [GCC 6.3.0]
+  34.0  45 |    0.0 TEL | [1] Running: uname -a
+  34.0  45 |    0.0   1 | Linux auth-c7bf9b0902144a1b8d8a54ebbcb23965-76989ff8d9-rh8q6 4.9.125-linuxkit #1 SMP Fri Sep 7 08:20:28 UTC 2018 x86_64 Linux
+  34.0  45 |    0.0 TEL | [1] ran in 0.01 secs.
+  34.0  45 |    0.0 TEL | [2] Running: /usr/sbin/sshd -e
+  34.0  45 |    0.0 TEL | [2] ran in 0.01 secs.
+  34.0  45 |    0.0 TEL | [3] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 38023 telepresence@127.0.0.1 /bin/true
+  34.0  45 |    0.0 TEL | [3] exit 255 in 0.01 secs.
+  34.3  45 |    0.3 TEL | [4] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 38023 telepresence@127.0.0.1 /bin/true
+  34.3  45 |    0.3 TEL | [4] exit 255 in 0.01 secs.
+  34.5  45 |    0.5 TEL | [5] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 38023 telepresence@127.0.0.1 /bin/true
+  34.6  45 |    0.5 TEL | [5] exit 255 in 0.01 secs.
+  34.6 TEL | [75] ran in 1.18 secs.
+  34.6 TEL | [76] Launching Local SSH port forward: ssh -N -oServerAliveInterval=1 -oServerAliveCountMax=10 -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 51592 root@127.0.0.1 -R 38023:127.0.0.1:51557
+  34.6 TEL | [77] Running: docker run --network=container:telepresence-1561679999-362567-98993 --rm datawire/telepresence-local:0.101 wait
+  34.8  45 |    0.8 TEL | [6] Running: ssh -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 38023 telepresence@127.0.0.1 /bin/true
+  34.8  39 | Handling connection for 51557
+  35.1  45 |    1.1 TEL | [6] ran in 0.27 secs.
+  35.1  45 |    1.1 TEL | [7] Capturing: netstat -n
+  35.1  45 |    1.1 TEL | [7] captured in 0.01 secs.
+  35.1  45 |    1.1 TEL | [8] Launching SSH port forward (exposed ports): ssh -N -oServerAliveInterval=1 -oServerAliveCountMax=10 -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 38023 telepresence@127.0.0.1 -R '*:8080:127.0.0.1:8080'
+  35.1  45 |    1.1 TEL | Everything launched. Waiting to exit...
+  35.1  77 | [INFO  tini (1)] Spawned child process 'python3' with pid '6'
+  35.1  39 | Handling connection for 51557
+  35.1  45 |    1.1 TEL | BEGIN SPAN runner.py:682(wait_for_exit)
+  35.4  45 | Starting sshuttle proxy.
+  35.6  45 | firewall manager: Starting firewall with Python version 3.6.8
+  35.6  45 | firewall manager: ready method name nat.
+  35.6  45 | IPv6 enabled: False
+  35.6  45 | UDP enabled: False
+  35.6  45 | DNS enabled: True
+  35.6  45 | TCP redirector listening on ('127.0.0.1', 12300).
+  35.6  45 | DNS listening on ('127.0.0.1', 12300).
+  35.6  45 | Starting client with Python version 3.6.8
+  35.6  45 | c : connecting to server...
+  35.6  39 | Handling connection for 51557
+  35.6  45 | Warning: Permanently added '[127.0.0.1]:38023' (ECDSA) to the list of known hosts.
+  35.9  45 | Starting server with Python version 3.6.8
+  35.9  45 |  s: latency control setting = True
+  35.9  45 |  s: available routes:
+  35.9  45 | c : Connected.
+  35.9  45 |  s:   2/10.1.0.0/16
+  35.9  45 | firewall manager: setting up.
+  35.9  45 | >> iptables -t nat -N sshuttle-12300
+  35.9  45 | >> iptables -t nat -F sshuttle-12300
+  35.9  45 | >> iptables -t nat -I OUTPUT 1 -j sshuttle-12300
+  35.9  45 | >> iptables -t nat -I PREROUTING 1 -j sshuttle-12300
+  35.9  45 | >> iptables -t nat -A sshuttle-12300 -j RETURN --dest 172.17.0.2/32 -p tcp
+  35.9  45 | >> iptables -t nat -A sshuttle-12300 -j RETURN --dest 172.17.0.1/32 -p tcp
+  35.9  45 | >> iptables -t nat -A sshuttle-12300 -j RETURN --dest 127.0.0.1/32 -p tcp
+  35.9  45 | >> iptables -t nat -A sshuttle-12300 -j REDIRECT --dest 0.0.0.0/0 -p tcp --to-ports 12300 -m ttl ! --ttl 42
+  35.9  45 | >> iptables -t nat -A sshuttle-12300 -j REDIRECT --dest 10.96.0.10/32 -p udp --dport 53 --to-ports 12300 -m ttl ! --ttl 42
+  35.9  45 | >> iptables -t nat -A sshuttle-12300 -j REDIRECT --dest 224.0.0.252/32 -p udp --dport 5355 --to-ports 12300 -m ttl ! --ttl 42
+  35.9  45 | conntrack v1.4.4 (conntrack-tools): 0 flow entries have been deleted.
+  36.4  77 | [INFO  tini (1)] Main child exited normally (with status '100')
+  36.6 TEL | [77] exit 100 in 2.05 secs.
+  36.6 TEL | [78] Capturing: docker run --help
+  36.7 TEL | [78] captured in 0.06 secs.
+  36.7 TEL | END SPAN container.py:139(run_docker_command)   12.2s
+  36.7 >>> | Setup complete. Launching your container.
+  36.7 TEL | Everything launched. Waiting to exit...
+  36.7 TEL | BEGIN SPAN runner.py:682(wait_for_exit)
+  36.9 TEL | [79] Running: sudo -n echo -n
+  37.0 TEL | [79] ran in 0.07 secs.
+  51.8 TEL | (proxy checking local liveness)
+  51.8  38 | 2019-06-28T00:00:26+0000 [Poll#info] Checkpoint
+  67.1 TEL | [80] Running: sudo -n echo -n
+  67.2 TEL | [80] ran in 0.13 secs.
+  81.8 TEL | (proxy checking local liveness)
+  81.8  38 | 2019-06-28T00:00:56+0000 [Poll#info] Checkpoint
+  97.3 TEL | [81] Running: sudo -n echo -n
+  97.3 TEL | [81] ran in 0.06 secs.
+ 111.8 TEL | (proxy checking local liveness)
+ 111.8  38 | 2019-06-28T00:01:26+0000 [Poll#info] Checkpoint
+ 127.4 TEL | [82] Running: sudo -n echo -n
+ 127.5 TEL | [82] ran in 0.07 secs.
+ 141.8 TEL | (proxy checking local liveness)
+ 141.8  38 | 2019-06-28T00:01:56+0000 [Poll#info] Checkpoint
+ 157.6 TEL | [83] Running: sudo -n echo -n
+ 157.7 TEL | [83] ran in 0.08 secs.
+ 169.3 >>> | Keyboard interrupt (Ctrl-C/Ctrl-Break) pressed
+ 169.3 >>> | Exit cleanup in progress
+ 169.3 TEL | (Cleanup) Terminate local container
+ 169.3 TEL | Shutting down containers...
+ 169.3 TEL | Killing local container...
+ 169.3 TEL | [84] Running: docker stop --time=1 telepresence-1561680011-497282-98993
+ 169.8  84 | telepresence-1561680011-497282-98993
+ 169.8 TEL | [84] ran in 0.51 secs.
+ 169.8 TEL | (Cleanup) Kill BG process [76] Local SSH port forward
+ 169.8 TEL | [76] Local SSH port forward: exit 0
+ 169.8 TEL | (Cleanup) Kill BG process [45] Network container
+ 169.8 TEL | [85] Running: docker stop --time=1 telepresence-1561679999-362567-98993
+ 169.8  45 | Connection to 127.0.0.1 closed by remote host.
+ 169.8  45 |  135.8   8 | Connection to 127.0.0.1 closed by remote host.
+ 169.8  45 |  135.8 TEL | [8] SSH port forward (exposed ports): exit 255
+ 169.8  45 | >> iptables -t nat -D OUTPUT -j sshuttle-12300
+ 169.8  45 | >> iptables -t nat -D PREROUTING -j sshuttle-12300
+ 169.8  45 | >> iptables -t nat -F sshuttle-12300
+ 169.8  45 | >> iptables -t nat -X sshuttle-12300
+ 169.8  45 | firewall manager: Error trying to undo /etc/hosts changes.
+ 169.8  45 | firewall manager: ---> Traceback (most recent call last):
+ 169.8  45 | firewall manager: --->   File "/usr/lib/python3.6/site-packages/sshuttle/firewall.py", line 274, in main
+ 169.8  45 | firewall manager: --->     restore_etc_hosts(port_v6 or port_v4)
+ 169.8  45 | firewall manager: --->   File "/usr/lib/python3.6/site-packages/sshuttle/firewall.py", line 50, in restore_etc_hosts
+ 169.8  45 | firewall manager: --->     rewrite_etc_hosts({}, port)
+ 169.8  45 | firewall manager: --->   File "/usr/lib/python3.6/site-packages/sshuttle/firewall.py", line 29, in rewrite_etc_hosts
+ 169.8  45 | firewall manager: --->     os.link(HOSTSFILE, BAKFILE)
+ 169.8  45 | firewall manager: ---> OSError: [Errno 18] Cross-device link: '/etc/hosts' -> '/etc/hosts.sbak'
+ 169.8  45 |  135.8 TEL | END SPAN runner.py:682(wait_for_exit)  134.7s
+ 169.8  45 |  135.8 >>> |
+ 169.8  45 |  135.8 >>> | Background process (SSH port forward (exposed ports)) exited with return code 255. Command was:
+ 169.8  45 |  135.8 >>> |   ssh -N -oServerAliveInterval=1 -oServerAliveCountMax=10 -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 38023 telepresence@127.0.0.1 -R '*:8080:127.0.0.1:8080'
+ 169.8  45 |  135.8 >>> |
+ 169.8  45 |  135.8 >>> | Recent output was:
+ 169.8  45 |  135.8 >>> |   Connection to 127.0.0.1 closed by remote host.
+ 169.8  45 |  135.8 >>> |
+ 169.8  45 |  135.8 >>> |
+ 169.8  45 |  135.8 >>> | Proxy to Kubernetes exited. This is typically due to a lost connection.
+ 169.8  45 |  135.8 >>> |
+ 169.8  45 |  135.8 TEL | EXITING with status code 255
+ 169.8  45 | 
+ 169.8  45 | T: Background process (SSH port forward (exposed ports)) exited with return code 255. Command was:
+ 169.8  45 | T:   ssh -N -oServerAliveInterval=1 -oServerAliveCountMax=10 -F /dev/null -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -q -p 38023 telepresence@127.0.0.1 -R '*:8080:127.0.0.1:8080'
+ 169.8  45 | 
+ 169.8  45 | T: Recent output was:
+ 169.8  45 | T:   Connection to 127.0.0.1 closed by remote host.
+ 169.8  45 | 
+ 169.8  45 | 
+ 169.8  45 | T: Proxy to Kubernetes exited. This is typically due to a lost connection.
+ 169.8  45 | 
+ 169.8  45 | c : fatal: server died with error code 255
+ 169.9  45 | [INFO  tini (1)] Main child exited with signal (with signal 'Terminated')
+ 170.5  85 | telepresence-1561679999-362567-98993
+ 170.5 TEL | [85] ran in 0.75 secs.
+ 170.5 TEL | (Cleanup) Unmount remote filesystem
+ 170.5 TEL | [86] Running: sudo umount -f /tmp/tel-17yvq4_0/fs
+ 170.6 TEL | [45] Network container: exit 143
+ 170.6  86 | umount: /tmp/tel-17yvq4_0/fs: not currently mounted
+ 170.6 TEL | [86] exit 1 in 0.07 secs.
+ 170.6 TEL | (Cleanup) Unmount remote filesystem failed:
+ 170.6 TEL | (Cleanup)   Command '['sudo', 'umount', '-f', '/tmp/tel-17yvq4_0/fs']' returned non-zero exit status 1.
+ 170.6 TEL | (Cleanup) Kill BG process [42] SSH port forward (socks and proxy poll)
+ 170.6 TEL | [42] SSH port forward (socks and proxy poll): exit 0
+ 170.6 TEL | (Cleanup) Kill Web server for proxy poll
+ 170.9 TEL | (Cleanup) Kill BG process [39] kubectl port-forward
+ 170.9 TEL | (Cleanup) Kill BG process [38] kubectl logs
+ 170.9 TEL | [39] kubectl port-forward: exit -15
+ 170.9 TEL | [38] kubectl logs: exit -15
+ 170.9 TEL | Background process (kubectl logs) exited with return code -15. Command was:
+ 170.9 TEL |   kubectl --context docker-for-desktop --namespace default logs -f auth-c7bf9b0902144a1b8d8a54ebbcb23965-76989ff8d9-rh8q6 --container auth --tail=10
+ 170.9 TEL | 
+ 170.9 TEL | Recent output was:
+ 170.9 TEL |   2019-06-27T23:59:56+0000 [socks.SOCKSv5Factory#info] Starting factory <socks.SOCKSv5Factory object at 0x7f5b57dcd630>
+ 170.9 TEL |   2019-06-27T23:59:56+0000 [-] DNSDatagramProtocol starting on 9053
+ 170.9 TEL |   2019-06-27T23:59:56+0000 [-] Starting protocol <twisted.names.dns.DNSDatagramProtocol object at 0x7f5b57dcd9e8>
+ 170.9 TEL |   2019-06-27T23:59:56+0000 [-] Loaded.
+ 170.9 TEL |   2019-06-27T23:59:56+0000 [twisted.scripts._twistd_unix.UnixAppLogger#info] twistd 19.2.1 (/usr/bin/python3.6 3.6.8) starting up.
+ 170.9 TEL |   2019-06-27T23:59:56+0000 [twisted.scripts._twistd_unix.UnixAppLogger#info] reactor class: twisted.internet.epollreactor.EPollReactor.
+ 170.9 TEL |   2019-06-28T00:00:26+0000 [Poll#info] Checkpoint
+ 170.9 TEL |   2019-06-28T00:00:56+0000 [Poll#info] Checkpoint
+ 170.9 TEL |   2019-06-28T00:01:26+0000 [Poll#info] Checkpoint
+ 170.9 TEL |   2019-06-28T00:01:56+0000 [Poll#info] Checkpoint
+ 170.9 TEL | (Cleanup) Re-scale original deployment
+ 170.9 TEL | [87] Running: kubectl --context docker-for-desktop --namespace default scale deployment auth --replicas=1
+ 171.2  87 | deployment.extensions "auth" scaled
+ 171.2 TEL | [87] ran in 0.25 secs.
+ 171.2 TEL | (Cleanup) Delete new deployment
+ 171.2 >>> | Swapping Deployment auth back to its original state
+ 171.2 TEL | [88] Running: kubectl --context docker-for-desktop --namespace default delete deployment auth-c7bf9b0902144a1b8d8a54ebbcb23965
+ 172.6  88 | deployment.extensions "auth-c7bf9b0902144a1b8d8a54ebbcb23965" deleted
+ 172.6 TEL | [88] ran in 1.44 secs.
+ 172.6 TEL | (Cleanup) Kill sudo privileges holder
+ 172.6 TEL | (Cleanup) Stop time tracking
+ 172.6 TEL | END SPAN main.py:40(main)  172.6s
+ 172.6 TEL | (Cleanup) Remove temporary directory
+ 172.6 TEL | (Cleanup) Save caches
+ 172.7 TEL | (sudo privileges holder thread exiting)
