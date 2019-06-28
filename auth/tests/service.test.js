@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
-var cookieParser = require('cookie');
+const cookieParser = require('cookie');
+const jwt = require('jsonwebtoken');
 
 const baseUrl = process.env.SERVICE_BASE_URL;
 
@@ -95,6 +96,11 @@ describe('GET /session/authn', () => {
         expect(response.status).toEqual(200);
         const authorizationHeader = response.headers.get('Authorization');
         expect(authorizationHeader).toMatch(/^Bearer .+/);
+        const token = authorizationHeader.match(/^Bearer (.+)/)[1];
+        const payload = jwt.decode(token);
+
+        expect(payload.uesrUuid).toMatch(/\w+/);
+        expect(payload.csrfToken).toMatch(/\w+/);
       });
   });
 

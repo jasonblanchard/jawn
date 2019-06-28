@@ -1,11 +1,11 @@
-var express = require('express');
-var Boom = require('@hapi/boom');
-var session = require('express-session');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var csrf = require('csurf');
-var jwt = require('jsonwebtoken');
-var morgan = require('morgan');
+const express = require('express');
+const Boom = require('@hapi/boom');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const csrf = require('csurf');
+const jwt = require('jsonwebtoken');
+const morgan = require('morgan');
 
 const usersByUsername = {
   'test': {
@@ -56,7 +56,10 @@ app.get('/csrf', csrfProtection, (request, response) => {
 app.use('/session/authn*', csrfProtection, (request, response) => {
   if (request.cookies.sessionId && request.session.user) {
     // TODO: Cache this and regenerate when it expires
-    var token = jwt.sign({ uesrUuid: request.session.user.uuid }, 'shhhhh');
+    var token = jwt.sign({
+      uesrUuid: request.session.user.uuid,
+      csrfToken: request.csrfToken()
+    }, 'shhhhh');
     response.header('Authorization', `Bearer ${token}`);
     return response.status(200).end();
   }
