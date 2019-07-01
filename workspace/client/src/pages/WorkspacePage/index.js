@@ -5,25 +5,19 @@ import styled from 'styled-components';
 
 import AuthenticatedPageLayout from 'layouts/AuthenticatedPageLayout';
 import { PrimaryButton } from 'uikit/Button';
-import { fragments as AuthenticatedPageLayoutFragments } from 'layouts/AuthenticatedPageLayout/connector';
 import Link from 'components/Link';
 import EntryEditor from 'components/EntryEditor';
 import { fragments as EntryEditorFragments } from 'components/EntryEditor/EntryEditorConnector';
 
 import withConnectors from 'state/withConnectors';
 
-export const query = gql`query workspacePageQuery($userId: ID!, $since: String!) {
+export const query = gql`query workspacePageQuery($since: String!) {
     entries(since: $since) {
       id
       text
       ...EntryEditor_entry
     }
-    user(id: $userId) {
-      id
-      ...AuthenticatedPageLayout_user
-    }
   }
-  ${AuthenticatedPageLayoutFragments.user}
   ${EntryEditorFragments.entry}
 `;
 

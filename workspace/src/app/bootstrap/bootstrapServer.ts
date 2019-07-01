@@ -18,12 +18,11 @@ const ASSET_PATHS = JSON.parse(fs.readFileSync(path.join(__dirname, BUILD_PATH, 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
 export default function(registry: Registry) {
-  const appSecret = process.env.APP_SECRET; // TODO: Bootstrap this separately
+  const jwtSecret = process.env.JWT_SECRET; // TODO: Bootstrap this separately
   const {
     graphqlService,
     logger,
     loginController,
-    userService,
   } = registry;
 
   logger.debug('\n>>> BOOTSTRAPPING APP <<<<\n', LOG_TAG);
@@ -35,21 +34,15 @@ export default function(registry: Registry) {
   app.use(cookieParser());
   app.use('/static', express.static(path.join(__dirname, BUILD_PATH + '/static')));
   app.use(morgan(NODE_ENV === 'development' ? 'dev' : 'combined'));
-  // TODO: Include audience nd issuer values?
   app.use(expressJwt({
-    secret: appSecret || '',
+    secret: jwtSecret || '',
     requestProperty: 'accessTokenPayload',
     getToken: request => {
       return TokenUtils.parseAuthorizationHeader(request.headers.authorization);
     },
     credentialsRequired: true,
   }).unless({
-    path: ['/api/login', '/api/sign-up'],
-    custom: request => {
-      // Require token for all /api/* routes. Skip it for all other routes which just serve satic assets.
-      // TODO: Consider doing all auth checks/redirects server-side
-      return !request.originalUrl.match(/^\/api\//);
-    },
+    path: ['/health'],
   }));
 
   app.get('/health', (_request, response) => {
@@ -66,32 +59,28 @@ export default function(registry: Registry) {
   });
 
   app.get('*', (request, response, next) => {
-    const id = request.accessTokenPayload && request.accessTokenPayload.id || '';
-    userService.findById(id)
-      .then(user => {
-        logger.debug({ user: user || {} }, LOG_TAG);
-
-        const token = request.cookies.token;
-        user = Object.assign({}, user, { token });
-
-        // TODO: Replace with a proper templating system
-        fs.readFile(path.join(__dirname, BUILD_PATH, 'index.html'), 'utf8', (error, file) => {
-          if (error) return next(error);
-          if (!file) return next();
-          file = ASSET_PATHS.main.css ? file.replace('__STYLE_PATH__', `/static/${ASSET_PATHS.main.css}`) : file.replace('<link rel="stylesheet" type="text/css" href="__STYLE_PATH__">', '');
-          file = file.replace('__INITIAL_STATE={}', `__INITIAL_STATE=${JSON.stringify({ currentUser: user })}`);
-          file = file.replace('__ENV={}', `__ENV={NODE_ENV: '${NODE_ENV}', LOG_LEVEL: '${process.env.LOG_LEVEL}'}`);
-          file = file.replace('__APP_PATH__', `/static/${ASSET_PATHS.main.js}`);
-          response.set('Content-Type', 'text/html');
-          return response.send(file);
-        });
-      })
-      .catch((error) => {
-        next(error);
-      });
+    const csrfToken = request.accessTokenPayload && request.accessTokenPayload.csrfToken;
+    var env = JSON.stringify({
+      NODE_ENV,
+      LOG_LEVEL: process.env.LOG_LEVEL,
+      CSRF_TOKEN: csrfToken
+    })
+    // TODO: Replace with a proper templating system
+    fs.readFile(path.join(__dirname, BUILD_PATH, 'index.html'), 'utf8', (error, file) => {
+      if (error) return next(error);
+      if (!file) return next();
+      file = ASSET_PATHS.main.css ? file.replace('__STYLE_PATH__', `/static/${ASSET_PATHS.main.css}`) : file.replace('<link rel="stylesheet" type="text/css" href="__STYLE_PATH__">', '');
+      file = file.replace('__INITIAL_STATE={}', `__INITIAL_STATE=${JSON.stringify({ currentUser: {} })}`);
+      // file = file.replace('{%ENV%}', `var ENV={NODE_ENV: '${NODE_ENV}', LOG_LEVEL: '${process.env.LOG_LEVEL}', 'CSRF_TOKEN'='${csrfToken}}'`);
+      file = file.replace('{%ENV%}', `var ENV = '${env}'`);
+      file = file.replace('__APP_PATH__', `/static/${ASSET_PATHS.main.js}`);
+      response.set('Content-Type', 'text/html');
+      return response.send(file);
+    });
   });
 
   app.use((error: Boom, _request: Request, response: Response) => {
+    console.log('====', 'HERE');
     if (error.name === 'UnauthorizedError') {
       error = Boom.unauthorized();
     }

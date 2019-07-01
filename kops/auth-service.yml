@@ -47,14 +47,24 @@ spec:
     metadata:
       labels:
         app: auth
-        version: '4'
+        version: '6'
     spec:
       containers:
       - name: auth
-        image: jasonblanchard/jawn-auth:4
+        image: jasonblanchard/jawn-auth:6
         env:
           - name: 'PORT'
             value: '8080'
+          - name: 'JWT_SECRET'
+            valueFrom:
+              secretKeyRef:
+                name: app-secrets
+                key: jwtSecret
+          - name: 'SESSION_SECRET'
+            valueFrom:
+              secretKeyRef:
+                name: app-secrets
+                key: sessionSecret
         ports:
         - containerPort: 8080
         readinessProbe:

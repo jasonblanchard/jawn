@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const Boom = require('@hapi/boom');
 const session = require('express-session');
@@ -24,7 +25,7 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
  
 app.use(session({
   key: 'sessionId',
-  secret: 'sekret',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   // TODO: Use RedisStore
@@ -59,7 +60,7 @@ app.use('/session/authn*', csrfProtection, (request, response) => {
     var token = jwt.sign({
       uesrUuid: request.session.user.uuid,
       csrfToken: request.csrfToken()
-    }, 'shhhhh');
+    }, process.env.JWT_SECRET);
     response.header('Authorization', `Bearer ${token}`);
     return response.status(200).end();
   }

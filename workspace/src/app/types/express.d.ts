@@ -1,7 +1,8 @@
 declare namespace Express {
   export interface Request {
     accessTokenPayload?: {
-      id?: string
+      uesrUuid?: string,
+      csrfToken?: string,
     }
   }
 }

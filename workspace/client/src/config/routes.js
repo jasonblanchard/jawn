@@ -21,7 +21,7 @@ export default {
         ['injectCoeffects', { coeffectId: 'accessToken' }],
         ['graphqalVariables', { since: '2018-01-01T05:00:00.000Z' }],
         ['injectCoeffects', { coeffectId: 'currentUserId' }],
-        ['path', { from: 'currentUserId', to: 'graphqalVariables.userId' }],
+        // ['path', { from: 'currentUserId', to: 'graphqalVariables.userId' }],
         ['effect', {
           effectId: 'graphql',
           args: {
@@ -40,7 +40,7 @@ export default {
               type: frame('LOAD_WORKSPACE_PAGE_FAILED'),
               interceptors: [
                 ['injectCoeffects', { coeffectId: 'registry' }],
-                ['effect', { effectId: 'changeLocation', args: { path: '/login' } }],
+                // ['effect', { effectId: 'changeLocation', args: { path: '/login' } }],
               ],
             },
           },

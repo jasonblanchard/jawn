@@ -29,7 +29,10 @@ export default {
   graphql: (context, args, dispatch) => {
     const { query, onSuccessAction, onFailureAction } = args;
     const { coeffects: { graphqalVariables: variables } } = context;
-    http.post('/api/graphql').set('Authorization', `Bearer ${context.coeffects.accessToken}`).send({ query, variables })
+    http.post('/api/graphql')
+      // .set('Authorization', `Bearer ${context.coeffects.accessToken}`)
+      .set('CSRF-Token', JSON.parse(window.ENV).CSRF_TOKEN) // TODO: Inject this
+      .send({ query, variables })
       .then(response => {
         const { body: responseBody, status, headers } = response;
         dispatch({ ...onSuccessAction, ...{ body: responseBody, status, headers } });

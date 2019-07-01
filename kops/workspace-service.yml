@@ -9,11 +9,11 @@ metadata:
       kind:  Mapping
       name:  workspace_mapping
       prefix: /
-      service: workspace
+      service: workspace:8080
 spec:
   type: ClusterIP
   ports:
-  - port: 80
+  - port: 8080
     name: http
   selector:
     app: workspace
@@ -36,26 +36,31 @@ spec:
     metadata:
       labels:
         app: workspace
-        version: '4'
+        version: '6'
     spec:
       containers:
       - name: workspace
-        image: jasonblanchard/jawn-workspace:4
+        image: jasonblanchard/jawn-workspace:6
         env:
           - name: 'PORT'
-            value: '80'
+            value: '8080'
           - name: 'MONGO_HOST'
             value: 'mongo'
           - name: 'DB_NAME'
             value: 'jawn'
           - name: 'LOG_LEVEL'
             value: 'DEBUG'
+          - name: 'JWT_SECRET'
+            valueFrom:
+              secretKeyRef:
+                name: app-secrets
+                key: jwtSecret
         ports:
-        - containerPort: 80
+        - containerPort: 8080
         readinessProbe:
           httpGet:
              path: /health
-             port: 80
+             port: 8080
           initialDelaySeconds: 5
           periodSeconds: 5
           successThreshold: 1
