@@ -2,7 +2,6 @@ import React from 'react';
 import { frame } from 'redux-frame';
 
 import SettingsPage from 'pages/SettingsPage';
-import LoginPage from 'pages/LoginPage';
 import PathUtils from 'utils/PathUtils';
 import WorkspacePage, { query as WorkspacePageQuery } from 'pages/WorkspacePage';
 
@@ -21,7 +20,6 @@ export default {
         ['injectCoeffects', { coeffectId: 'accessToken' }],
         ['graphqalVariables', { since: '2018-01-01T05:00:00.000Z' }],
         ['injectCoeffects', { coeffectId: 'currentUserId' }],
-        // ['path', { from: 'currentUserId', to: 'graphqalVariables.userId' }],
         ['effect', {
           effectId: 'graphql',
           args: {
@@ -40,7 +38,6 @@ export default {
               type: frame('LOAD_WORKSPACE_PAGE_FAILED'),
               interceptors: [
                 ['injectCoeffects', { coeffectId: 'registry' }],
-                // ['effect', { effectId: 'changeLocation', args: { path: '/login' } }],
               ],
             },
           },
@@ -80,7 +77,6 @@ export default {
               type: frame('LOAD_SETTINGS_PAGE_FAILED'),
               interceptors: [
                 ['injectCoeffects', { coeffectId: 'registry' }],
-                ['effect', { effectId: 'changeLocation', args: { path: '/login' } }],
               ],
             },
           },
@@ -90,12 +86,5 @@ export default {
     render: () => {
       return <SettingsPage />;
     },
-  },
-  login: {
-    key: 'login',
-    matches: path => Boolean(path.match(/^\/login/)),
-    render: () => {
-      return <LoginPage />;
-    },
-  },
+  }
 };

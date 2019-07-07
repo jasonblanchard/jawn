@@ -21,8 +21,7 @@ export default function(registry: Registry) {
   const jwtSecret = process.env.JWT_SECRET; // TODO: Bootstrap this separately
   const {
     graphqlService,
-    logger,
-    loginController,
+    logger
   } = registry;
 
   logger.debug('\n>>> BOOTSTRAPPING APP <<<<\n', LOG_TAG);
@@ -48,9 +47,6 @@ export default function(registry: Registry) {
   app.get('/health', (_request, response) => {
     return response.json({ ok: true });
   });
-
-  app.post('/api/login', loginController.handleLogin);
-  app.post('/api/sign-up', loginController.handleSignUp);
 
   app.use('/api/graphql', graphqlExpress((request: Request) => graphqlService.handleRequest(request)));
 

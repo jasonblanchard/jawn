@@ -10,3 +10,5 @@ npm-debug.log
 !.elasticbeanstalk/*.global.yml
 
 coverage
+
+telepresence.log
