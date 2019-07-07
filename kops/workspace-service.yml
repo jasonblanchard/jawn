@@ -36,11 +36,11 @@ spec:
     metadata:
       labels:
         app: workspace
-        version: '6'
+        version: '7'
     spec:
       containers:
       - name: workspace
-        image: jasonblanchard/jawn-workspace:6
+        image: jasonblanchard/jawn-workspace:7
         env:
           - name: 'PORT'
             value: '8080'

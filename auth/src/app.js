@@ -68,7 +68,7 @@ app.use('/session/authn*', csrfProtection, (request, response) => {
 
   switch (request.accepts(['html', 'json'])) {
     case 'html':
-      return response.status(401).send(error.message);
+      return response.redirect(process.env.LOGIN_PATH);
     case 'json':
       return response.status(401).json(error.output.payload);
     default:

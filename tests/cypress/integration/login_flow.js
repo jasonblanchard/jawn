@@ -15,10 +15,10 @@ describe('Login', () => {
     // cy.checkA11y();
   });
 
-  // it('visiting workspace page without logging in redirects to login page', () => {
-  //   cy.visit('/workspace');
-  //   cy.url().should('include', '/login');
-  // });
+  it('visiting workspace page without logging in redirects to login page', () => {
+    cy.visit('/workspace');
+    cy.url().should('include', '/auth/login');
+  });
 
   it('successful login', () => {
     cy.visit('/auth/login');

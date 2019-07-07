@@ -52,10 +52,8 @@ describe('GET /session/authn', () => {
   it('returns 401 without an active session', () => {
     return fetch(`${baseUrl}/session/authn`)
       .then(response => {
-        expect(response.status).toEqual(401);
-        return response.text();
-      }).then(body => {
-        expect(body).toEqual('Unauthorized');
+        expect(response.redirected).toEqual(true);
+        expect(response.url).toMatch(/\/health/);
       });
   });
 

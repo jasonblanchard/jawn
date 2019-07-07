@@ -47,14 +47,16 @@ spec:
     metadata:
       labels:
         app: auth
-        version: '6'
+        version: '7'
     spec:
       containers:
       - name: auth
-        image: jasonblanchard/jawn-auth:6
+        image: jasonblanchard/jawn-auth:7
         env:
           - name: 'PORT'
             value: '8080'
+          - name: 'LOGIN_PATH'
+            value: '/auth/login'
           - name: 'JWT_SECRET'
             valueFrom:
               secretKeyRef:
