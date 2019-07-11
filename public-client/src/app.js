@@ -11,7 +11,7 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 app.use('/static', express.static(path.resolve(__dirname + '/../client/build')));
 
 app.get('/health', (request, response) => {
-  return response.json({ status: 'ok', service: 'auth-client', version: 1 });
+  return response.json({ status: 'ok', service: 'public-client', version: 1 });
 });
 
 app.get('/*', (request, response, next) => {

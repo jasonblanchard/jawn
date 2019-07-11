@@ -2,7 +2,7 @@ version: "3.7"
 services: 
   app: 
     build: .
-    image: jasonblanchard/jawn-auth-client
+    image: jasonblanchard/jawn-public-client
     command:
       - /bin/bash
       - -c
@@ -28,7 +28,7 @@ services:
       context: .
       dockerfile: Dockerfile
       target: test
-    image: jasonblanchard/jawn-auth-client:test
+    image: jasonblanchard/jawn-public-client:test
     command:
       - /bin/bash
       - -c

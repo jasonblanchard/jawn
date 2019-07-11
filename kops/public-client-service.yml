@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-client
+  name: public-client
   annotations:
     getambassador.io/config: |
       ---
@@ -9,7 +9,7 @@ metadata:
       kind:  Mapping
       name:  auth_client_mapping
       prefix: /auth/
-      service: auth-client:8080
+      service: public-client:8080
       bypass_auth: true
 spec:
   type: ClusterIP
@@ -17,16 +17,16 @@ spec:
   - port: 8080
     name: http
   selector:
-    app: auth-client
+    app: public-client
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-client
+  name: public-client
 spec:
   selector:
     matchLabels:
-      app: auth-client
+      app: public-client
   replicas: 1
   strategy:
     type: RollingUpdate
@@ -36,12 +36,12 @@ spec:
   template:
     metadata:
       labels:
-        app: auth-client
-        version: '10'
+        app: public-client
+        version: '1'
     spec:
       containers:
-      - name: auth-client
-        image: jasonblanchard/jawn-auth-client:10
+      - name: public-client
+        image: jasonblanchard/jawn-public-client:1
         env:
           - name: 'PORT'
             value: '8080'
