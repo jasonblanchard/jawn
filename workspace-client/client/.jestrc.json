@@ -1,0 +1,11 @@
+{
+  "collectCoverageFrom": [
+    "!src/bootstrap/**",
+    "!src/config/**",
+    "!src/styles/**",
+    "src/**/*.js"
+  ],
+  "coverageDirectory": "coverage",
+  "setupTestFrameworkScriptFile": "<rootDir>src/tests/setupTestFramework.js",
+  "coverageReporters": ["json", "lcov", "text", "html"]
+}

@@ -1,31 +1,31 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: workspace
+  name: workspace-client
   annotations:
     getambassador.io/config: |
       ---
       apiVersion: ambassador/v1
       kind:  Mapping
-      name:  workspace_mapping
-      prefix: /
-      service: workspace:8080
+      name:  workspace_client_mapping
+      prefix: /v2/workspace
+      service: workspace-client:8080
 spec:
   type: ClusterIP
   ports:
   - port: 8080
     name: http
   selector:
-    app: workspace
+    app: workspace-client
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: workspace
+  name: workspace-client
 spec:
   selector:
     matchLabels:
-      app: workspace
+      app: workspace-client
   replicas: 1
   strategy:
     type: RollingUpdate
@@ -35,12 +35,12 @@ spec:
   template:
     metadata:
       labels:
-        app: workspace
-        version: '6'
+        app: workspace-client
+        version: '1'
     spec:
       containers:
-      - name: workspace
-        image: jasonblanchard/jawn-workspace:6
+      - name: workspace-client
+        image: jasonblanchard/jawn-workspace-client:1
         env:
           - name: 'PORT'
             value: '8080'
