@@ -8,7 +8,7 @@ metadata:
       apiVersion: ambassador/v1
       kind:  Mapping
       name:  workspace_mapping
-      prefix: /
+      prefix: /api/workspace/
       service: workspace:8080
 spec:
   type: ClusterIP
@@ -36,11 +36,11 @@ spec:
     metadata:
       labels:
         app: workspace
-        version: '6'
+        version: '7'
     spec:
       containers:
       - name: workspace
-        image: jasonblanchard/jawn-workspace:6
+        image: jasonblanchard/jawn-workspace:7
         env:
           - name: 'PORT'
             value: '8080'

@@ -8,7 +8,7 @@ metadata:
       apiVersion: ambassador/v1
       kind:  Mapping
       name:  workspace_client_mapping
-      prefix: /v2/workspace
+      prefix: /workspace/
       service: workspace-client:8080
 spec:
   type: ClusterIP
@@ -36,11 +36,11 @@ spec:
     metadata:
       labels:
         app: workspace-client
-        version: '1'
+        version: '5'
     spec:
       containers:
       - name: workspace-client
-        image: jasonblanchard/jawn-workspace-client:1
+        image: jasonblanchard/jawn-workspace-client:5
         env:
           - name: 'PORT'
             value: '8080'
@@ -50,6 +50,8 @@ spec:
             value: 'jawn'
           - name: 'LOG_LEVEL'
             value: 'DEBUG'
+          - name: 'APP_BASE_PATH'
+            value: '/workspace'
           - name: 'JWT_SECRET'
             valueFrom:
               secretKeyRef:

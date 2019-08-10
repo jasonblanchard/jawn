@@ -29,7 +29,8 @@ export default {
   graphql: (context, args, dispatch) => {
     const { query, onSuccessAction, onFailureAction } = args;
     const { coeffects: { graphqalVariables: variables } } = context;
-    http.post('/api/graphql')
+    // TODO: Pass this in via env
+    http.post('/api/workspace/graphql/')
       // .set('Authorization', `Bearer ${context.coeffects.accessToken}`)
       .set('CSRF-Token', window.ENV.CSRF_TOKEN) // TODO: Inject this
       .send({ query, variables })

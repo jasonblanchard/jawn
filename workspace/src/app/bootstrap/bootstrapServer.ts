@@ -48,9 +48,9 @@ export default function(registry: Registry) {
     return response.json({ ok: true });
   });
 
-  app.use('/api/graphql', graphqlExpress((request: Request) => graphqlService.handleRequest(request)));
+  app.use('/graphql', graphqlExpress((request: Request) => graphqlService.handleRequest(request)));
 
-  app.use('/api/*', (_request, _response, next) => {
+  app.use('/*', (_request, _response, next) => {
     next(Boom.notFound());
   });
 
@@ -75,8 +75,8 @@ export default function(registry: Registry) {
     });
   });
 
-  app.use((error: Boom, _request: Request, response: Response) => {
-    console.log('====', 'HERE');
+  app.use((error: Boom, _request: Request, response: Response, _next: any) => {
+    console.log('====', 'HERE', error);
     if (error.name === 'UnauthorizedError') {
       error = Boom.unauthorized();
     }
