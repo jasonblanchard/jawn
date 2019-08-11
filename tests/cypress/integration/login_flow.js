@@ -16,7 +16,7 @@ describe('Login', () => {
   });
 
   it('visiting workspace page without logging in redirects to login page', () => {
-    cy.visit('/workspace');
+    cy.visit('/workspace/');
     cy.url().should('include', '/auth/login');
   });
 
@@ -33,7 +33,7 @@ describe('Login', () => {
   it('successful login bypassing page', () => {
     cy.login()
       .then(() => {
-        cy.visit('/workspace');
+        cy.visit('/workspace/');
         cy.url().should('include', '/workspace');
         cy.contains('new');
       });

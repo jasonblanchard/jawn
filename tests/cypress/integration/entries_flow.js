@@ -3,7 +3,7 @@ describe('Authoring entries', () => {
 
     cy.login()
       .then(() => {
-        cy.visit('/workspace');
+        cy.visit('/workspace/');
 
         // TODO: This is stupid, but fixes the case where there aren't any posts yet
         cy.contains('new').click();
@@ -25,7 +25,7 @@ describe('Authoring entries', () => {
   it('saves when you click save', () => {
     cy.login()
       .then(() => {
-        cy.visit('/workspace');
+        cy.visit('/workspace/');
         cy.contains('new').click();
         cy.contains('(untitled)');
         cy.get('textarea[name=text]').type('This is a new entry\n\nWith a new line.');
@@ -39,7 +39,7 @@ describe('Authoring entries', () => {
   it('autosaves without clicking save', () => {
     cy.login()
       .then(() => {
-        cy.visit('/workspace');
+        cy.visit('/workspace/');
         cy.contains('new').click();
         cy.contains('(untitled)');
         cy.get('textarea[name=text]').type('This is a new entry\n\nWith a new line.');
@@ -52,7 +52,7 @@ describe('Authoring entries', () => {
     cy.login()
       .then(() => {
         const rando = Math.random();
-        cy.visit('/workspace');
+        cy.visit('/workspace/');
         cy.contains('new').click();
         cy.contains('(untitled)');
         cy.get('textarea[name=text]').type(`Remove me ${rando}`);
@@ -68,7 +68,7 @@ describe('Authoring entries', () => {
   it('can can cancel deleting an entry', () => {
     cy.login()
       .then(() => {
-        cy.visit('/workspace');
+        cy.visit('/workspace/');
         cy.contains('new').click();
         cy.contains('(untitled)');
         cy.get('textarea[name=text]').type('Keep me');
