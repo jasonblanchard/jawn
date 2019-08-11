@@ -53,7 +53,7 @@ export default function(registry: Registry) {
       if (!file) return next();
       file = ASSET_PATHS.main.css ? file.replace('__STYLE_PATH__', `${APP_BASE_PATH}/static/${ASSET_PATHS.main.css}`) : file.replace('<link rel="stylesheet" type="text/css" href="__STYLE_PATH__">', '');
       file = file.replace('__INITIAL_STATE={}', `__INITIAL_STATE=${JSON.stringify({ currentUser: {} })}`);
-      file = file.replace('{%ENV%}', `var ENV={NODE_ENV: '${NODE_ENV}', LOG_LEVEL: '${process.env.LOG_LEVEL}', 'CSRF_TOKEN':'${csrfToken}'}`);
+      file = file.replace('{%ENV%}', `var ENV={NODE_ENV: '${NODE_ENV}', LOG_LEVEL: '${process.env.LOG_LEVEL}', 'CSRF_TOKEN':'${csrfToken}', 'APP_BASE_PATH':'${APP_BASE_PATH ? APP_BASE_PATH : ""}'}`);
       file = file.replace('{%ENV%}', `var ENV = '${env}'`);
       file = file.replace('__APP_PATH__', `${APP_BASE_PATH}/static/${ASSET_PATHS.main.js}`);
       response.set('Content-Type', 'text/html');

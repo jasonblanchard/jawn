@@ -36,11 +36,11 @@ spec:
     metadata:
       labels:
         app: workspace-client
-        version: '5'
+        version: '6'
     spec:
       containers:
       - name: workspace-client
-        image: jasonblanchard/jawn-workspace-client:5
+        image: jasonblanchard/jawn-workspace-client:6
         env:
           - name: 'PORT'
             value: '8080'

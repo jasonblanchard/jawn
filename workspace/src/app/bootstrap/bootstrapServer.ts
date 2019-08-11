@@ -5,16 +5,12 @@ import Boom from 'boom';
 import cookieParser from 'cookie-parser';
 import express, { Request, Response } from 'express';
 import expressJwt from 'express-jwt';
-import favicon from 'serve-favicon';
-import fs from 'fs';
 import morgan from 'morgan';
 import path from 'path';
 import TokenUtils from 'app/utils/TokenUtils';
 
 const LOG_TAG = 'app';
 const BUILD_PATH = '../../../client/build';
-const ASSET_PATHS = JSON.parse(fs.readFileSync(path.join(__dirname, BUILD_PATH, '/static/assets.json'), 'utf8'));
-
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
 export default function(registry: Registry) {
@@ -28,7 +24,6 @@ export default function(registry: Registry) {
 
   const app = express();
 
-  app.use(favicon(path.join(__dirname, BUILD_PATH + '/favicon.ico')));
   app.use(bodyParser.json());
   app.use(cookieParser());
   app.use('/static', express.static(path.join(__dirname, BUILD_PATH + '/static')));
@@ -54,29 +49,7 @@ export default function(registry: Registry) {
     next(Boom.notFound());
   });
 
-  app.get('*', (request, response, next) => {
-    const csrfToken = request.accessTokenPayload && request.accessTokenPayload.csrfToken;
-    var env = JSON.stringify({
-      NODE_ENV,
-      LOG_LEVEL: process.env.LOG_LEVEL,
-      CSRF_TOKEN: csrfToken
-    })
-    // TODO: Replace with a proper templating system
-    fs.readFile(path.join(__dirname, BUILD_PATH, 'index.html'), 'utf8', (error, file) => {
-      if (error) return next(error);
-      if (!file) return next();
-      file = ASSET_PATHS.main.css ? file.replace('__STYLE_PATH__', `/static/${ASSET_PATHS.main.css}`) : file.replace('<link rel="stylesheet" type="text/css" href="__STYLE_PATH__">', '');
-      file = file.replace('__INITIAL_STATE={}', `__INITIAL_STATE=${JSON.stringify({ currentUser: {} })}`);
-      // file = file.replace('{%ENV%}', `var ENV={NODE_ENV: '${NODE_ENV}', LOG_LEVEL: '${process.env.LOG_LEVEL}', 'CSRF_TOKEN'='${csrfToken}}'`);
-      file = file.replace('{%ENV%}', `var ENV = '${env}'`);
-      file = file.replace('__APP_PATH__', `/static/${ASSET_PATHS.main.js}`);
-      response.set('Content-Type', 'text/html');
-      return response.send(file);
-    });
-  });
-
   app.use((error: Boom, _request: Request, response: Response, _next: any) => {
-    console.log('====', 'HERE', error);
     if (error.name === 'UnauthorizedError') {
       error = Boom.unauthorized();
     }

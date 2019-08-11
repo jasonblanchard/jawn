@@ -18,7 +18,7 @@ store.dispatch(actions.resolveLocation());
 
 ReactDOM.render(
   <ConnectorProvider connectors={connectors}>
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={{ ...theme, appBasePath: window.ENV.APP_BASE_PATH }}>
       <Provider store={store}>
         <RootConnector>
           {stateProps => (

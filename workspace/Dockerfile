@@ -9,12 +9,6 @@ RUN cp -a /tmp/node_modules /home/node/app
 
 ENV npm_config_unsafe_perm true
 
-ADD client/package.json /tmp/client/package.json
-ADD client/package-lock.json /tmp/client/package-lock.json
-RUN cd /tmp/client && npm install
-RUN mkdir -p /home/node/app/client
-RUN cp -a /tmp/client/node_modules /home/node/app/client
-
 ADD . /home/node/app
 
 RUN cd /home/node/app && npm run build-all-production

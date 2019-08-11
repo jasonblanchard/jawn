@@ -26,7 +26,6 @@
     "moment": "^2.23.0",
     "mongoose": "^5.4.1",
     "morgan": "^1.9.1",
-    "serve-favicon": "^2.5.0",
     "wait-on": "^3.2.0"
   },
   "devDependencies": {
@@ -58,13 +57,12 @@
     "typescript": "^3.2.2"
   },
   "scripts": {
-    "build-all": "cd ./client && npm run build && cd .. && npm run build",
-    "build-all-production": "cd ./client && npm run build && cd .. && npm run build --noEmitOnError",
+    "build-all": "npm run build",
+    "build-all-production": "npm run build --noEmitOnError",
     "build": "tsc",
     "lint": "eslint src/",
-    "watch-all": "rm -f client/build/static/assets.json && concurrently --names \"client,server,node\" --prefix-colors \"green,cyan,yellow\" \"cd client && npm run watch\" \"npm run build -- --watch\" \"wait-on client/build/static/assets.json && NODE_PATH=build nodemon --watch build build/app/index.js\"",
+    "watch-all": "concurrently --names \"server,node\" --prefix-colors \"cyan,yellow\" \"npm run build -- --watch\" \"NODE_PATH=build nodemon --watch build build/app/index.js\"",
     "start": "node build/app/index.js",
-    "test": "NODE_PATH=./src jest --env node --config jest.config.js",
-    "watch-all-integration": "rm -f client/build/static/assets.json && concurrently --names \"client,server,node,cypress\" --prefix-colors \"green,cyan,yellow,orange\" \"cd client && npm run watch\" \"npm run build -- --watch\" \"wait-on client/build/static/assets.json && PORT=8082 DB_NAME=jawn_test NODE_PATH=build nodemon --watch build build/app/index.js\" \"wait-on client/build/static/assets.json && cd tests && PORT=8082 MONGO_HOST=localhost DB_NAME=jawn_test npm run cypress:open\""
+    "test": "NODE_PATH=./src jest --env node --config jest.config.js"
   }
 }
